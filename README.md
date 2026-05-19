@@ -1,12 +1,12 @@
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/giantswarm/{APP-NAME}/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/giantswarm/{APP-NAME}/tree/main)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/giantswarm/{APP-NAME}/badge)](https://securityscorecards.dev/viewer/?uri=github.com/giantswarm/{APP-NAME})
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/giantswarm/cluster-aks/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/giantswarm/cluster-aks/tree/main)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/giantswarm/cluster-aks/badge)](https://securityscorecards.dev/viewer/?uri=github.com/giantswarm/cluster-aks)
 
 [Guide about how to manage an app on Giant Swarm](https://handbook.giantswarm.io/docs/dev-and-releng/app-developer-processes/adding_app_to_appcatalog/)
 
-# {APP-NAME} chart
+# cluster-aks chart
 
-Giant Swarm offers a {APP-NAME} App which can be installed in workload clusters.
-Here, we define the {APP-NAME} chart with its templates and default configuration.
+Giant Swarm offers a cluster-aks App which can be installed in workload clusters.
+Here, we define the cluster-aks chart with its templates and default configuration.
 
 **What is this app?**
 
