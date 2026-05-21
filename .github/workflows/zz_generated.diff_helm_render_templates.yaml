@@ -1,0 +1,21 @@
+# DO NOT EDIT. Generated with:
+#
+#    devctl
+#
+#    https://github.com/giantswarm/devctl/blob/b82c7cb3bf13d2f48e4782038e8f0b332f867cc7/pkg/gen/input/workflows/internal/file/helm_render_diff.yaml.template
+#
+name: Compare Helm Rendering
+
+on:
+  pull_request:
+  push:
+    branches: [HEAD_BRANCH, main]
+
+permissions: {}
+
+jobs:
+  helm-render-diff:
+    uses: giantswarm/github-workflows/.github/workflows/helm-render-diff.yaml@main
+    permissions:
+      contents: read
+      pull-requests: write
