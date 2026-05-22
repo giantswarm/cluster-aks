@@ -7,11 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- added: Initial implementation of the AKS cluster chart. Templates the
-  CAPZ-specific resources (`AzureClusterIdentity`, `AzureManagedCluster`,
-  `AzureManagedControlPlane`, `AzureManagedMachinePool`) and depends on the
-  upstream `giantswarm/cluster` chart for the provider-agnostic CAPI
-  resources (`Cluster`, `MachinePool`).
+- added: Initial implementation of the AKS cluster chart.
 - changed: `app.giantswarm.io` label group was changed to `application.giantswarm.io`
 
 [Unreleased]: https://github.com/giantswarm/cluster-aks/tree/main

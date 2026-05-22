@@ -6,8 +6,12 @@
 # It composes with the upstream giantswarm/cluster chart (declared as a
 # dependency in Chart.yaml). The cluster chart owns all the provider-agnostic
 # CAPI resources (Cluster, MachinePool, MachineHealthCheck, ...). This chart
-# owns the CAPZ-specific resources (AzureManagedControlPlane,
-# AzureManagedCluster, AzureManagedMachinePool, AzureClusterIdentity).
+# owns the CAPZ-specific resources (AzureASOManagedCluster,
+# AzureASOManagedControlPlane, AzureASOManagedMachinePool). The new ASO-based
+# CRDs embed Azure Service Operator (ASO) resources (ResourceGroup,
+# ManagedCluster, ManagedClustersAgentPool) directly under `spec.resources`,
+# and Azure credentials are referenced via a Kubernetes Secret using the
+# `serviceoperator.azure.com/credential-from` annotation.
 
 # Configuration passed to the giantswarm/cluster subchart. The
 # `providerIntegration` block is the contract between provider charts and the
@@ -88,19 +92,19 @@ cluster:
       # node remediation for managed node pools.
       machineHealthCheckResourceEnabled: false
 
-      # The Cluster.spec.infrastructureRef points at AzureManagedCluster.
+      # The Cluster.spec.infrastructureRef points at AzureASOManagedCluster.
       infrastructureCluster:
         group: infrastructure.cluster.x-k8s.io
-        kind: AzureManagedCluster
+        kind: AzureASOManagedCluster
         version: v1beta1
 
       # Worker node pools are rendered as CAPI MachinePool resources whose
-      # infrastructureRef points at AzureManagedMachinePool.
+      # infrastructureRef points at AzureASOManagedMachinePool.
       machinePoolResourcesEnabled: true
       nodePoolKind: MachinePool
       infrastructureMachinePool:
         group: infrastructure.cluster.x-k8s.io
-        kind: AzureManagedMachinePool
+        kind: AzureASOManagedMachinePool
         version: v1beta1
 
       # Externally-managed bootstrap: AKS provisions kubelet on its own, so
@@ -113,17 +117,17 @@ cluster:
 
     controlPlane:
       resources:
-        # Cluster.spec.controlPlaneRef → AzureManagedControlPlane.
+        # Cluster.spec.controlPlaneRef → AzureASOManagedControlPlane.
         controlPlane:
           api:
             group: infrastructure.cluster.x-k8s.io
-            kind: AzureManagedControlPlane
+            kind: AzureASOManagedControlPlane
             version: v1beta1
         # Required by the cluster subchart schema but unused for AKS because
         # the KubeadmControlPlane template is gated on provider == "kubeadm".
         infrastructureMachineTemplate:
           group: infrastructure.cluster.x-k8s.io
-          kind: AzureManagedControlPlane
+          kind: AzureASOManagedControlPlane
           version: v1beta1
         infrastructureMachineTemplateSpecTemplateName: noop
 
@@ -135,8 +139,6 @@ cluster:
         system:
           mode: System
           vmSize: Standard_D2s_v3
-          minSize: 1
-          maxSize: 3
           replicas: 1
 
 # User-facing values. These are the knobs end users tune.
@@ -166,6 +168,8 @@ global:
     baseDomain: ""
 
     network:
+      # Must be within the service CIDR
+      dnsServiceIP: 172.20.0.10
       # Services CIDR — assigned by AKS for Kubernetes Service IPs. Used to
       # populate Cluster.spec.clusterNetwork.services.
       services:
@@ -190,25 +194,23 @@ global:
   controlPlane:
     # AKS SKU tier.
     sku:
+      # Allowed: Free | Premium | Standard
       tier: Standard
 
     # DNS prefix. Defaults to the cluster name when empty.
     dnsPrefix: ""
 
-    # Outbound traffic type.
-    # Allowed: loadBalancer | managedNATGateway | userAssignedNATGateway | userDefinedRouting
-    outboundType: loadBalancer
-
-    # AKS networking. networkPlugin: azure | kubenet.
+    # AKS networking
     networking:
+      # Allowed: loadBalancer, managedNATGateway, userAssignedNATGateway, userDefinedRouting
+      outboundType: loadBalancer
+      # Allowed: azure | cilium
       networkDataplane: cilium
+      # Allowed: azure | kubenet.
       networkPlugin: azure
-      networkPluginMode: overlay
+      networkMode: transparent
+      # Allowed: azure, calico, cilium, none
       networkPolicy: cilium
-
-    # OIDC issuer profile — required for workload identity federation.
-    oidcIssuer:
-      enabled: true
 
     # AAD integration. When `managed: true`, AKS uses AAD for k8s API auth.
     aadProfile: {}
@@ -230,8 +232,6 @@ global:
       osDiskType: Managed
       osType: Linux
       replicas: 1
-      minSize: 1
-      maxSize: 3
       availabilityZones: []
       nodeLabels: {}
       taints: []
@@ -247,9 +247,11 @@ global:
     # name when empty. CAPZ creates the RG if it does not exist.
     resourceGroupName: ""
 
-    azureClusterIdentity:
-      name: cluster-identity
-      namespace: org-giantswarm
+    # Name of the Kubernetes Secret that holds the Azure credentials used by the
+    # Azure Service Operator (ASO) to reconcile the embedded Azure resources.
+    # The secret must live in the same namespace as the Cluster.
+    # If omitted or empty ASO will attempt to use its default credential resolution behavior.
+    asoCredentialSecretName: ""
 
     # Identity assigned to the AKS control plane itself (separate from the
     # CAPZ controller identity above).

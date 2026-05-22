@@ -25,18 +25,11 @@ contract.
 {{- end -}}
 
 {{/*
-Name of the AzureClusterIdentity. Falls back to the cluster name when the
-user has not provided an explicit identity name.
+Name of the Kubernetes Secret that holds the Azure credentials used by the
+Azure Service Operator (ASO) to reconcile the embedded Azure resources.
 */}}
-{{- define "cluster-aks.identity.name" -}}
-{{- .Values.global.providerSpecific.azureClusterIdentity.name | default (include "cluster-aks.resource.name" .) -}}
-{{- end -}}
-
-{{/*
-Namespace of the AzureClusterIdentity. Falls back to the release namespace.
-*/}}
-{{- define "cluster-aks.identity.namespace" -}}
-{{- .Values.global.providerSpecific.azureClusterIdentity.namespace | default .Release.Namespace -}}
+{{- define "cluster-aks.aso.credentialSecretName" -}}
+{{- .Values.global.providerSpecific.asoCredentialSecretName | default "" -}}
 {{- end -}}
 
 {{/*

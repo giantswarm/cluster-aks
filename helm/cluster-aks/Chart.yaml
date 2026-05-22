@@ -22,10 +22,6 @@ annotations:
   io.giantswarm.application.audience: all
   io.giantswarm.application.managed: "false"
 
-restrictions:
-  compatibleProviders:
-    - capz
-
 dependencies:
   - name: cluster
     version: "6.5.0"
