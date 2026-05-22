@@ -1,12 +1,282 @@
-# This file is a Helm values file for the cluster-aks chart.
+# Default values for cluster-aks.
 #
-# To learn more about how to configure your app on your cluster
-# and override the default values in here, visit:
+# This chart provisions an AKS (Azure Kubernetes Service) workload cluster
+# through Cluster API using the Azure provider (CAPZ).
 #
-#   https://docs.giantswarm.io/tutorials/fleet-management/app-platform/app-configuration/#basic-values-merging-example
+# It composes with the upstream giantswarm/cluster chart (declared as a
+# dependency in Chart.yaml). The cluster chart owns all the provider-agnostic
+# CAPI resources (Cluster, MachinePool, MachineHealthCheck, ...). This chart
+# owns the CAPZ-specific resources (AzureManagedControlPlane,
+# AzureManagedCluster, AzureManagedMachinePool, AzureClusterIdentity).
+
+# Configuration passed to the giantswarm/cluster subchart. The
+# `providerIntegration` block is the contract between provider charts and the
+# cluster chart — it tells the subchart how to wire CAPI resources to our
+# AKS-specific CRs.
+cluster:
+  providerIntegration:
+    apps:
+      certExporter:
+        enable: false
+      certManager:
+        enable: false
+      chartOperatorExtensions:
+        enable: false
+      cilium:
+        enable: false
+      ciliumServiceMonitors:
+        enable: false
+      clusterAutoscaler:
+        enable: false
+      coreDns:
+        enable: false
+      coreDnsExtensions:
+        enable: false
+      externalDns:
+        enable: false
+      k8sDnsNodeCache:
+        enable: false
+      metricsServer:
+        enable: false
+      netExporter:
+        enable: false
+      networkPolicies:
+        configTemplateName: AKSNetworkPoliciesHelmValues
+        enable: true
+      nodeExporter:
+        enable: false
+      observabilityBundle:
+        enable: false
+      observabilityPolicies:
+        enable: false
+      rbacBootstrap:
+        enable: false
+      securityBundle:
+        enable: false
+      teleportKubeAgent:
+        configTemplateName: AKSTeleportKubeAgentHelmValues
+        enable: true
+      verticalPodAutoscaler:
+        enable: false
+      verticalPodAutoscalerCrd:
+        enable: false
+
+    provider: capz
+
+    # Named template (defined in this chart) that renders annotations placed
+    # on the Cluster CR by the cluster subchart.
+    clusterAnnotationsTemplateName: azureClusterAnnotations
+
+    pauseProperties: {}
+
+    useReleases: true
+
+    resourcesApi:
+      bastionResourceEnabled: false
+      cleanupHelmReleaseResourcesEnabled: false
+      clusterResourceEnabled: true
+      helmRepositoryResourcesEnabled: false
+
+      # AKS manages the control plane externally; we don't render a
+      # KubeadmControlPlane or KamajiControlPlane. The Cluster CR's
+      # controlPlaneRef still points at AzureManagedControlPlane (see below).
+      controlPlaneResource:
+        enabled: true
+        provider: external
+
+      # AKS clusters do not need MachineHealthChecks — AKS itself handles
+      # node remediation for managed node pools.
+      machineHealthCheckResourceEnabled: false
+
+      # The Cluster.spec.infrastructureRef points at AzureManagedCluster.
+      infrastructureCluster:
+        group: infrastructure.cluster.x-k8s.io
+        kind: AzureManagedCluster
+        version: v1beta1
+
+      # Worker node pools are rendered as CAPI MachinePool resources whose
+      # infrastructureRef points at AzureManagedMachinePool.
+      machinePoolResourcesEnabled: true
+      nodePoolKind: MachinePool
+      infrastructureMachinePool:
+        group: infrastructure.cluster.x-k8s.io
+        kind: AzureManagedMachinePool
+        version: v1beta1
+
+      # Externally-managed bootstrap: AKS provisions kubelet on its own, so
+      # the wrapping MachinePool needs an empty dataSecretName instead of a
+      # KubeadmConfig configRef. The named template is defined in this
+      # chart's templates/_helpers.tpl.
+      machinePool:
+        bootstrap:
+          templateName: azureMachinePoolBootstrap
+
+    controlPlane:
+      resources:
+        # Cluster.spec.controlPlaneRef → AzureManagedControlPlane.
+        controlPlane:
+          api:
+            group: infrastructure.cluster.x-k8s.io
+            kind: AzureManagedControlPlane
+            version: v1beta1
+        # Required by the cluster subchart schema but unused for AKS because
+        # the KubeadmControlPlane template is gated on provider == "kubeadm".
+        infrastructureMachineTemplate:
+          group: infrastructure.cluster.x-k8s.io
+          kind: AzureManagedControlPlane
+          version: v1beta1
+        infrastructureMachineTemplateSpecTemplateName: noop
+
+    # Workers do not use KubeadmConfig (AKS handles bootstrap).
+    workers:
+      kubeadmConfig:
+        enabled: false
+      defaultNodePools:
+        system:
+          mode: System
+          vmSize: Standard_D2s_v3
+          minSize: 1
+          maxSize: 3
+          replicas: 1
+
+# User-facing values. These are the knobs end users tune.
 #
-image:
-  name: "giantswarm/cluster-aks"
-  tag: ""
-registry:
-  domain: gsoci.azurecr.io
+# Helm shares the `global` key between this chart and its subcharts, so the
+# fields below are visible inside the giantswarm/cluster subchart as well.
+global:
+  # Name of the management cluster that manages this workload cluster.
+  # Required by the cluster subchart.
+  managementCluster: ""
+
+  metadata:
+    # Name of the workload cluster. Defaults to the Helm release name when
+    # unset. Must comply with Azure resource naming rules.
+    name: ""
+    description: ""
+    organization: ""
+    preventDeletion: false
+    servicePriority: highest
+    labels: {}
+    annotations: {}
+
+  connectivity:
+    # DNS base domain used by the management cluster's installation. AKS
+    # exposes its API server through a *.azmk8s.io hostname; this value is
+    # consumed by the cluster subchart for labels/annotations only.
+    baseDomain: ""
+
+    network:
+      # Services CIDR — assigned by AKS for Kubernetes Service IPs. Used to
+      # populate Cluster.spec.clusterNetwork.services.
+      services:
+        cidrBlocks:
+          - 172.20.0.0/16
+      # Pods CIDR — used for AKS overlay / kubenet networking. With Azure
+      # CNI in non-overlay mode pods get IPs from the VNet subnet and this
+      # is ignored at the AKS level.
+      pods:
+        cidrBlocks:
+          - 192.168.0.0/16
+
+    # Optional API server access controls (AKS public/private cluster).
+    apiServerAccess:
+      # When true, the AKS API server is reachable only from inside the
+      # VNet (or via authorizedIPRanges).
+      enablePrivateCluster: false
+      privateDNSZone: ""
+      enablePrivateClusterPublicFQDN: false
+      authorizedIPRanges: []
+
+  controlPlane:
+    # AKS SKU tier.
+    sku:
+      tier: Standard
+
+    # DNS prefix. Defaults to the cluster name when empty.
+    dnsPrefix: ""
+
+    # Outbound traffic type.
+    # Allowed: loadBalancer | managedNATGateway | userAssignedNATGateway | userDefinedRouting
+    outboundType: loadBalancer
+
+    # AKS networking. networkPlugin: azure | kubenet.
+    networking:
+      networkDataplane: cilium
+      networkPlugin: azure
+      networkPluginMode: overlay
+      networkPolicy: cilium
+
+    # OIDC issuer profile — required for workload identity federation.
+    oidcIssuer:
+      enabled: true
+
+    # AAD integration. When `managed: true`, AKS uses AAD for k8s API auth.
+    aadProfile: {}
+
+    # Auto-upgrade channel: none | patch | rapid | stable | node-image
+    autoUpgradeChannel: none
+
+    # Additional Azure tags applied to the underlying AKS resources.
+    additionalTags: {}
+
+  # Map of node pools, keyed by pool name. The key must satisfy AKS agent
+  # pool naming rules (lowercase alphanumeric, ≤12 chars for Linux pools).
+  # At least one pool must have `mode: System`.
+  nodePools:
+    system:
+      mode: System
+      vmSize: Standard_D2s_v3
+      osDiskSizeGB: 128
+      osDiskType: Managed
+      osType: Linux
+      replicas: 1
+      minSize: 1
+      maxSize: 3
+      availabilityZones: []
+      nodeLabels: {}
+      taints: []
+
+  providerSpecific:
+    # Azure subscription that hosts the AKS cluster.
+    subscriptionId: ""
+
+    # Azure region (e.g. westeurope, eastus).
+    location: ""
+
+    # Resource group that contains the AKS cluster. Defaults to the cluster
+    # name when empty. CAPZ creates the RG if it does not exist.
+    resourceGroupName: ""
+
+    azureClusterIdentity:
+      name: cluster-identity
+      namespace: org-giantswarm
+
+    # Identity assigned to the AKS control plane itself (separate from the
+    # CAPZ controller identity above).
+    # Allowed types: SystemAssigned | UserAssigned
+    controlPlaneIdentity:
+      type: SystemAssigned
+      userAssignedIdentityResourceID: ""
+
+    # User-assigned identity used by the kubelet (typically for ACR pulls).
+    kubeletIdentityResourceID: ""
+
+internal:
+  defaults:
+    evictionMinimumReclaim: imagefs.available=5%,memory.available=100Mi,nodefs.available=5%
+    hardEvictionThresholds: memory.available<200Mi,nodefs.available<10%,nodefs.inodesFree<3%,imagefs.available<10%,pid.available<20%
+    softEvictionGracePeriod: memory.available=30s,nodefs.available=2m,nodefs.inodesFree=1m,imagefs.available=2m,pid.available=1m
+    softEvictionThresholds: memory.available<500Mi,nodefs.available<15%,nodefs.inodesFree<5%,imagefs.available<15%,pid.available<30%
+  enableVpaResources: true
+  network:
+    vnet: {}
+    vpn:
+      gatewayMode: none
+  sandboxContainerImage:
+    name: giantswarm/pause
+    registry: gsoci.azurecr.io
+    tag: "3.9"
+  teleport:
+    enabled: true
+    proxyAddr: teleport.giantswarm.io:443
+    version: 14.1.3

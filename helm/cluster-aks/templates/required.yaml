@@ -1,0 +1,4 @@
+{{- $_ := required "global.providerSpecific.location is required" .Values.global.providerSpecific.location }}
+{{- $_ := required "global.providerSpecific.subscriptionId is required" .Values.global.providerSpecific.subscriptionId }}
+{{- $_ := required "global.metadata.organization is required" .Values.global.metadata.organization }}
+{{- $_ := required "global.managementCluster is required" .Values.global.managementCluster }}

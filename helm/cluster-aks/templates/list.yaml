@@ -1,0 +1,7 @@
+{{- include "validation" . }}
+---
+{{- include "azure-managed-cluster" . }}
+---
+{{- include "azure-managed-control-plane" . }}
+---
+{{- include "azure-managed-machine-pools" . }}
