@@ -1,250 +1,35 @@
 {
     "$schema": "http://json-schema.org/schema#",
-    "type": "object",
-    "properties": {
-        "cluster": {
-            "type": "object",
-            "description": "Configuration forwarded to the giantswarm/cluster subchart."
-        },
-        "global": {
-            "type": "object",
-            "properties": {
-                "managementCluster": {
-                    "type": "string"
-                },
-                "metadata": {
-                    "type": "object",
-                    "properties": {
-                        "name": {
-                            "type": "string"
-                        },
-                        "description": {
-                            "type": "string"
-                        },
-                        "organization": {
-                            "type": "string"
-                        },
-                        "preventDeletion": {
-                            "type": "boolean"
-                        },
-                        "servicePriority": {
-                            "type": "string",
-                            "enum": [
-                                "lowest",
-                                "medium",
-                                "highest"
-                            ]
-                        },
-                        "labels": {
-                            "type": "object"
-                        },
-                        "annotations": {
-                            "type": "object"
-                        }
-                    }
-                },
-                "connectivity": {
-                    "type": "object",
-                    "properties": {
-                        "baseDomain": {
-                            "type": "string"
-                        },
-                        "network": {
-                            "type": "object",
-                            "properties": {
-                                "services": {
-                                    "type": "object",
-                                    "properties": {
-                                        "cidrBlocks": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
-                                        }
-                                    }
-                                },
-                                "pods": {
-                                    "type": "object",
-                                    "properties": {
-                                        "cidrBlocks": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "apiServerAccess": {
-                            "type": "object",
-                            "properties": {
-                                "enablePrivateCluster": {
-                                    "type": "boolean"
-                                },
-                                "enablePrivateClusterPublicFQDN": {
-                                    "type": "boolean"
-                                },
-                                "privateDNSZone": {
-                                    "type": "string"
-                                },
-                                "authorizedIPRanges": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "controlPlane": {
-                    "type": "object",
-                    "properties": {
-                        "sku": {
-                            "type": "object",
-                            "properties": {
-                                "tier": {
-                                    "type": "string",
-                                    "enum": [
-                                        "Free",
-                                        "Premium",
-                                        "Standard"
-                                    ]
-                                }
-                            }
-                        },
-                        "dnsPrefix": {
-                            "type": "string"
-                        },
-                        "networking": {
-                            "type": "object",
-                            "properties": {
-                                "outboundType": {
-                                    "type": "string",
-                                    "enum": [
-                                        "loadBalancer",
-                                        "userDefinedRouting"
-                                    ]
-                                },
-                                "networkDataplane": {
-                                    "type": "string",
-                                    "enum": [
-                                        "azure",
-                                        "cilium"
-                                    ]
-                                },
-                                "networkPlugin": {
-                                    "type": "string",
-                                    "enum": [
-                                        "azure",
-                                        "kubenet"
-                                    ]
-                                },
-                                "networkMode": {
-                                    "type": "string",
-                                    "enum": [
-                                        "bridge",
-                                        "transparent"
-                                    ]
-                                },
-                                "networkPolicy": {
-                                    "type": "string",
-                                    "enum": [
-                                        "",
-                                        "azure",
-                                        "calico",
-                                        "cilium"
-                                    ]
-                                }
-                            }
-                        },
-                        "aadProfile": {
-                            "type": "object",
-                            "properties": {
-                                "managed": {
-                                    "type": "boolean"
-                                },
-                                "adminGroupObjectIDs": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        },
-                        "autoUpgradeChannel": {
-                            "type": "string",
-                            "enum": [
-                                "none",
-                                "patch",
-                                "rapid",
-                                "stable",
-                                "node-image"
-                            ]
-                        },
-                        "additionalTags": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                },
-                "nodePools": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "patternProperties": {
-                        "^[a-z0-9]{1,12}$": {
-                            "$ref": "#/$defs/nodePool"
-                        }
-                    }
-                },
-                "providerSpecific": {
-                    "type": "object",
-                    "properties": {
-                        "subscriptionId": {
-                            "type": "string"
-                        },
-                        "location": {
-                            "type": "string"
-                        },
-                        "resourceGroupName": {
-                            "type": "string"
-                        },
-                        "asoCredentialSecretName": {
-                            "type": "string"
-                        },
-                        "controlPlaneIdentity": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "enum": [
-                                        "SystemAssigned",
-                                        "UserAssigned"
-                                    ]
-                                },
-                                "userAssignedIdentityResourceID": {
-                                    "type": "string"
-                                }
-                            }
-                        },
-                        "kubeletIdentityResourceID": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "internal": {
-            "type": "object"
-        }
-    },
     "$defs": {
         "nodePool": {
             "type": "object",
             "properties": {
+                "additionalTags": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "availabilityZones": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "maxPods": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "maxSize": {
+                    "type": "integer",
+                    "maximum": 1000,
+                    "minimum": 0
+                },
+                "minSize": {
+                    "type": "integer",
+                    "maximum": 1000,
+                    "minimum": 0
+                },
                 "mode": {
                     "type": "string",
                     "enum": [
@@ -253,8 +38,11 @@
                     ],
                     "default": "User"
                 },
-                "vmSize": {
-                    "type": "string"
+                "nodeLabels": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
                 },
                 "osDiskSizeGB": {
                     "type": "integer",
@@ -276,60 +64,8 @@
                 },
                 "replicas": {
                     "type": "integer",
-                    "minimum": 0,
-                    "maximum": 1000
-                },
-                "minSize": {
-                    "type": "integer",
-                    "minimum": 0,
-                    "maximum": 1000
-                },
-                "maxSize": {
-                    "type": "integer",
-                    "minimum": 0,
-                    "maximum": 1000
-                },
-                "maxPods": {
-                    "type": "integer",
+                    "maximum": 1000,
                     "minimum": 0
-                },
-                "availabilityZones": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "nodeLabels": {
-                    "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
-                },
-                "taints": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "required": [
-                            "key",
-                            "effect"
-                        ],
-                        "properties": {
-                            "key": {
-                                "type": "string"
-                            },
-                            "value": {
-                                "type": "string"
-                            },
-                            "effect": {
-                                "type": "string",
-                                "enum": [
-                                    "NoSchedule",
-                                    "NoExecute",
-                                    "PreferNoSchedule"
-                                ]
-                            }
-                        }
-                    }
                 },
                 "scaleSetPriority": {
                     "type": "string",
@@ -344,13 +80,277 @@
                 "subnetArmId": {
                     "type": "string"
                 },
-                "additionalTags": {
+                "taints": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "key",
+                            "effect"
+                        ],
+                        "properties": {
+                            "effect": {
+                                "type": "string",
+                                "enum": [
+                                    "NoSchedule",
+                                    "NoExecute",
+                                    "PreferNoSchedule"
+                                ]
+                            },
+                            "key": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "vmSize": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "type": "object",
+    "properties": {
+        "cluster": {
+            "type": "object",
+            "description": "Configuration forwarded to the giantswarm/cluster subchart."
+        },
+        "global": {
+            "type": "object",
+            "properties": {
+                "connectivity": {
                     "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
+                    "properties": {
+                        "apiServerAccess": {
+                            "type": "object",
+                            "properties": {
+                                "authorizedIPRanges": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "enablePrivateCluster": {
+                                    "type": "boolean"
+                                },
+                                "enablePrivateClusterPublicFQDN": {
+                                    "type": "boolean"
+                                },
+                                "privateDNSZone": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "baseDomain": {
+                            "type": "string"
+                        },
+                        "network": {
+                            "type": "object",
+                            "properties": {
+                                "pods": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cidrBlocks": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                },
+                                "services": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cidrBlocks": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "controlPlane": {
+                    "type": "object",
+                    "properties": {
+                        "aadProfile": {
+                            "type": "object",
+                            "properties": {
+                                "adminGroupObjectIDs": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "managed": {
+                                    "type": "boolean"
+                                }
+                            }
+                        },
+                        "additionalTags": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        },
+                        "autoUpgradeChannel": {
+                            "type": "string",
+                            "enum": [
+                                "none",
+                                "patch",
+                                "rapid",
+                                "stable",
+                                "node-image"
+                            ]
+                        },
+                        "dnsPrefix": {
+                            "type": "string"
+                        },
+                        "networking": {
+                            "type": "object",
+                            "properties": {
+                                "networkDataplane": {
+                                    "type": "string",
+                                    "enum": [
+                                        "azure",
+                                        "cilium"
+                                    ]
+                                },
+                                "networkMode": {
+                                    "type": "string",
+                                    "enum": [
+                                        "bridge",
+                                        "transparent"
+                                    ]
+                                },
+                                "networkPlugin": {
+                                    "type": "string",
+                                    "enum": [
+                                        "azure",
+                                        "kubenet"
+                                    ]
+                                },
+                                "networkPolicy": {
+                                    "type": "string",
+                                    "enum": [
+                                        "",
+                                        "azure",
+                                        "calico",
+                                        "cilium"
+                                    ]
+                                },
+                                "outboundType": {
+                                    "type": "string",
+                                    "enum": [
+                                        "loadBalancer",
+                                        "userDefinedRouting"
+                                    ]
+                                }
+                            }
+                        },
+                        "sku": {
+                            "type": "object",
+                            "properties": {
+                                "tier": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Free",
+                                        "Premium",
+                                        "Standard"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "managementCluster": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "type": "object",
+                    "properties": {
+                        "description": {
+                            "type": "string"
+                        },
+                        "annotations": {
+                            "type": "object"
+                        },
+                        "labels": {
+                            "type": "object"
+                        },
+                        "name": {
+                            "type": "string"
+                        },
+                        "organization": {
+                            "type": "string"
+                        },
+                        "preventDeletion": {
+                            "type": "boolean"
+                        },
+                        "servicePriority": {
+                            "type": "string",
+                            "enum": [
+                                "lowest",
+                                "medium",
+                                "highest"
+                            ]
+                        }
+                    }
+                },
+                "nodePools": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[a-z0-9]{1,12}$": {
+                            "$ref": "#/$defs/nodePool"
+                        }
+                    }
+                },
+                "providerSpecific": {
+                    "type": "object",
+                    "properties": {
+                        "asoCredentialSecretName": {
+                            "type": "string"
+                        },
+                        "controlPlaneIdentity": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "SystemAssigned",
+                                        "UserAssigned"
+                                    ]
+                                },
+                                "userAssignedIdentityResourceID": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "kubeletIdentityResourceID": {
+                            "type": "string"
+                        },
+                        "location": {
+                            "type": "string"
+                        },
+                        "resourceGroupName": {
+                            "type": "string"
+                        },
+                        "subscriptionId": {
+                            "type": "string"
+                        }
                     }
                 }
             }
+        },
+        "internal": {
+            "type": "object"
         }
     }
 }
