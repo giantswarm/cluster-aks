@@ -27,9 +27,21 @@ contract.
 {{/*
 Name of the Kubernetes Secret that holds the Azure credentials used by the
 Azure Service Operator (ASO) to reconcile the embedded Azure resources.
+Empty when no asoAuthentication.clientID is configured, so the credential-from
+annotation in the ASO resources is omitted and ASO falls back to its default
+credential resolution.
 */}}
 {{- define "cluster-aks.aso.credentialSecretName" -}}
-{{- .Values.global.providerSpecific.asoCredentialSecretName | default "" -}}
+{{- if .Values.global.providerSpecific.asoAuthentication.clientID -}}
+{{- printf "%s-aso-credentials" (include "cluster-aks.resource.name" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Name of the AzureClusterIdentity CR that mirrors the ASO credentials secret.
+*/}}
+{{- define "cluster-aks.azureClusterIdentity.name" -}}
+{{- printf "%s-identity" (include "cluster-aks.resource.name" .) -}}
 {{- end -}}
 
 {{/*

@@ -247,11 +247,10 @@ global:
     # name when empty. CAPZ creates the RG if it does not exist.
     resourceGroupName: ""
 
-    # Name of the Kubernetes Secret that holds the Azure credentials used by the
-    # Azure Service Operator (ASO) to reconcile the embedded Azure resources.
-    # The secret must live in the same namespace as the Cluster.
-    # If omitted or empty ASO will attempt to use its default credential resolution behavior.
-    asoCredentialSecretName: ""
+    asoAuthentication:
+      subscriptionID: ""
+      tenantID: ""
+      clientID: ""
 
     # Identity assigned to the AKS control plane itself (separate from the
     # CAPZ controller identity above).

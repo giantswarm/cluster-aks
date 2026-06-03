@@ -315,8 +315,19 @@
                 "providerSpecific": {
                     "type": "object",
                     "properties": {
-                        "asoCredentialSecretName": {
-                            "type": "string"
+                        "asoAuthentication": {
+                            "type": "object",
+                            "properties": {
+                                "clientID": {
+                                    "type": "string"
+                                },
+                                "subscriptionID": {
+                                    "type": "string"
+                                },
+                                "tenantID": {
+                                    "type": "string"
+                                }
+                            }
                         },
                         "controlPlaneIdentity": {
                             "type": "object",

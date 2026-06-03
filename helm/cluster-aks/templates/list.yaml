@@ -1,4 +1,12 @@
 {{- include "validation" . }}
+{{- with (include "aso-credentials-secret" .) }}
+---
+{{ . }}
+{{- end }}
+{{- with (include "azure-cluster-identity" .) }}
+---
+{{ . }}
+{{- end }}
 ---
 {{ include "azure-aso-managed-cluster" . }}
 ---
