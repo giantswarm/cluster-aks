@@ -52,6 +52,7 @@ cluster:
       nodeExporter:
         enable: true
       observabilityBundle:
+        configTemplateName: AKSObservabilityBundleHelmValues
         enable: true
       observabilityPolicies:
         enable: true
@@ -66,6 +67,7 @@ cluster:
         configTemplateName: AKSTeleportKubeAgentHelmValues
         enable: true
       verticalPodAutoscaler:
+        configTemplateName: AKSVerticalPodAutoscalerHelmValues
         enable: true
       verticalPodAutoscalerCrd:
         enable: true

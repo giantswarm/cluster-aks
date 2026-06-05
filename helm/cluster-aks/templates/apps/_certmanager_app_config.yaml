@@ -3,4 +3,8 @@
 {{- define "AKSCertManagerHelmValues" }}
 ciliumNetworkPolicy:
   enabled: true
+webhook:
+  mutatingWebhookConfigurationAnnotations:
+    # prevent AKS from overriding the VPA webhook configuration
+    admissions.enforcer/disabled: "true"
 {{- end }}

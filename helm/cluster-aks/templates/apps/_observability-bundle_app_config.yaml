@@ -1,0 +1,14 @@
+{{/* AKS-specific observability-bundle Helm values*/}}
+{{- define "AKSObservabilityBundleHelmValues" }}
+userConfig:
+  kubePrometheusStack:
+    configMap:
+      values:
+        kube-prometheus-stack:
+          prometheusOperator:
+            admissionWebhooks:
+              mutatingWebhookConfiguration:
+                annotations:
+                  # prevent AKS from overriding the VPA webhook configuration
+                  admissions.enforcer/disabled: "true"
+{{- end }}
