@@ -59,8 +59,10 @@ spec:
           {{- with (first ($net.network.services.cidrBlocks | default list)) }}
           serviceCidr: {{ . | quote }}
           {{- end }}
+          {{- if eq $cp.networking.networkPlugin "kubenet" }}
           {{- with (first ($net.network.pods.cidrBlocks | default list)) }}
           podCidr: {{ . | quote }}
+          {{- end }}
           {{- end }}
         oidcIssuerProfile:
           enabled: true

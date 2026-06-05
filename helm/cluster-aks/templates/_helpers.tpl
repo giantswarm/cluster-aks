@@ -47,6 +47,41 @@ credential resolution.
 {{- end -}}
 
 {{/*
+Whether the cluster uses a bring-your-own VNet. True when
+global.connectivity.network.vnet.subnetArmId is set, in which case the
+chart does not create a VNet and every node pool references the given
+subnet by ARM ID.
+*/}}
+{{- define "cluster-aks.vnet.byo" -}}
+{{- if .Values.global.connectivity.network.vnet.subnetArmId -}}true{{- end -}}
+{{- end -}}
+
+{{/*
+Azure name of the chart-created VirtualNetwork. Defaults to the cluster name
+when global.connectivity.network.vnet.name is unset.
+*/}}
+{{- define "cluster-aks.vnet.name" -}}
+{{- .Values.global.connectivity.network.vnet.name | default (include "cluster-aks.resource.name" .) -}}
+{{- end -}}
+
+{{/*
+Azure name of the chart-created subnet inside the VirtualNetwork. Defaults
+to "nodes" when global.connectivity.network.vnet.subnet.name is unset.
+*/}}
+{{- define "cluster-aks.subnet.name" -}}
+{{- .Values.global.connectivity.network.vnet.subnet.name | default "nodes" -}}
+{{- end -}}
+
+{{/*
+Kubernetes object name of the chart-created VirtualNetworksSubnet CR. The
+ASO CR name combines the VNet name and the subnet name to keep it unique
+inside the namespace when multiple clusters share it.
+*/}}
+{{- define "cluster-aks.subnet.crName" -}}
+{{- printf "%s-%s" (include "cluster-aks.vnet.name" .) (include "cluster-aks.subnet.name" .) -}}
+{{- end -}}
+
+{{/*
 Name of the AzureClusterIdentity CR that mirrors the ASO credentials secret.
 */}}
 {{- define "cluster-aks.azureClusterIdentity.name" -}}

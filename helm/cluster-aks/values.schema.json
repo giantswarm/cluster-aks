@@ -77,9 +77,6 @@
                 "spotMaxPrice": {
                     "type": "string"
                 },
-                "subnetArmId": {
-                    "type": "string"
-                },
                 "taints": {
                     "type": "array",
                     "items": {
@@ -169,6 +166,37 @@
                                             "items": {
                                                 "type": "string"
                                             }
+                                        }
+                                    }
+                                },
+                                "vnet": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cidrBlocks": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "subnet": {
+                                            "type": "object",
+                                            "properties": {
+                                                "cidrBlocks": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "subnetArmId": {
+                                            "type": "string"
                                         }
                                     }
                                 }

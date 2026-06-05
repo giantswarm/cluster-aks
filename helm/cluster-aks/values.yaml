@@ -175,12 +175,44 @@ global:
       services:
         cidrBlocks:
           - 172.20.0.0/16
-      # Pods CIDR — used for AKS overlay / kubenet networking. With Azure
-      # CNI in non-overlay mode pods get IPs from the VNet subnet and this
-      # is ignored at the AKS level.
+      # Pods CIDR — only used by AKS when `controlPlane.networking.networkPlugin`
+      # is `kubenet`. Ignored for Azure CNI (both node-subnet and overlay
+      # modes); in node-subnet mode pods get IPs from `vnet.subnet.cidrBlocks`.
+      # Kept non-empty because the giantswarm/cluster subchart schema
+      # requires at least one entry.
       pods:
         cidrBlocks:
           - 192.168.0.0/16
+
+      # VNet for the cluster's node pools.
+      #
+      # By default the chart creates an Azure VirtualNetwork (via ASO)
+      # with one subnet inside it, and wires every node pool to that
+      # subnet (Azure CNI node-subnet mode — pods get IPs from the
+      # subnet's CIDR).
+      #
+      # To bring your own VNet, set `subnetArmId` to the ARM ID of an
+      # existing subnet. When set, the chart does NOT create a VNet
+      # and every node pool references the provided subnet instead;
+      # `cidrBlocks`, `name`, and `subnet.*` are then ignored.
+      vnet:
+        # ARM ID of an existing subnet to use for all node pools. When
+        # set, the chart skips VNet/Subnet creation. Format:
+        # /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<vnet>/subnets/<subnet>
+        subnetArmId: ""
+        # CIDR(s) of the chart-created VirtualNetwork's address space.
+        cidrBlocks:
+          - 10.224.0.0/12
+        # Name of the chart-created VirtualNetwork. Defaults to the
+        # cluster name when empty.
+        name: ""
+        subnet:
+          # CIDR of the chart-created subnet. Must lie within
+          # vnet.cidrBlocks.
+          cidrBlocks:
+            - 10.224.0.0/16
+          # Name of the chart-created subnet (Azure resource name).
+          name: nodes
 
     # Optional API server access controls (AKS public/private cluster).
     apiServerAccess:

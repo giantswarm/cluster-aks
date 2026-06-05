@@ -68,9 +68,14 @@ spec:
         {{- if and (eq ($pool.scaleSetPriority | default "Regular") "Spot") $pool.spotMaxPrice }}
         spotMaxPrice: {{ $pool.spotMaxPrice }}
         {{- end }}
-        {{- with $pool.subnetArmId }}
+        {{- if include "cluster-aks.vnet.byo" $root }}
         vnetSubnetReference:
-          armId: {{ . | quote }}
+          armId: {{ $root.Values.global.connectivity.network.vnet.subnetArmId | quote }}
+        {{- else }}
+        vnetSubnetReference:
+          group: network.azure.com
+          kind: VirtualNetworksSubnet
+          name: {{ include "cluster-aks.subnet.crName" $root }}
         {{- end }}
         {{- with $pool.additionalTags }}
         tags:
