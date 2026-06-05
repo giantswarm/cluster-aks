@@ -21,49 +21,54 @@ cluster:
   providerIntegration:
     apps:
       certExporter:
-        enable: false
+        enable: true
       certManager:
-        enable: false
+        configTemplateName: AKSCertManagerHelmValues
+        enable: true
       chartOperatorExtensions:
-        enable: false
+        enable: true
       cilium:
-        enable: false
+        enable: false # Already managed by AKS
       ciliumServiceMonitors:
-        enable: false
+        enable: true
       clusterAutoscaler:
         enable: false
       coreDns:
-        enable: false
+        enable: false # Already managed by AKS
       coreDnsExtensions:
-        enable: false
+        enable: false # Already managed by AKS
       externalDns:
-        enable: false
+        configTemplateName: AKSExternalDnsHelmValues
+        enable: true
       k8sDnsNodeCache:
-        enable: false
+        enable: true
       metricsServer:
-        enable: false
+        enable: false # Already managed by AKS
       netExporter:
-        enable: false
+        enable: true
       networkPolicies:
         configTemplateName: AKSNetworkPoliciesHelmValues
         enable: true
       nodeExporter:
-        enable: false
+        enable: true
       observabilityBundle:
-        enable: false
+        enable: true
       observabilityPolicies:
-        enable: false
+        enable: true
+      priorityClasses:
+        enable: true
       rbacBootstrap:
-        enable: false
+        enable: true
       securityBundle:
-        enable: false
+        configTemplateName: AKSSecurityBundleHelmValues
+        enable: true
       teleportKubeAgent:
         configTemplateName: AKSTeleportKubeAgentHelmValues
         enable: true
       verticalPodAutoscaler:
-        enable: false
+        enable: true
       verticalPodAutoscalerCrd:
-        enable: false
+        enable: true
 
     provider: aks
 

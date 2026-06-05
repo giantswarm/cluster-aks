@@ -3,4 +3,8 @@
 {{- define "AKSNetworkPoliciesHelmValues" }}
 allowEgressToDNS:
   enabled: true
+konnectivityAgent:
+  enabled: true
+  namespaces:
+    - "kube-system"
 {{- end }}
