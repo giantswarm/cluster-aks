@@ -79,7 +79,7 @@ cluster:
       bastionResourceEnabled: false
       cleanupHelmReleaseResourcesEnabled: false
       clusterResourceEnabled: true
-      helmRepositoryResourcesEnabled: false
+      helmRepositoryResourcesEnabled: true
 
       # AKS manages the control plane externally; we don't render a
       # KubeadmControlPlane or KamajiControlPlane. The Cluster CR's
