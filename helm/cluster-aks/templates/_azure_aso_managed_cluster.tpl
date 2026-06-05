@@ -1,5 +1,4 @@
 {{- define "azure-aso-managed-cluster" -}}
-{{- $ps := .Values.global.providerSpecific -}}
 {{- $clusterName := include "cluster-aks.resource.name" . -}}
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AzureASOManagedCluster
@@ -21,8 +20,8 @@ spec:
           serviceoperator.azure.com/credential-from: {{ . | quote }}
         {{- end }}
       spec:
-        azureName: {{ $ps.resourceGroupName | default $clusterName | quote }}
-        location: {{ required "global.providerSpecific.location is required" $ps.location | quote }}
+        azureName: {{ include "cluster-aks.resourceGroup.name" . | quote }}
+        location: {{ required "global.providerSpecific.location is required" .Values.global.providerSpecific.location | quote }}
         {{- with .Values.global.controlPlane.additionalTags }}
         tags:
           {{- toYaml . | nindent 10 }}

@@ -25,6 +25,15 @@ contract.
 {{- end -}}
 
 {{/*
+Name of the Azure resource group that holds the AKS cluster and its
+related Azure resources. Defaults to the cluster name when
+global.providerSpecific.resourceGroupName is unset.
+*/}}
+{{- define "cluster-aks.resourceGroup.name" -}}
+{{- .Values.global.providerSpecific.resourceGroupName | default (include "cluster-aks.resource.name" .) -}}
+{{- end -}}
+
+{{/*
 Name of the Kubernetes Secret that holds the Azure credentials used by the
 Azure Service Operator (ASO) to reconcile the embedded Azure resources.
 Empty when no asoAuthentication.clientID is configured, so the credential-from
