@@ -8,6 +8,8 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "labels.common" . | nindent 4 }}
+  annotations:
+    "helm.sh/resource-policy": keep
 type: Opaque
 stringData:
   AZURE_SUBSCRIPTION_ID: {{ $auth.subscriptionID | quote }}

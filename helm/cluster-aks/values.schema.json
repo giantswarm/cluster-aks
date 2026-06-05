@@ -361,7 +361,23 @@
             }
         },
         "internal": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "kubectlImage": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "registry": {
+                            "type": "string"
+                        },
+                        "tag": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     }
 }

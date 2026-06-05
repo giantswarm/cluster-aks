@@ -273,6 +273,10 @@ internal:
     vnet: {}
     vpn:
       gatewayMode: none
+  kubectlImage:
+    name: giantswarm/docker-kubectl
+    registry: gsoci.azurecr.io
+    tag: "1.36.1"
   sandboxContainerImage:
     name: giantswarm/pause
     registry: gsoci.azurecr.io

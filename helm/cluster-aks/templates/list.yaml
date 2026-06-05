@@ -3,6 +3,10 @@
 ---
 {{ . }}
 {{- end }}
+{{- with (include "aso-credentials-secret-owner-hook" .) }}
+---
+{{ . }}
+{{- end }}
 {{- with (include "azure-cluster-identity" .) }}
 ---
 {{ . }}
