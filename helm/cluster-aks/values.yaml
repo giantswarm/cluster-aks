@@ -87,6 +87,7 @@ cluster:
       cleanupHelmReleaseResourcesEnabled: false
       clusterResourceEnabled: true
       helmRepositoryResourcesEnabled: true
+      externalAutoscalerEnabled: false
 
       # AKS manages the control plane externally; we don't render a
       # KubeadmControlPlane or KamajiControlPlane. The Cluster CR's
@@ -146,7 +147,29 @@ cluster:
         system:
           mode: System
           vmSize: Standard_D2s_v3
-          replicas: 1
+          minSize: 1
+          maxSize: 2
+          enableAutoScaling: true
+          osDiskSizeGB: 128
+          osDiskType: Managed
+          osType: Linux
+          availabilityZones:
+            - "1"
+            - "2"
+            - "3"
+        workers:
+          mode: User
+          vmSize: Standard_D2s_v3
+          minSize: 1
+          maxSize: 2
+          enableAutoScaling: true
+          osDiskSizeGB: 128
+          osDiskType: Managed
+          osType: Linux
+          availabilityZones:
+            - "1"
+            - "2"
+            - "3"
 
 # User-facing values. These are the knobs end users tune.
 #
@@ -259,21 +282,6 @@ global:
 
     # Additional Azure tags applied to the underlying AKS resources.
     additionalTags: {}
-
-  # Map of node pools, keyed by pool name. The key must satisfy AKS agent
-  # pool naming rules (lowercase alphanumeric, ≤12 chars for Linux pools).
-  # At least one pool must have `mode: System`.
-  nodePools:
-    system:
-      mode: System
-      vmSize: Standard_D2s_v3
-      osDiskSizeGB: 128
-      osDiskType: Managed
-      osType: Linux
-      replicas: 1
-      availabilityZones: []
-      nodeLabels: {}
-      taints: []
 
   providerSpecific:
     # Azure subscription that hosts the AKS cluster.

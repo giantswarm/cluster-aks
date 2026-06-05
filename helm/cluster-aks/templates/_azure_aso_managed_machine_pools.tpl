@@ -2,7 +2,7 @@
 {{- $root := . -}}
 {{- $clusterName := include "cluster-aks.resource.name" . -}}
 {{- $first := true -}}
-{{- range $poolName, $pool := .Values.global.nodePools }}
+{{- range $poolName, $pool := .Values.global.nodePools | default .Values.cluster.providerIntegration.workers.defaultNodePools }}
 {{- if $first }}{{- $first = false -}}{{- else }}
 ---
 {{- end }}
@@ -57,10 +57,13 @@ spec:
           - {{ printf "%s=%s:%s" .key (.value | default "") .effect | quote }}
           {{- end }}
         {{- end }}
+        enableAutoScaling: {{ $pool.enableAutoScaling | default true }}
+        {{- with $pool.count }}
+        count: {{ . }}
+        {{- end }}
         {{- if and (hasKey $pool "minSize") (hasKey $pool "maxSize") }}
-        enableAutoScaling: false
-        minCount: {{ $pool.minSize }}
-        maxCount: {{ $pool.maxSize }}
+        minCount: {{ $pool.minSize | default 1 }}
+        maxCount: {{ $pool.maxSize | default 2 }}
         {{- end }}
         {{- with $pool.scaleSetPriority }}
         scaleSetPriority: {{ . }}
