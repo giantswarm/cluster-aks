@@ -48,11 +48,11 @@ rules:
   - apiGroups: ["infrastructure.cluster.x-k8s.io"]
     resources: ["azureclusteridentities"]
     resourceNames: [{{ $identityName | quote }}]
-    verbs: ["get", "patch"]
+    verbs: ["get", "patch", "delete"]
   - apiGroups: [""]
     resources: ["secrets"]
     resourceNames: [{{ $secretName | quote }}]
-    verbs: ["get", "patch"]
+    verbs: ["get", "patch", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -95,9 +95,24 @@ spec:
     spec:
       restartPolicy: OnFailure
       serviceAccountName: {{ $hookName }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: kubectl
           image: "{{ .Values.internal.kubectlImage.registry }}/{{ .Values.internal.kubectlImage.name }}:{{ .Values.internal.kubectlImage.tag }}"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           command: ["/bin/sh", "-c"]
           args:
             - |
