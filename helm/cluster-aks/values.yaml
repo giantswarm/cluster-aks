@@ -65,7 +65,7 @@ cluster:
       verticalPodAutoscalerCrd:
         enable: false
 
-    provider: capz
+    provider: aks
 
     # Named template (defined in this chart) that renders annotations placed
     # on the Cluster CR by the cluster subchart.
