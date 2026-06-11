@@ -87,7 +87,8 @@ cluster:
       cleanupHelmReleaseResourcesEnabled: false
       clusterResourceEnabled: true
       helmRepositoryResourcesEnabled: true
-      externalAutoscalerEnabled: false
+      externalAutoscaler:
+        enabled: false
 
       # AKS manages the control plane externally; we don't render a
       # KubeadmControlPlane or KamajiControlPlane. The Cluster CR's
