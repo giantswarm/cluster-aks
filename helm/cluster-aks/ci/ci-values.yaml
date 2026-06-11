@@ -44,3 +44,10 @@ global:
         - "1"
         - "2"
         - "3"
+
+# TODO: This is required until we have an aks release
+cluster:
+  internal:
+    ephemeralConfiguration:
+      offlineTesting:
+        renderWithoutReleaseResource: true
