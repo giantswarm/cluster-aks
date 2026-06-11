@@ -28,22 +28,22 @@ cluster:
       chartOperatorExtensions:
         enable: true
       cilium:
-        enable: false # Already managed by AKS
+        enable: false        # Already managed by AKS
       ciliumServiceMonitors:
         enable: true
       clusterAutoscaler:
         enable: false
       coreDns:
-        enable: false # Already managed by AKS
+        enable: false        # Already managed by AKS
       coreDnsExtensions:
-        enable: false # Already managed by AKS
+        enable: false        # Already managed by AKS
       externalDns:
         configTemplateName: AKSExternalDnsHelmValues
         enable: true
       k8sDnsNodeCache:
         enable: true
       metricsServer:
-        enable: false # Already managed by AKS
+        enable: false        # Already managed by AKS
       netExporter:
         enable: true
       networkPolicies:
