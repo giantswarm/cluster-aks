@@ -87,8 +87,6 @@ cluster:
       cleanupHelmReleaseResourcesEnabled: false
       clusterResourceEnabled: true
       helmRepositoryResourcesEnabled: true
-      externalAutoscaler:
-        enabled: false
 
       # AKS manages the control plane externally; we don't render a
       # KubeadmControlPlane or KamajiControlPlane. The Cluster CR's
@@ -109,7 +107,11 @@ cluster:
 
       # Worker node pools are rendered as CAPI MachinePool resources whose
       # infrastructureRef points at AzureASOManagedMachinePool.
-      machinePoolResourcesEnabled: true
+      machinePoolResources:
+        enabled: true
+        externalAutoscaler:
+          enabled: false
+
       nodePoolKind: MachinePool
       infrastructureMachinePool:
         group: infrastructure.cluster.x-k8s.io

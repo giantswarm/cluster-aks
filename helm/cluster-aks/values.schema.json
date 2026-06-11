@@ -30,6 +30,10 @@
                     "maximum": 1000,
                     "minimum": 0
                 },
+                "enableAutoScaling": {
+                    "type": "boolean",
+                    "default": true
+                },
                 "mode": {
                     "type": "string",
                     "enum": [
@@ -147,6 +151,9 @@
                         "network": {
                             "type": "object",
                             "properties": {
+                                "dnsServiceIP": {
+                                    "type": "string"
+                                },
                                 "pods": {
                                     "type": "object",
                                     "properties": {
@@ -267,16 +274,18 @@
                                 "networkPolicy": {
                                     "type": "string",
                                     "enum": [
-                                        "",
                                         "azure",
                                         "calico",
-                                        "cilium"
+                                        "cilium",
+                                        "none"
                                     ]
                                 },
                                 "outboundType": {
                                     "type": "string",
                                     "enum": [
                                         "loadBalancer",
+                                        "managedNATGateway",
+                                        "userAssignedNATGateway",
                                         "userDefinedRouting"
                                     ]
                                 }
@@ -391,6 +400,26 @@
         "internal": {
             "type": "object",
             "properties": {
+                "defaults": {
+                    "type": "object",
+                    "properties": {
+                        "evictionMinimumReclaim": {
+                            "type": "string"
+                        },
+                        "hardEvictionThresholds": {
+                            "type": "string"
+                        },
+                        "softEvictionGracePeriod": {
+                            "type": "string"
+                        },
+                        "softEvictionThresholds": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "enableVpaResources": {
+                    "type": "boolean"
+                },
                 "kubectlImage": {
                     "type": "object",
                     "properties": {
@@ -401,6 +430,50 @@
                             "type": "string"
                         },
                         "tag": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "network": {
+                    "type": "object",
+                    "properties": {
+                        "vnet": {
+                            "type": "object"
+                        },
+                        "vpn": {
+                            "type": "object",
+                            "properties": {
+                                "gatewayMode": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "sandboxContainerImage": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "registry": {
+                            "type": "string"
+                        },
+                        "tag": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "teleport": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "proxyAddr": {
+                            "type": "string"
+                        },
+                        "version": {
                             "type": "string"
                         }
                     }

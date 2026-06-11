@@ -1,0 +1,55 @@
+{{/* Default Helm values for the app */}}
+{{/* See schema for the appropriate app version here https://github.com/giantswarm/azure-aks-extras/blob/main/helm/azure-aks-extras/values.schema.json */}}
+{{- define "defaultAzureAksExtrasHelmValues" }}
+coredns:
+  cluster:
+    calico:
+      CIDR: {{ first .Values.global.connectivity.network.pods.cidrBlocks | quote }}
+    kubernetes:
+      API:
+        clusterIPRange: {{ first .Values.global.connectivity.network.services.cidrBlocks | quote }}
+      DNS:
+        IP: {{ include "cluster.internal.apps.coredns.dns" $ | quote }}
+{{- end }}
+
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: {{ include "cluster-aks.resource.name" $ }}-azure-aks-extras
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    cluster.giantswarm.io/description: "{{ .Values.global.metadata.description }}"
+  labels:
+    cluster-apps-operator.giantswarm.io/watching: ""
+    {{- if .Values.global.metadata.servicePriority }}
+    giantswarm.io/service-priority: {{ .Values.global.metadata.servicePriority }}
+    {{- end }}
+    {{- include "labels.common" . | nindent 4 }}
+spec:
+  suspend: false
+  releaseName: azure-aks-extras
+  targetNamespace: kube-system
+  storageNamespace: kube-system
+  chart:
+    spec:
+      chart: azure-aks-extras
+      {{- $_ := set $ "appName" "azure-aks-extras" }}
+      version: {{ include "cluster.app.version" $ }}
+      sourceRef:
+        kind: HelmRepository
+        name: {{ include "cluster-aks.resource.name" $ }}-{{ include "cluster.app.catalog" $ }}
+  kubeConfig:
+    secretRef:
+      name: {{ include "cluster-aks.resource.name" $ }}-kubeconfig
+  interval: 1m
+  install:
+    remediation:
+      retries: -1
+  {{- $azureAksExtrasHelmValues := (include "defaultAzureAksExtrasHelmValues" .) | fromYaml -}}
+  {{- $customAzureAksExtrasHelmValues := $.Values.global.apps.azureAksExtras.values -}}
+  {{- if $customAzureAksExtrasHelmValues }}
+  {{- $azureAksExtrasHelmValues = merge (deepCopy $customAzureAksExtrasHelmValues) $azureAksExtrasHelmValues -}}
+  {{- end }}
+  {{- if $azureAksExtrasHelmValues }}
+  values: {{- $azureAksExtrasHelmValues | toYaml | nindent 4 }}
+  {{- end }}
