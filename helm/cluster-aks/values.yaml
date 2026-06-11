@@ -28,22 +28,26 @@ cluster:
       chartOperatorExtensions:
         enable: true
       cilium:
-        enable: false        # Already managed by AKS
+        # Already managed by AKS
+        enable: false
       ciliumServiceMonitors:
         enable: true
       clusterAutoscaler:
         enable: false
       coreDns:
-        enable: false        # Already managed by AKS
+        # Already managed by AKS
+        enable: false
       coreDnsExtensions:
-        enable: false        # Already managed by AKS
+        # Already managed by AKS
+        enable: false
       externalDns:
         configTemplateName: AKSExternalDnsHelmValues
         enable: true
       k8sDnsNodeCache:
         enable: true
       metricsServer:
-        enable: false        # Already managed by AKS
+        # Already managed by AKS
+        enable: false
       netExporter:
         enable: true
       networkPolicies:
@@ -179,6 +183,9 @@ cluster:
 # Helm shares the `global` key between this chart and its subcharts, so the
 # fields below are visible inside the giantswarm/cluster subchart as well.
 global:
+  apps:
+    azureAksExtras: {}
+
   # Name of the management cluster that manages this workload cluster.
   # Required by the cluster subchart.
   managementCluster: ""
