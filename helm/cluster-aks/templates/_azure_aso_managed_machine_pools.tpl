@@ -31,19 +31,19 @@ spec:
         mode: {{ $pool.mode | default "User" }}
         type: VirtualMachineScaleSets
         vmSize: {{ required (printf "vmSize is required for node pool %q" $poolName) $pool.vmSize | quote }}
-        {{- with $pool.osType }}
+        {{- with $pool.osType | default "Linux" }}
         osType: {{ . }}
         {{- end }}
-        {{- with $pool.osDiskSizeGB }}
+        {{- with $pool.osDiskSizeGB | default 30 }}
         osDiskSizeGB: {{ . }}
         {{- end }}
-        {{- with $pool.osDiskType }}
+        {{- with $pool.osDiskType | default "Managed" }}
         osDiskType: {{ . }}
         {{- end }}
         {{- with $pool.maxPods }}
         maxPods: {{ . }}
         {{- end }}
-        {{- with $pool.availabilityZones }}
+        {{- with $pool.availabilityZones | default (list "1" "2" "3") }}
         availabilityZones:
           {{- toYaml . | nindent 10 }}
         {{- end }}
