@@ -293,5 +293,13 @@ Properties within the `.internal` top-level object
 | `internal.teleport.proxyAddr` |**None**|**Type:** `string`<br/>**Default:** `"teleport.giantswarm.io:443"`|
 | `internal.teleport.version` |**None**|**Type:** `string`<br/>**Default:** `"14.1.3"`|
 
+### Other
+
+| **Property** | **Description** | **More Details** |
+| :----------- | :-------------- | :--------------- |
+| `baseDomain` | **Base DNS domain**|**Type:** `string`<br/>|
+| `managementCluster` | **Management cluster** - Name of the Cluster API cluster managing this workload cluster.|**Type:** `string`<br/>|
+| `provider` | **Cluster API provider name**|**Type:** `string`<br/>|
+
 
 <!-- DOCS_END -->
