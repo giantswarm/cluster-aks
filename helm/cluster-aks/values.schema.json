@@ -114,6 +114,7 @@
         }
     },
     "type": "object",
+    "additionalProperties": false,
     "properties": {
         "cluster": {
             "type": "object",
@@ -160,7 +161,7 @@
                                     "properties": {
                                         "enable": {
                                             "type": "boolean",
-                                            "description": "Already managed by AKS",
+                                            "description": "Already managed by AKS.",
                                             "default": false
                                         }
                                     }
@@ -188,7 +189,7 @@
                                     "properties": {
                                         "enable": {
                                             "type": "boolean",
-                                            "description": "Already managed by AKS",
+                                            "description": "Already managed by AKS.",
                                             "default": false
                                         }
                                     }
@@ -198,7 +199,7 @@
                                     "properties": {
                                         "enable": {
                                             "type": "boolean",
-                                            "description": "Already managed by AKS",
+                                            "description": "Already managed by AKS.",
                                             "default": false
                                         }
                                     }
@@ -230,7 +231,7 @@
                                     "properties": {
                                         "enable": {
                                             "type": "boolean",
-                                            "description": "Already managed by AKS",
+                                            "description": "Already managed by AKS.",
                                             "default": false
                                         }
                                     }
@@ -655,25 +656,31 @@
         },
         "global": {
             "type": "object",
+            "title": "Global configuration",
             "properties": {
                 "apps": {
                     "type": "object",
+                    "title": "Apps",
                     "properties": {
                         "azureAksExtras": {
                             "type": "object",
+                            "title": "Azure AKS extras",
                             "default": {}
                         }
                     }
                 },
                 "connectivity": {
                     "type": "object",
+                    "title": "Connectivity",
                     "properties": {
                         "apiServerAccess": {
                             "type": "object",
+                            "title": "API server access",
                             "description": "Optional API server access controls (AKS public/private cluster).",
                             "properties": {
                                 "authorizedIPRanges": {
                                     "type": "array",
+                                    "title": "Authorized IP ranges",
                                     "items": {
                                         "type": "string"
                                     },
@@ -681,38 +688,46 @@
                                 },
                                 "enablePrivateCluster": {
                                     "type": "boolean",
+                                    "title": "Enable private cluster",
                                     "description": "When true, the AKS API server is reachable only from inside the VNet (or via authorizedIPRanges).",
                                     "default": false
                                 },
                                 "enablePrivateClusterPublicFQDN": {
                                     "type": "boolean",
+                                    "title": "Enable private cluster public FQDN",
                                     "default": false
                                 },
                                 "privateDNSZone": {
                                     "type": "string",
+                                    "title": "Private DNS zone",
                                     "default": ""
                                 }
                             }
                         },
                         "baseDomain": {
                             "type": "string",
-                            "description": "DNS base domain used by the management cluster's installation",
+                            "title": "Base domain",
+                            "description": "DNS base domain used by the management cluster's installation.",
                             "default": ""
                         },
                         "network": {
                             "type": "object",
+                            "title": "Network",
                             "properties": {
                                 "dnsServiceIP": {
                                     "type": "string",
+                                    "title": "DNS service IP",
                                     "description": "Must be within the service CIDR.",
                                     "default": "172.20.0.10"
                                 },
                                 "pods": {
                                     "type": "object",
+                                    "title": "Pods network",
                                     "description": "Pods CIDR — only used by AKS when controlPlane.networking.networkPlugin is kubenet. Ignored for Azure CNI (both node-subnet and overlay modes); in node-subnet mode pods get IPs from vnet.subnet.cidrBlocks. Kept non-empty because the giantswarm/cluster subchart schema requires at least one entry.",
                                     "properties": {
                                         "cidrBlocks": {
                                             "type": "array",
+                                            "title": "CIDR blocks",
                                             "items": {
                                                 "type": "string"
                                             },
@@ -724,10 +739,12 @@
                                 },
                                 "services": {
                                     "type": "object",
+                                    "title": "Services network",
                                     "description": "Services CIDR — assigned by AKS for Kubernetes Service IPs. Used to populate Cluster.spec.clusterNetwork.services.",
                                     "properties": {
                                         "cidrBlocks": {
                                             "type": "array",
+                                            "title": "CIDR blocks",
                                             "items": {
                                                 "type": "string"
                                             },
@@ -739,10 +756,12 @@
                                 },
                                 "vnet": {
                                     "type": "object",
-                                    "description": "VNet for the cluster's node pools. By default the chart creates an Azure VirtualNetwork (via ASO) with one subnet inside it, and wires every node pool to that subnet (Azure CNI node-subnet mode — pods get IPs from the subnet's CIDR). To bring your own VNet, set subnetArmId to the ARM ID of an existing subnet. When set, the chart does NOT create a VNet and every node pool references the provided subnet instead; cidrBlocks, name, and subnet.* are then ignored.",
+                                    "title": "VNet",
+                                    "description": "VNet for the cluster's node pools. By default the chart creates an Azure VirtualNetwork (via ASO) with one subnet inside it, and wires every node pool to that subnet (Azure CNI node-subnet mode). To bring your own VNet, set subnetArmId to the ARM ID of an existing subnet. When set, the chart does NOT create a VNet and every node pool references the provided subnet instead; cidrBlocks, name, and subnet.* are then ignored.",
                                     "properties": {
                                         "cidrBlocks": {
                                             "type": "array",
+                                            "title": "CIDR blocks",
                                             "description": "CIDR(s) of the chart-created VirtualNetwork's address space.",
                                             "items": {
                                                 "type": "string"
@@ -753,14 +772,17 @@
                                         },
                                         "name": {
                                             "type": "string",
+                                            "title": "Name",
                                             "description": "Name of the chart-created VirtualNetwork. Defaults to the cluster name when empty.",
                                             "default": ""
                                         },
                                         "subnet": {
                                             "type": "object",
+                                            "title": "Subnet",
                                             "properties": {
                                                 "cidrBlocks": {
                                                     "type": "array",
+                                                    "title": "CIDR blocks",
                                                     "description": "CIDR of the chart-created subnet. Must lie within vnet.cidrBlocks.",
                                                     "items": {
                                                         "type": "string"
@@ -771,6 +793,7 @@
                                                 },
                                                 "name": {
                                                     "type": "string",
+                                                    "title": "Name",
                                                     "description": "Name of the chart-created subnet (Azure resource name).",
                                                     "default": "nodes"
                                                 }
@@ -778,7 +801,8 @@
                                         },
                                         "subnetArmId": {
                                             "type": "string",
-                                            "description": "ARM ID of an existing subnet to use for all node pools. When set, the chart skips VNet/Subnet creation. Format: /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<vnet>/subnets/<subnet>",
+                                            "title": "Subnet ARM ID",
+                                            "description": "ARM ID of an existing subnet to use for all node pools. When set, the chart skips VNet/Subnet creation. Format: /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<vnet>/subnets/<subnet>.",
                                             "default": ""
                                         }
                                     }
@@ -789,24 +813,29 @@
                 },
                 "controlPlane": {
                     "type": "object",
+                    "title": "Control plane",
                     "properties": {
                         "aadProfile": {
                             "type": "object",
+                            "title": "AAD profile",
                             "description": "AAD integration. When managed: true, AKS uses AAD for Kubernetes API authentication.",
                             "properties": {
                                 "adminGroupObjectIDs": {
                                     "type": "array",
+                                    "title": "Admin group object IDs",
                                     "items": {
                                         "type": "string"
                                     }
                                 },
                                 "managed": {
-                                    "type": "boolean"
+                                    "type": "boolean",
+                                    "title": "Managed"
                                 }
                             }
                         },
                         "additionalTags": {
                             "type": "object",
+                            "title": "Additional tags",
                             "description": "Additional Azure tags applied to the underlying AKS resources.",
                             "additionalProperties": {
                                 "type": "string"
@@ -815,6 +844,8 @@
                         },
                         "autoUpgradeChannel": {
                             "type": "string",
+                            "title": "Auto-upgrade channel",
+                            "description": "Auto-upgrade channel for AKS node image and Kubernetes version updates.",
                             "enum": [
                                 "none",
                                 "patch",
@@ -826,15 +857,18 @@
                         },
                         "dnsPrefix": {
                             "type": "string",
+                            "title": "DNS prefix",
                             "description": "DNS prefix. Defaults to the cluster name when empty.",
                             "default": ""
                         },
                         "networking": {
                             "type": "object",
-                            "description": "AKS networking.",
+                            "title": "Networking",
+                            "description": "AKS networking configuration.",
                             "properties": {
                                 "networkDataplane": {
                                     "type": "string",
+                                    "title": "Network dataplane",
                                     "enum": [
                                         "azure",
                                         "cilium"
@@ -843,6 +877,7 @@
                                 },
                                 "networkMode": {
                                     "type": "string",
+                                    "title": "Network mode",
                                     "enum": [
                                         "bridge",
                                         "transparent"
@@ -851,6 +886,7 @@
                                 },
                                 "networkPlugin": {
                                     "type": "string",
+                                    "title": "Network plugin",
                                     "enum": [
                                         "azure",
                                         "kubenet"
@@ -859,6 +895,7 @@
                                 },
                                 "networkPolicy": {
                                     "type": "string",
+                                    "title": "Network policy",
                                     "enum": [
                                         "azure",
                                         "calico",
@@ -869,6 +906,7 @@
                                 },
                                 "outboundType": {
                                     "type": "string",
+                                    "title": "Outbound type",
                                     "enum": [
                                         "loadBalancer",
                                         "managedNATGateway",
@@ -881,10 +919,12 @@
                         },
                         "sku": {
                             "type": "object",
+                            "title": "SKU",
                             "description": "AKS SKU tier.",
                             "properties": {
                                 "tier": {
                                     "type": "string",
+                                    "title": "Tier",
                                     "enum": [
                                         "Free",
                                         "Premium",
@@ -898,38 +938,53 @@
                 },
                 "managementCluster": {
                     "type": "string",
+                    "title": "Management cluster",
                     "default": ""
                 },
                 "metadata": {
                     "type": "object",
+                    "title": "Metadata",
                     "properties": {
                         "description": {
                             "type": "string",
+                            "title": "Description",
                             "default": ""
                         },
                         "annotations": {
                             "type": "object",
+                            "title": "Annotations",
+                            "additionalProperties": {
+                                "type": "string"
+                            },
                             "default": {}
                         },
                         "labels": {
                             "type": "object",
+                            "title": "Labels",
+                            "additionalProperties": {
+                                "type": "string"
+                            },
                             "default": {}
                         },
                         "name": {
                             "type": "string",
+                            "title": "Name",
                             "description": "Name of the workload cluster. Defaults to the Helm release name when unset. Must comply with Azure resource naming rules.",
                             "default": ""
                         },
                         "organization": {
                             "type": "string",
+                            "title": "Organization",
                             "default": ""
                         },
                         "preventDeletion": {
                             "type": "boolean",
+                            "title": "Prevent deletion",
                             "default": false
                         },
                         "servicePriority": {
                             "type": "string",
+                            "title": "Service priority",
                             "enum": [
                                 "lowest",
                                 "medium",
@@ -941,6 +996,7 @@
                 },
                 "nodePools": {
                     "type": "object",
+                    "title": "Node pools",
                     "additionalProperties": false,
                     "patternProperties": {
                         "^[a-z0-9]{1,12}$": {
@@ -950,30 +1006,37 @@
                 },
                 "providerSpecific": {
                     "type": "object",
+                    "title": "Provider-specific configuration",
                     "properties": {
                         "asoAuthentication": {
                             "type": "object",
+                            "title": "ASO authentication",
                             "properties": {
                                 "clientID": {
                                     "type": "string",
+                                    "title": "Client ID",
                                     "default": ""
                                 },
                                 "subscriptionID": {
                                     "type": "string",
+                                    "title": "Subscription ID",
                                     "default": ""
                                 },
                                 "tenantID": {
                                     "type": "string",
+                                    "title": "Tenant ID",
                                     "default": ""
                                 }
                             }
                         },
                         "controlPlaneIdentity": {
                             "type": "object",
+                            "title": "Control plane identity",
                             "description": "Identity assigned to the AKS control plane itself (separate from the CAPZ controller identity above).",
                             "properties": {
                                 "type": {
                                     "type": "string",
+                                    "title": "Type",
                                     "enum": [
                                         "SystemAssigned",
                                         "UserAssigned"
@@ -982,27 +1045,32 @@
                                 },
                                 "userAssignedIdentityResourceID": {
                                     "type": "string",
+                                    "title": "User-assigned identity resource ID",
                                     "default": ""
                                 }
                             }
                         },
                         "kubeletIdentityResourceID": {
                             "type": "string",
+                            "title": "Kubelet identity resource ID",
                             "description": "User-assigned identity used by the kubelet (typically for ACR pulls).",
                             "default": ""
                         },
                         "location": {
                             "type": "string",
+                            "title": "Location",
                             "description": "Azure region (e.g. westeurope, eastus).",
                             "default": ""
                         },
                         "resourceGroupName": {
                             "type": "string",
+                            "title": "Resource group name",
                             "description": "Resource group that contains the AKS cluster. Defaults to the cluster name when empty. CAPZ creates the RG if it does not exist.",
                             "default": ""
                         },
                         "subscriptionId": {
                             "type": "string",
+                            "title": "Subscription ID",
                             "description": "Azure subscription that hosts the AKS cluster.",
                             "default": ""
                         }
