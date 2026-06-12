@@ -12,18 +12,132 @@ make generate-docs
 
 <!-- DOCS_START -->
 
-### Other global
-
-| **Property** | **Description** | **More Details** |
-| :----------- | :-------------- | :--------------- |
-| `global.managementCluster` |**None**|**Type:** `string`<br/>**Default:** `""`|
-
-### apps
+### Apps
 Properties within the `.global.apps` object
 
 | **Property** | **Description** | **More Details** |
 | :----------- | :-------------- | :--------------- |
-| `global.apps.azureAksExtras` |**None**|**Type:** `object`<br/>**Default:** `{}`|
+| `global.apps.azureAksExtras` | **Azure AKS extras**|**Type:** `object`<br/>**Default:** `{}`|
+
+### Connectivity
+Properties within the `.global.connectivity` object
+
+| **Property** | **Description** | **More Details** |
+| :----------- | :-------------- | :--------------- |
+| `global.connectivity.apiServerAccess` | **API server access** - Optional API server access controls (AKS public/private cluster).|**Type:** `object`<br/>|
+| `global.connectivity.apiServerAccess.authorizedIPRanges` | **Authorized IP ranges**|**Type:** `array`<br/>**Default:** `[]`|
+| `global.connectivity.apiServerAccess.authorizedIPRanges[*]` |**None**|**Type:** `string`<br/>|
+| `global.connectivity.apiServerAccess.enablePrivateCluster` | **Enable private cluster** - When true, the AKS API server is reachable only from inside the VNet (or via authorizedIPRanges).|**Type:** `boolean`<br/>**Default:** `false`|
+| `global.connectivity.apiServerAccess.enablePrivateClusterPublicFQDN` | **Enable private cluster public FQDN**|**Type:** `boolean`<br/>**Default:** `false`|
+| `global.connectivity.apiServerAccess.privateDNSZone` | **Private DNS zone**|**Type:** `string`<br/>**Default:** `""`|
+| `global.connectivity.baseDomain` | **Base domain** - DNS base domain used by the management cluster's installation.|**Type:** `string`<br/>**Default:** `""`|
+| `global.connectivity.network` | **Network**|**Type:** `object`<br/>|
+| `global.connectivity.network.dnsServiceIP` | **DNS service IP** - Must be within the service CIDR.|**Type:** `string`<br/>**Default:** `"172.20.0.10"`|
+| `global.connectivity.network.pods` | **Pods network** - Pods CIDR — only used by AKS when controlPlane.networking.networkPlugin is kubenet. Ignored for Azure CNI (both node-subnet and overlay modes); in node-subnet mode pods get IPs from vnet.subnet.cidrBlocks. Kept non-empty because the giantswarm/cluster subchart schema requires at least one entry.|**Type:** `object`<br/>|
+| `global.connectivity.network.pods.cidrBlocks` | **CIDR blocks**|**Type:** `array`<br/>**Default:** `["192.168.0.0/16"]`|
+| `global.connectivity.network.pods.cidrBlocks[*]` |**None**|**Type:** `string`<br/>|
+| `global.connectivity.network.services` | **Services network** - Services CIDR — assigned by AKS for Kubernetes Service IPs. Used to populate Cluster.spec.clusterNetwork.services.|**Type:** `object`<br/>|
+| `global.connectivity.network.services.cidrBlocks` | **CIDR blocks**|**Type:** `array`<br/>**Default:** `["172.20.0.0/16"]`|
+| `global.connectivity.network.services.cidrBlocks[*]` |**None**|**Type:** `string`<br/>|
+| `global.connectivity.network.vnet` | **VNet** - VNet for the cluster's node pools. By default the chart creates an Azure VirtualNetwork (via ASO) with one subnet inside it, and wires every node pool to that subnet (Azure CNI node-subnet mode). To bring your own VNet, set subnetArmId to the ARM ID of an existing subnet. When set, the chart does NOT create a VNet and every node pool references the provided subnet instead; cidrBlocks, name, and subnet.* are then ignored.|**Type:** `object`<br/>|
+| `global.connectivity.network.vnet.cidrBlocks` | **CIDR blocks** - CIDR(s) of the chart-created VirtualNetwork's address space.|**Type:** `array`<br/>**Default:** `["10.224.0.0/12"]`|
+| `global.connectivity.network.vnet.cidrBlocks[*]` |**None**|**Type:** `string`<br/>|
+| `global.connectivity.network.vnet.name` | **Name** - Name of the chart-created VirtualNetwork. Defaults to the cluster name when empty.|**Type:** `string`<br/>**Default:** `""`|
+| `global.connectivity.network.vnet.subnet` | **Subnet**|**Type:** `object`<br/>|
+| `global.connectivity.network.vnet.subnet.cidrBlocks` | **CIDR blocks** - CIDR of the chart-created subnet. Must lie within vnet.cidrBlocks.|**Type:** `array`<br/>**Default:** `["10.224.0.0/16"]`|
+| `global.connectivity.network.vnet.subnet.cidrBlocks[*]` |**None**|**Type:** `string`<br/>|
+| `global.connectivity.network.vnet.subnet.name` | **Name** - Name of the chart-created subnet (Azure resource name).|**Type:** `string`<br/>**Default:** `"nodes"`|
+| `global.connectivity.network.vnet.subnetArmId` | **Subnet ARM ID** - ARM ID of an existing subnet to use for all node pools. When set, the chart skips VNet/Subnet creation. Format: /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<vnet>/subnets/<subnet>.|**Type:** `string`<br/>**Default:** `""`|
+
+### Control plane
+Properties within the `.global.controlPlane` object
+
+| **Property** | **Description** | **More Details** |
+| :----------- | :-------------- | :--------------- |
+| `global.controlPlane.aadProfile` | **AAD profile** - AAD integration. When managed: true, AKS uses AAD for Kubernetes API authentication.|**Type:** `object`<br/>|
+| `global.controlPlane.aadProfile.adminGroupObjectIDs` | **Admin group object IDs**|**Type:** `array`<br/>|
+| `global.controlPlane.aadProfile.adminGroupObjectIDs[*]` |**None**|**Type:** `string`<br/>|
+| `global.controlPlane.aadProfile.managed` | **Managed**|**Type:** `boolean`<br/>|
+| `global.controlPlane.additionalTags` | **Additional tags** - Additional Azure tags applied to the underlying AKS resources.|**Type:** `object`<br/>**Default:** `{}`|
+| `global.controlPlane.additionalTags.*` |**None**|**Type:** `string`<br/>|
+| `global.controlPlane.autoUpgradeChannel` | **Auto-upgrade channel** - Auto-upgrade channel for AKS node image and Kubernetes version updates.|**Type:** `string`<br/>**Allowed values:** `none`, `patch`, `rapid`, `stable`, `node-image`<br/>**Default:** `"none"`|
+| `global.controlPlane.dnsPrefix` | **DNS prefix** - DNS prefix. Defaults to the cluster name when empty.|**Type:** `string`<br/>**Default:** `""`|
+| `global.controlPlane.networking` | **Networking** - AKS networking configuration.|**Type:** `object`<br/>|
+| `global.controlPlane.networking.networkDataplane` | **Network dataplane**|**Type:** `string`<br/>**Allowed values:** `azure`, `cilium`<br/>**Default:** `"cilium"`|
+| `global.controlPlane.networking.networkMode` | **Network mode**|**Type:** `string`<br/>**Allowed values:** `bridge`, `transparent`<br/>**Default:** `"transparent"`|
+| `global.controlPlane.networking.networkPlugin` | **Network plugin**|**Type:** `string`<br/>**Allowed values:** `azure`, `kubenet`<br/>**Default:** `"azure"`|
+| `global.controlPlane.networking.networkPolicy` | **Network policy**|**Type:** `string`<br/>**Allowed values:** `azure`, `calico`, `cilium`, `none`<br/>**Default:** `"cilium"`|
+| `global.controlPlane.networking.outboundType` | **Outbound type**|**Type:** `string`<br/>**Allowed values:** `loadBalancer`, `managedNATGateway`, `userAssignedNATGateway`, `userDefinedRouting`<br/>**Default:** `"loadBalancer"`|
+| `global.controlPlane.sku` | **SKU** - AKS SKU tier.|**Type:** `object`<br/>|
+| `global.controlPlane.sku.tier` | **Tier**|**Type:** `string`<br/>**Allowed values:** `Free`, `Premium`, `Standard`<br/>**Default:** `"Standard"`|
+
+### Metadata
+Properties within the `.global.metadata` object
+
+| **Property** | **Description** | **More Details** |
+| :----------- | :-------------- | :--------------- |
+| `global.metadata.annotations` | **Annotations**|**Type:** `object`<br/>**Default:** `{}`|
+| `global.metadata.annotations.*` |**None**|**Type:** `string`<br/>|
+| `global.metadata.description` | **Description**|**Type:** `string`<br/>**Default:** `""`|
+| `global.metadata.labels` | **Labels**|**Type:** `object`<br/>**Default:** `{}`|
+| `global.metadata.labels.*` |**None**|**Type:** `string`<br/>|
+| `global.metadata.name` | **Name** - Name of the workload cluster. Defaults to the Helm release name when unset. Must comply with Azure resource naming rules.|**Type:** `string`<br/>**Default:** `""`|
+| `global.metadata.organization` | **Organization**|**Type:** `string`<br/>**Default:** `""`|
+| `global.metadata.preventDeletion` | **Prevent deletion**|**Type:** `boolean`<br/>**Default:** `false`|
+| `global.metadata.servicePriority` | **Service priority**|**Type:** `string`<br/>**Allowed values:** `lowest`, `medium`, `highest`<br/>**Default:** `"highest"`|
+
+### Node pools
+Properties within the `.global.nodePools` object
+
+| **Property** | **Description** | **More Details** |
+| :----------- | :-------------- | :--------------- |
+| `global.nodePools.PATTERN` |**None**|**Type:** `object`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.additionalTags` |**None**|**Type:** `object`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.additionalTags.*` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.availabilityZones` |**None**|**Type:** `array`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.availabilityZones[*]` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.enableAutoScaling` |**None**|**Type:** `boolean`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Default:** `true`|
+| `global.nodePools.PATTERN.maxPods` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.maxSize` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.minSize` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.mode` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Allowed values:** `System`, `User`<br/>**Default:** `"User"`|
+| `global.nodePools.PATTERN.nodeLabels` |**None**|**Type:** `object`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.nodeLabels.*` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.osDiskSizeGB` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.osDiskType` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Allowed values:** `Managed`, `Ephemeral`<br/>|
+| `global.nodePools.PATTERN.osType` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Allowed values:** `Linux`, `Windows`<br/>|
+| `global.nodePools.PATTERN.replicas` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.scaleSetPriority` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Allowed values:** `Regular`, `Spot`<br/>|
+| `global.nodePools.PATTERN.spotMaxPrice` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.taints` |**None**|**Type:** `array`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.taints[*]` |**None**|**Type:** `object`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.taints[*].effect` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Allowed values:** `NoSchedule`, `NoExecute`, `PreferNoSchedule`<br/>|
+| `global.nodePools.PATTERN.taints[*].key` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.taints[*].value` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.vmSize` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+
+### Other global
+
+| **Property** | **Description** | **More Details** |
+| :----------- | :-------------- | :--------------- |
+| `global.managementCluster` | **Management cluster**|**Type:** `string`<br/>**Default:** `""`|
+
+### Provider-specific configuration
+Properties within the `.global.providerSpecific` object
+
+| **Property** | **Description** | **More Details** |
+| :----------- | :-------------- | :--------------- |
+| `global.providerSpecific.asoAuthentication` | **ASO authentication**|**Type:** `object`<br/>|
+| `global.providerSpecific.asoAuthentication.clientID` | **Client ID**|**Type:** `string`<br/>**Default:** `""`|
+| `global.providerSpecific.asoAuthentication.subscriptionID` | **Subscription ID**|**Type:** `string`<br/>**Default:** `""`|
+| `global.providerSpecific.asoAuthentication.tenantID` | **Tenant ID**|**Type:** `string`<br/>**Default:** `""`|
+| `global.providerSpecific.controlPlaneIdentity` | **Control plane identity** - Identity assigned to the AKS control plane itself (separate from the CAPZ controller identity above).|**Type:** `object`<br/>|
+| `global.providerSpecific.controlPlaneIdentity.type` | **Type**|**Type:** `string`<br/>**Allowed values:** `SystemAssigned`, `UserAssigned`<br/>**Default:** `"SystemAssigned"`|
+| `global.providerSpecific.controlPlaneIdentity.userAssignedIdentityResourceID` | **User-assigned identity resource ID**|**Type:** `string`<br/>**Default:** `""`|
+| `global.providerSpecific.kubeletIdentityResourceID` | **Kubelet identity resource ID** - User-assigned identity used by the kubelet (typically for ACR pulls).|**Type:** `string`<br/>**Default:** `""`|
+| `global.providerSpecific.location` | **Location** - Azure region (e.g. westeurope, eastus).|**Type:** `string`<br/>**Default:** `""`|
+| `global.providerSpecific.resourceGroupName` | **Resource group name** - Resource group that contains the AKS cluster. Defaults to the cluster name when empty. CAPZ creates the RG if it does not exist.|**Type:** `string`<br/>**Default:** `""`|
+| `global.providerSpecific.subscriptionId` | **Subscription ID** - Azure subscription that hosts the AKS cluster.|**Type:** `string`<br/>**Default:** `""`|
 
 ### cluster
 Properties within the `.cluster` top-level object
@@ -40,22 +154,22 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration.apps.chartOperatorExtensions` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.chartOperatorExtensions.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.cilium` |**None**|**Type:** `object`<br/>|
-| `cluster.providerIntegration.apps.cilium.enable` |Already managed by AKS|**Type:** `boolean`<br/>**Default:** `false`|
+| `cluster.providerIntegration.apps.cilium.enable` |Already managed by AKS.|**Type:** `boolean`<br/>**Default:** `false`|
 | `cluster.providerIntegration.apps.ciliumServiceMonitors` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.ciliumServiceMonitors.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.clusterAutoscaler` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.clusterAutoscaler.enable` |**None**|**Type:** `boolean`<br/>**Default:** `false`|
 | `cluster.providerIntegration.apps.coreDns` |**None**|**Type:** `object`<br/>|
-| `cluster.providerIntegration.apps.coreDns.enable` |Already managed by AKS|**Type:** `boolean`<br/>**Default:** `false`|
+| `cluster.providerIntegration.apps.coreDns.enable` |Already managed by AKS.|**Type:** `boolean`<br/>**Default:** `false`|
 | `cluster.providerIntegration.apps.coreDnsExtensions` |**None**|**Type:** `object`<br/>|
-| `cluster.providerIntegration.apps.coreDnsExtensions.enable` |Already managed by AKS|**Type:** `boolean`<br/>**Default:** `false`|
+| `cluster.providerIntegration.apps.coreDnsExtensions.enable` |Already managed by AKS.|**Type:** `boolean`<br/>**Default:** `false`|
 | `cluster.providerIntegration.apps.externalDns` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.externalDns.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSExternalDnsHelmValues"`|
 | `cluster.providerIntegration.apps.externalDns.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.k8sDnsNodeCache` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.k8sDnsNodeCache.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.metricsServer` |**None**|**Type:** `object`<br/>|
-| `cluster.providerIntegration.apps.metricsServer.enable` |Already managed by AKS|**Type:** `boolean`<br/>**Default:** `false`|
+| `cluster.providerIntegration.apps.metricsServer.enable` |Already managed by AKS.|**Type:** `boolean`<br/>**Default:** `false`|
 | `cluster.providerIntegration.apps.netExporter` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.netExporter.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.networkPolicies` |**None**|**Type:** `object`<br/>|
@@ -151,58 +265,6 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration.workers.kubeadmConfig` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.workers.kubeadmConfig.enabled` |**None**|**Type:** `boolean`<br/>**Default:** `false`|
 
-### connectivity
-Properties within the `.global.connectivity` object
-
-| **Property** | **Description** | **More Details** |
-| :----------- | :-------------- | :--------------- |
-| `global.connectivity.apiServerAccess` |Optional API server access controls (AKS public/private cluster).|**Type:** `object`<br/>|
-| `global.connectivity.apiServerAccess.authorizedIPRanges` |**None**|**Type:** `array`<br/>**Default:** `[]`|
-| `global.connectivity.apiServerAccess.authorizedIPRanges[*]` |**None**|**Type:** `string`<br/>|
-| `global.connectivity.apiServerAccess.enablePrivateCluster` |When true, the AKS API server is reachable only from inside the VNet (or via authorizedIPRanges).|**Type:** `boolean`<br/>**Default:** `false`|
-| `global.connectivity.apiServerAccess.enablePrivateClusterPublicFQDN` |**None**|**Type:** `boolean`<br/>**Default:** `false`|
-| `global.connectivity.apiServerAccess.privateDNSZone` |**None**|**Type:** `string`<br/>**Default:** `""`|
-| `global.connectivity.baseDomain` |DNS base domain used by the management cluster's installation|**Type:** `string`<br/>**Default:** `""`|
-| `global.connectivity.network` |**None**|**Type:** `object`<br/>|
-| `global.connectivity.network.dnsServiceIP` |Must be within the service CIDR.|**Type:** `string`<br/>**Default:** `"172.20.0.10"`|
-| `global.connectivity.network.pods` |Pods CIDR — only used by AKS when controlPlane.networking.networkPlugin is kubenet. Ignored for Azure CNI (both node-subnet and overlay modes); in node-subnet mode pods get IPs from vnet.subnet.cidrBlocks. Kept non-empty because the giantswarm/cluster subchart schema requires at least one entry.|**Type:** `object`<br/>|
-| `global.connectivity.network.pods.cidrBlocks` |**None**|**Type:** `array`<br/>**Default:** `["192.168.0.0/16"]`|
-| `global.connectivity.network.pods.cidrBlocks[*]` |**None**|**Type:** `string`<br/>|
-| `global.connectivity.network.services` |Services CIDR — assigned by AKS for Kubernetes Service IPs. Used to populate Cluster.spec.clusterNetwork.services.|**Type:** `object`<br/>|
-| `global.connectivity.network.services.cidrBlocks` |**None**|**Type:** `array`<br/>**Default:** `["172.20.0.0/16"]`|
-| `global.connectivity.network.services.cidrBlocks[*]` |**None**|**Type:** `string`<br/>|
-| `global.connectivity.network.vnet` |VNet for the cluster's node pools. By default the chart creates an Azure VirtualNetwork (via ASO) with one subnet inside it, and wires every node pool to that subnet (Azure CNI node-subnet mode — pods get IPs from the subnet's CIDR). To bring your own VNet, set subnetArmId to the ARM ID of an existing subnet. When set, the chart does NOT create a VNet and every node pool references the provided subnet instead; cidrBlocks, name, and subnet.* are then ignored.|**Type:** `object`<br/>|
-| `global.connectivity.network.vnet.cidrBlocks` |CIDR(s) of the chart-created VirtualNetwork's address space.|**Type:** `array`<br/>**Default:** `["10.224.0.0/12"]`|
-| `global.connectivity.network.vnet.cidrBlocks[*]` |**None**|**Type:** `string`<br/>|
-| `global.connectivity.network.vnet.name` |Name of the chart-created VirtualNetwork. Defaults to the cluster name when empty.|**Type:** `string`<br/>**Default:** `""`|
-| `global.connectivity.network.vnet.subnet` |**None**|**Type:** `object`<br/>|
-| `global.connectivity.network.vnet.subnet.cidrBlocks` |CIDR of the chart-created subnet. Must lie within vnet.cidrBlocks.|**Type:** `array`<br/>**Default:** `["10.224.0.0/16"]`|
-| `global.connectivity.network.vnet.subnet.cidrBlocks[*]` |**None**|**Type:** `string`<br/>|
-| `global.connectivity.network.vnet.subnet.name` |Name of the chart-created subnet (Azure resource name).|**Type:** `string`<br/>**Default:** `"nodes"`|
-| `global.connectivity.network.vnet.subnetArmId` |ARM ID of an existing subnet to use for all node pools. When set, the chart skips VNet/Subnet creation. Format: /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<vnet>/subnets/<subnet>|**Type:** `string`<br/>**Default:** `""`|
-
-### controlPlane
-Properties within the `.global.controlPlane` object
-
-| **Property** | **Description** | **More Details** |
-| :----------- | :-------------- | :--------------- |
-| `global.controlPlane.aadProfile` |AAD integration. When managed: true, AKS uses AAD for Kubernetes API authentication.|**Type:** `object`<br/>|
-| `global.controlPlane.aadProfile.adminGroupObjectIDs` |**None**|**Type:** `array`<br/>|
-| `global.controlPlane.aadProfile.adminGroupObjectIDs[*]` |**None**|**Type:** `string`<br/>|
-| `global.controlPlane.aadProfile.managed` |**None**|**Type:** `boolean`<br/>|
-| `global.controlPlane.additionalTags` |Additional Azure tags applied to the underlying AKS resources.|**Type:** `object`<br/>**Default:** `{}`|
-| `global.controlPlane.additionalTags.*` |**None**|**Type:** `string`<br/>|
-| `global.controlPlane.autoUpgradeChannel` |**None**|**Type:** `string`<br/>**Allowed values:** `none`, `patch`, `rapid`, `stable`, `node-image`<br/>**Default:** `"none"`|
-| `global.controlPlane.dnsPrefix` |DNS prefix. Defaults to the cluster name when empty.|**Type:** `string`<br/>**Default:** `""`|
-| `global.controlPlane.networking` |AKS networking.|**Type:** `object`<br/>|
-| `global.controlPlane.networking.networkDataplane` |**None**|**Type:** `string`<br/>**Allowed values:** `azure`, `cilium`<br/>**Default:** `"cilium"`|
-| `global.controlPlane.networking.networkMode` |**None**|**Type:** `string`<br/>**Allowed values:** `bridge`, `transparent`<br/>**Default:** `"transparent"`|
-| `global.controlPlane.networking.networkPlugin` |**None**|**Type:** `string`<br/>**Allowed values:** `azure`, `kubenet`<br/>**Default:** `"azure"`|
-| `global.controlPlane.networking.networkPolicy` |**None**|**Type:** `string`<br/>**Allowed values:** `azure`, `calico`, `cilium`, `none`<br/>**Default:** `"cilium"`|
-| `global.controlPlane.networking.outboundType` |**None**|**Type:** `string`<br/>**Allowed values:** `loadBalancer`, `managedNATGateway`, `userAssignedNATGateway`, `userDefinedRouting`<br/>**Default:** `"loadBalancer"`|
-| `global.controlPlane.sku` |AKS SKU tier.|**Type:** `object`<br/>|
-| `global.controlPlane.sku.tier` |**None**|**Type:** `string`<br/>**Allowed values:** `Free`, `Premium`, `Standard`<br/>**Default:** `"Standard"`|
-
 ### internal
 Properties within the `.internal` top-level object
 
@@ -230,66 +292,6 @@ Properties within the `.internal` top-level object
 | `internal.teleport.enabled` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `internal.teleport.proxyAddr` |**None**|**Type:** `string`<br/>**Default:** `"teleport.giantswarm.io:443"`|
 | `internal.teleport.version` |**None**|**Type:** `string`<br/>**Default:** `"14.1.3"`|
-
-### metadata
-Properties within the `.global.metadata` object
-
-| **Property** | **Description** | **More Details** |
-| :----------- | :-------------- | :--------------- |
-| `global.metadata.annotations` |**None**|**Type:** `object`<br/>**Default:** `{}`|
-| `global.metadata.description` |**None**|**Type:** `string`<br/>**Default:** `""`|
-| `global.metadata.labels` |**None**|**Type:** `object`<br/>**Default:** `{}`|
-| `global.metadata.name` |Name of the workload cluster. Defaults to the Helm release name when unset. Must comply with Azure resource naming rules.|**Type:** `string`<br/>**Default:** `""`|
-| `global.metadata.organization` |**None**|**Type:** `string`<br/>**Default:** `""`|
-| `global.metadata.preventDeletion` |**None**|**Type:** `boolean`<br/>**Default:** `false`|
-| `global.metadata.servicePriority` |**None**|**Type:** `string`<br/>**Allowed values:** `lowest`, `medium`, `highest`<br/>**Default:** `"highest"`|
-
-### nodePools
-Properties within the `.global.nodePools` object
-
-| **Property** | **Description** | **More Details** |
-| :----------- | :-------------- | :--------------- |
-| `global.nodePools.PATTERN` |**None**|**Type:** `object`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.additionalTags` |**None**|**Type:** `object`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.additionalTags.*` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.availabilityZones` |**None**|**Type:** `array`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.availabilityZones[*]` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.enableAutoScaling` |**None**|**Type:** `boolean`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Default:** `true`|
-| `global.nodePools.PATTERN.maxPods` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.maxSize` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.minSize` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.mode` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Allowed values:** `System`, `User`<br/>**Default:** `"User"`|
-| `global.nodePools.PATTERN.nodeLabels` |**None**|**Type:** `object`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.nodeLabels.*` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.osDiskSizeGB` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.osDiskType` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Allowed values:** `Managed`, `Ephemeral`<br/>|
-| `global.nodePools.PATTERN.osType` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Allowed values:** `Linux`, `Windows`<br/>|
-| `global.nodePools.PATTERN.replicas` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.scaleSetPriority` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Allowed values:** `Regular`, `Spot`<br/>|
-| `global.nodePools.PATTERN.spotMaxPrice` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.taints` |**None**|**Type:** `array`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.taints[*]` |**None**|**Type:** `object`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.taints[*].effect` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Allowed values:** `NoSchedule`, `NoExecute`, `PreferNoSchedule`<br/>|
-| `global.nodePools.PATTERN.taints[*].key` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.taints[*].value` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-| `global.nodePools.PATTERN.vmSize` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
-
-### providerSpecific
-Properties within the `.global.providerSpecific` object
-
-| **Property** | **Description** | **More Details** |
-| :----------- | :-------------- | :--------------- |
-| `global.providerSpecific.asoAuthentication` |**None**|**Type:** `object`<br/>|
-| `global.providerSpecific.asoAuthentication.clientID` |**None**|**Type:** `string`<br/>**Default:** `""`|
-| `global.providerSpecific.asoAuthentication.subscriptionID` |**None**|**Type:** `string`<br/>**Default:** `""`|
-| `global.providerSpecific.asoAuthentication.tenantID` |**None**|**Type:** `string`<br/>**Default:** `""`|
-| `global.providerSpecific.controlPlaneIdentity` |Identity assigned to the AKS control plane itself (separate from the CAPZ controller identity above).|**Type:** `object`<br/>|
-| `global.providerSpecific.controlPlaneIdentity.type` |**None**|**Type:** `string`<br/>**Allowed values:** `SystemAssigned`, `UserAssigned`<br/>**Default:** `"SystemAssigned"`|
-| `global.providerSpecific.controlPlaneIdentity.userAssignedIdentityResourceID` |**None**|**Type:** `string`<br/>**Default:** `""`|
-| `global.providerSpecific.kubeletIdentityResourceID` |User-assigned identity used by the kubelet (typically for ACR pulls).|**Type:** `string`<br/>**Default:** `""`|
-| `global.providerSpecific.location` |Azure region (e.g. westeurope, eastus).|**Type:** `string`<br/>**Default:** `""`|
-| `global.providerSpecific.resourceGroupName` |Resource group that contains the AKS cluster. Defaults to the cluster name when empty. CAPZ creates the RG if it does not exist.|**Type:** `string`<br/>**Default:** `""`|
-| `global.providerSpecific.subscriptionId` |Azure subscription that hosts the AKS cluster.|**Type:** `string`<br/>**Default:** `""`|
 
 
 <!-- DOCS_END -->
