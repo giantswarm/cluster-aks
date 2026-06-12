@@ -18,6 +18,9 @@ global:
       mode: User
       vmSize: Standard_D4s_v3
 
+  providerSpecific:
+    location: westeurope
+
 cluster:
   internal:
     ephemeralConfiguration:

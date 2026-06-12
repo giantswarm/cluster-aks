@@ -45,6 +45,9 @@ global:
         - "2"
         - "3"
 
+  providerSpecific:
+    location: westeurope
+
 # TODO: This is required until we have an aks release
 cluster:
   internal:
