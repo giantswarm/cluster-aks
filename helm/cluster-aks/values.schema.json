@@ -16,6 +16,10 @@
                         "type": "string"
                     }
                 },
+                "enableAutoScaling": {
+                    "type": "boolean",
+                    "default": true
+                },
                 "maxPods": {
                     "type": "integer",
                     "minimum": 0
@@ -29,10 +33,6 @@
                     "type": "integer",
                     "maximum": 1000,
                     "minimum": 0
-                },
-                "enableAutoScaling": {
-                    "type": "boolean",
-                    "default": true
                 },
                 "mode": {
                     "type": "string",
@@ -356,130 +356,10 @@
                                 }
                             }
                         },
-                        "provider": {
-                            "type": "string",
-                            "default": "aks"
-                        },
                         "clusterAnnotationsTemplateName": {
                             "type": "string",
                             "description": "Named template (defined in this chart) that renders annotations placed on the Cluster CR by the cluster subchart.",
                             "default": "azureClusterAnnotations"
-                        },
-                        "pauseProperties": {
-                            "type": "object",
-                            "default": {}
-                        },
-                        "useReleases": {
-                            "type": "boolean",
-                            "default": true
-                        },
-                        "resourcesApi": {
-                            "type": "object",
-                            "properties": {
-                                "bastionResourceEnabled": {
-                                    "type": "boolean",
-                                    "default": false
-                                },
-                                "cleanupHelmReleaseResourcesEnabled": {
-                                    "type": "boolean",
-                                    "default": false
-                                },
-                                "clusterResourceEnabled": {
-                                    "type": "boolean",
-                                    "default": true
-                                },
-                                "helmRepositoryResourcesEnabled": {
-                                    "type": "boolean",
-                                    "default": true
-                                },
-                                "controlPlaneResource": {
-                                    "type": "object",
-                                    "properties": {
-                                        "enabled": {
-                                            "type": "boolean",
-                                            "default": true
-                                        },
-                                        "provider": {
-                                            "type": "string",
-                                            "default": "external"
-                                        }
-                                    }
-                                },
-                                "machineHealthCheckResourceEnabled": {
-                                    "type": "boolean",
-                                    "default": false
-                                },
-                                "infrastructureCluster": {
-                                    "type": "object",
-                                    "properties": {
-                                        "group": {
-                                            "type": "string",
-                                            "default": "infrastructure.cluster.x-k8s.io"
-                                        },
-                                        "kind": {
-                                            "type": "string",
-                                            "default": "AzureASOManagedCluster"
-                                        },
-                                        "version": {
-                                            "type": "string",
-                                            "default": "v1beta1"
-                                        }
-                                    }
-                                },
-                                "machinePoolResources": {
-                                    "type": "object",
-                                    "properties": {
-                                        "enabled": {
-                                            "type": "boolean",
-                                            "default": true
-                                        },
-                                        "externalAutoscaler": {
-                                            "type": "object",
-                                            "properties": {
-                                                "enabled": {
-                                                    "type": "boolean",
-                                                    "default": false
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                "nodePoolKind": {
-                                    "type": "string",
-                                    "default": "MachinePool"
-                                },
-                                "infrastructureMachinePool": {
-                                    "type": "object",
-                                    "properties": {
-                                        "group": {
-                                            "type": "string",
-                                            "default": "infrastructure.cluster.x-k8s.io"
-                                        },
-                                        "kind": {
-                                            "type": "string",
-                                            "default": "AzureASOManagedMachinePool"
-                                        },
-                                        "version": {
-                                            "type": "string",
-                                            "default": "v1beta1"
-                                        }
-                                    }
-                                },
-                                "machinePool": {
-                                    "type": "object",
-                                    "properties": {
-                                        "bootstrap": {
-                                            "type": "object",
-                                            "properties": {
-                                                "templateName": {
-                                                    "type": "string",
-                                                    "default": "azureMachinePoolBootstrap"
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
                         },
                         "controlPlane": {
                             "type": "object",
@@ -534,43 +414,161 @@
                                 }
                             }
                         },
-                        "workers": {
+                        "pauseProperties": {
+                            "type": "object",
+                            "default": {}
+                        },
+                        "provider": {
+                            "type": "string",
+                            "default": "aks"
+                        },
+                        "resourcesApi": {
                             "type": "object",
                             "properties": {
-                                "kubeadmConfig": {
+                                "bastionResourceEnabled": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "cleanupHelmReleaseResourcesEnabled": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "clusterResourceEnabled": {
+                                    "type": "boolean",
+                                    "default": true
+                                },
+                                "controlPlaneResource": {
                                     "type": "object",
                                     "properties": {
                                         "enabled": {
                                             "type": "boolean",
-                                            "default": false
+                                            "default": true
+                                        },
+                                        "provider": {
+                                            "type": "string",
+                                            "default": "external"
                                         }
                                     }
                                 },
+                                "helmRepositoryResourcesEnabled": {
+                                    "type": "boolean",
+                                    "default": true
+                                },
+                                "infrastructureCluster": {
+                                    "type": "object",
+                                    "properties": {
+                                        "group": {
+                                            "type": "string",
+                                            "default": "infrastructure.cluster.x-k8s.io"
+                                        },
+                                        "kind": {
+                                            "type": "string",
+                                            "default": "AzureASOManagedCluster"
+                                        },
+                                        "version": {
+                                            "type": "string",
+                                            "default": "v1beta1"
+                                        }
+                                    }
+                                },
+                                "infrastructureMachinePool": {
+                                    "type": "object",
+                                    "properties": {
+                                        "group": {
+                                            "type": "string",
+                                            "default": "infrastructure.cluster.x-k8s.io"
+                                        },
+                                        "kind": {
+                                            "type": "string",
+                                            "default": "AzureASOManagedMachinePool"
+                                        },
+                                        "version": {
+                                            "type": "string",
+                                            "default": "v1beta1"
+                                        }
+                                    }
+                                },
+                                "machineHealthCheckResourceEnabled": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "machinePool": {
+                                    "type": "object",
+                                    "properties": {
+                                        "bootstrap": {
+                                            "type": "object",
+                                            "properties": {
+                                                "templateName": {
+                                                    "type": "string",
+                                                    "default": "azureMachinePoolBootstrap"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "machinePoolResources": {
+                                    "type": "object",
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean",
+                                            "default": true
+                                        },
+                                        "externalAutoscaler": {
+                                            "type": "object",
+                                            "properties": {
+                                                "enabled": {
+                                                    "type": "boolean",
+                                                    "default": false
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "nodePoolKind": {
+                                    "type": "string",
+                                    "default": "MachinePool"
+                                }
+                            }
+                        },
+                        "useReleases": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "workers": {
+                            "type": "object",
+                            "properties": {
                                 "defaultNodePools": {
                                     "type": "object",
                                     "properties": {
                                         "system": {
                                             "type": "object",
                                             "properties": {
-                                                "mode": {
-                                                    "type": "string",
-                                                    "default": "System"
+                                                "availabilityZones": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "default": [
+                                                        "1",
+                                                        "2",
+                                                        "3"
+                                                    ]
                                                 },
-                                                "vmSize": {
-                                                    "type": "string",
-                                                    "default": "Standard_D2s_v3"
-                                                },
-                                                "minSize": {
-                                                    "type": "integer",
-                                                    "default": 1
+                                                "enableAutoScaling": {
+                                                    "type": "boolean",
+                                                    "default": true
                                                 },
                                                 "maxSize": {
                                                     "type": "integer",
                                                     "default": 2
                                                 },
-                                                "enableAutoScaling": {
-                                                    "type": "boolean",
-                                                    "default": true
+                                                "minSize": {
+                                                    "type": "integer",
+                                                    "default": 1
+                                                },
+                                                "mode": {
+                                                    "type": "string",
+                                                    "default": "System"
                                                 },
                                                 "osDiskSizeGB": {
                                                     "type": "integer",
@@ -584,41 +582,41 @@
                                                     "type": "string",
                                                     "default": "Linux"
                                                 },
-                                                "availabilityZones": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "default": [
-                                                        "1",
-                                                        "2",
-                                                        "3"
-                                                    ]
+                                                "vmSize": {
+                                                    "type": "string",
+                                                    "default": "Standard_D2s_v3"
                                                 }
                                             }
                                         },
                                         "workers": {
                                             "type": "object",
                                             "properties": {
-                                                "mode": {
-                                                    "type": "string",
-                                                    "default": "User"
+                                                "availabilityZones": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "default": [
+                                                        "1",
+                                                        "2",
+                                                        "3"
+                                                    ]
                                                 },
-                                                "vmSize": {
-                                                    "type": "string",
-                                                    "default": "Standard_D2s_v3"
-                                                },
-                                                "minSize": {
-                                                    "type": "integer",
-                                                    "default": 1
+                                                "enableAutoScaling": {
+                                                    "type": "boolean",
+                                                    "default": true
                                                 },
                                                 "maxSize": {
                                                     "type": "integer",
                                                     "default": 2
                                                 },
-                                                "enableAutoScaling": {
-                                                    "type": "boolean",
-                                                    "default": true
+                                                "minSize": {
+                                                    "type": "integer",
+                                                    "default": 1
+                                                },
+                                                "mode": {
+                                                    "type": "string",
+                                                    "default": "User"
                                                 },
                                                 "osDiskSizeGB": {
                                                     "type": "integer",
@@ -632,18 +630,20 @@
                                                     "type": "string",
                                                     "default": "Linux"
                                                 },
-                                                "availabilityZones": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "default": [
-                                                        "1",
-                                                        "2",
-                                                        "3"
-                                                    ]
+                                                "vmSize": {
+                                                    "type": "string",
+                                                    "default": "Standard_D2s_v3"
                                                 }
                                             }
+                                        }
+                                    }
+                                },
+                                "kubeadmConfig": {
+                                    "type": "object",
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean",
+                                            "default": false
                                         }
                                     }
                                 }
@@ -665,52 +665,35 @@
                         }
                     }
                 },
-                "managementCluster": {
-                    "type": "string",
-                    "default": ""
-                },
-                "metadata": {
-                    "type": "object",
-                    "properties": {
-                        "name": {
-                            "type": "string",
-                            "description": "Name of the workload cluster. Defaults to the Helm release name when unset. Must comply with Azure resource naming rules.",
-                            "default": ""
-                        },
-                        "description": {
-                            "type": "string",
-                            "default": ""
-                        },
-                        "organization": {
-                            "type": "string",
-                            "default": ""
-                        },
-                        "preventDeletion": {
-                            "type": "boolean",
-                            "default": false
-                        },
-                        "servicePriority": {
-                            "type": "string",
-                            "enum": [
-                                "lowest",
-                                "medium",
-                                "highest"
-                            ],
-                            "default": "highest"
-                        },
-                        "labels": {
-                            "type": "object",
-                            "default": {}
-                        },
-                        "annotations": {
-                            "type": "object",
-                            "default": {}
-                        }
-                    }
-                },
                 "connectivity": {
                     "type": "object",
                     "properties": {
+                        "apiServerAccess": {
+                            "type": "object",
+                            "description": "Optional API server access controls (AKS public/private cluster).",
+                            "properties": {
+                                "authorizedIPRanges": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "default": []
+                                },
+                                "enablePrivateCluster": {
+                                    "type": "boolean",
+                                    "description": "When true, the AKS API server is reachable only from inside the VNet (or via authorizedIPRanges).",
+                                    "default": false
+                                },
+                                "enablePrivateClusterPublicFQDN": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "privateDNSZone": {
+                                    "type": "string",
+                                    "default": ""
+                                }
+                            }
+                        },
                         "baseDomain": {
                             "type": "string",
                             "description": "DNS base domain used by the management cluster's installation",
@@ -723,21 +706,6 @@
                                     "type": "string",
                                     "description": "Must be within the service CIDR.",
                                     "default": "172.20.0.10"
-                                },
-                                "services": {
-                                    "type": "object",
-                                    "description": "Services CIDR — assigned by AKS for Kubernetes Service IPs. Used to populate Cluster.spec.clusterNetwork.services.",
-                                    "properties": {
-                                        "cidrBlocks": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            },
-                                            "default": [
-                                                "172.20.0.0/16"
-                                            ]
-                                        }
-                                    }
                                 },
                                 "pods": {
                                     "type": "object",
@@ -754,15 +722,25 @@
                                         }
                                     }
                                 },
+                                "services": {
+                                    "type": "object",
+                                    "description": "Services CIDR — assigned by AKS for Kubernetes Service IPs. Used to populate Cluster.spec.clusterNetwork.services.",
+                                    "properties": {
+                                        "cidrBlocks": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "default": [
+                                                "172.20.0.0/16"
+                                            ]
+                                        }
+                                    }
+                                },
                                 "vnet": {
                                     "type": "object",
                                     "description": "VNet for the cluster's node pools. By default the chart creates an Azure VirtualNetwork (via ASO) with one subnet inside it, and wires every node pool to that subnet (Azure CNI node-subnet mode — pods get IPs from the subnet's CIDR). To bring your own VNet, set subnetArmId to the ARM ID of an existing subnet. When set, the chart does NOT create a VNet and every node pool references the provided subnet instead; cidrBlocks, name, and subnet.* are then ignored.",
                                     "properties": {
-                                        "subnetArmId": {
-                                            "type": "string",
-                                            "description": "ARM ID of an existing subnet to use for all node pools. When set, the chart skips VNet/Subnet creation. Format: /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<vnet>/subnets/<subnet>",
-                                            "default": ""
-                                        },
                                         "cidrBlocks": {
                                             "type": "array",
                                             "description": "CIDR(s) of the chart-created VirtualNetwork's address space.",
@@ -797,34 +775,13 @@
                                                     "default": "nodes"
                                                 }
                                             }
+                                        },
+                                        "subnetArmId": {
+                                            "type": "string",
+                                            "description": "ARM ID of an existing subnet to use for all node pools. When set, the chart skips VNet/Subnet creation. Format: /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<vnet>/subnets/<subnet>",
+                                            "default": ""
                                         }
                                     }
-                                }
-                            }
-                        },
-                        "apiServerAccess": {
-                            "type": "object",
-                            "description": "Optional API server access controls (AKS public/private cluster).",
-                            "properties": {
-                                "enablePrivateCluster": {
-                                    "type": "boolean",
-                                    "description": "When true, the AKS API server is reachable only from inside the VNet (or via authorizedIPRanges).",
-                                    "default": false
-                                },
-                                "privateDNSZone": {
-                                    "type": "string",
-                                    "default": ""
-                                },
-                                "enablePrivateClusterPublicFQDN": {
-                                    "type": "boolean",
-                                    "default": false
-                                },
-                                "authorizedIPRanges": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    },
-                                    "default": []
                                 }
                             }
                         }
@@ -833,76 +790,6 @@
                 "controlPlane": {
                     "type": "object",
                     "properties": {
-                        "sku": {
-                            "type": "object",
-                            "description": "AKS SKU tier.",
-                            "properties": {
-                                "tier": {
-                                    "type": "string",
-                                    "enum": [
-                                        "Free",
-                                        "Premium",
-                                        "Standard"
-                                    ],
-                                    "default": "Standard"
-                                }
-                            }
-                        },
-                        "dnsPrefix": {
-                            "type": "string",
-                            "description": "DNS prefix. Defaults to the cluster name when empty.",
-                            "default": ""
-                        },
-                        "networking": {
-                            "type": "object",
-                            "description": "AKS networking.",
-                            "properties": {
-                                "outboundType": {
-                                    "type": "string",
-                                    "enum": [
-                                        "loadBalancer",
-                                        "managedNATGateway",
-                                        "userAssignedNATGateway",
-                                        "userDefinedRouting"
-                                    ],
-                                    "default": "loadBalancer"
-                                },
-                                "networkDataplane": {
-                                    "type": "string",
-                                    "enum": [
-                                        "azure",
-                                        "cilium"
-                                    ],
-                                    "default": "cilium"
-                                },
-                                "networkPlugin": {
-                                    "type": "string",
-                                    "enum": [
-                                        "azure",
-                                        "kubenet"
-                                    ],
-                                    "default": "azure"
-                                },
-                                "networkMode": {
-                                    "type": "string",
-                                    "enum": [
-                                        "bridge",
-                                        "transparent"
-                                    ],
-                                    "default": "transparent"
-                                },
-                                "networkPolicy": {
-                                    "type": "string",
-                                    "enum": [
-                                        "azure",
-                                        "calico",
-                                        "cilium",
-                                        "none"
-                                    ],
-                                    "default": "cilium"
-                                }
-                            }
-                        },
                         "aadProfile": {
                             "type": "object",
                             "description": "AAD integration. When managed: true, AKS uses AAD for Kubernetes API authentication.",
@@ -918,6 +805,14 @@
                                 }
                             }
                         },
+                        "additionalTags": {
+                            "type": "object",
+                            "description": "Additional Azure tags applied to the underlying AKS resources.",
+                            "additionalProperties": {
+                                "type": "string"
+                            },
+                            "default": {}
+                        },
                         "autoUpgradeChannel": {
                             "type": "string",
                             "enum": [
@@ -929,13 +824,118 @@
                             ],
                             "default": "none"
                         },
-                        "additionalTags": {
+                        "dnsPrefix": {
+                            "type": "string",
+                            "description": "DNS prefix. Defaults to the cluster name when empty.",
+                            "default": ""
+                        },
+                        "networking": {
                             "type": "object",
-                            "description": "Additional Azure tags applied to the underlying AKS resources.",
-                            "additionalProperties": {
-                                "type": "string"
-                            },
+                            "description": "AKS networking.",
+                            "properties": {
+                                "networkDataplane": {
+                                    "type": "string",
+                                    "enum": [
+                                        "azure",
+                                        "cilium"
+                                    ],
+                                    "default": "cilium"
+                                },
+                                "networkMode": {
+                                    "type": "string",
+                                    "enum": [
+                                        "bridge",
+                                        "transparent"
+                                    ],
+                                    "default": "transparent"
+                                },
+                                "networkPlugin": {
+                                    "type": "string",
+                                    "enum": [
+                                        "azure",
+                                        "kubenet"
+                                    ],
+                                    "default": "azure"
+                                },
+                                "networkPolicy": {
+                                    "type": "string",
+                                    "enum": [
+                                        "azure",
+                                        "calico",
+                                        "cilium",
+                                        "none"
+                                    ],
+                                    "default": "cilium"
+                                },
+                                "outboundType": {
+                                    "type": "string",
+                                    "enum": [
+                                        "loadBalancer",
+                                        "managedNATGateway",
+                                        "userAssignedNATGateway",
+                                        "userDefinedRouting"
+                                    ],
+                                    "default": "loadBalancer"
+                                }
+                            }
+                        },
+                        "sku": {
+                            "type": "object",
+                            "description": "AKS SKU tier.",
+                            "properties": {
+                                "tier": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Free",
+                                        "Premium",
+                                        "Standard"
+                                    ],
+                                    "default": "Standard"
+                                }
+                            }
+                        }
+                    }
+                },
+                "managementCluster": {
+                    "type": "string",
+                    "default": ""
+                },
+                "metadata": {
+                    "type": "object",
+                    "properties": {
+                        "description": {
+                            "type": "string",
+                            "default": ""
+                        },
+                        "annotations": {
+                            "type": "object",
                             "default": {}
+                        },
+                        "labels": {
+                            "type": "object",
+                            "default": {}
+                        },
+                        "name": {
+                            "type": "string",
+                            "description": "Name of the workload cluster. Defaults to the Helm release name when unset. Must comply with Azure resource naming rules.",
+                            "default": ""
+                        },
+                        "organization": {
+                            "type": "string",
+                            "default": ""
+                        },
+                        "preventDeletion": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "servicePriority": {
+                            "type": "string",
+                            "enum": [
+                                "lowest",
+                                "medium",
+                                "highest"
+                            ],
+                            "default": "highest"
                         }
                     }
                 },
@@ -951,33 +951,18 @@
                 "providerSpecific": {
                     "type": "object",
                     "properties": {
-                        "subscriptionId": {
-                            "type": "string",
-                            "description": "Azure subscription that hosts the AKS cluster.",
-                            "default": ""
-                        },
-                        "location": {
-                            "type": "string",
-                            "description": "Azure region (e.g. westeurope, eastus).",
-                            "default": ""
-                        },
-                        "resourceGroupName": {
-                            "type": "string",
-                            "description": "Resource group that contains the AKS cluster. Defaults to the cluster name when empty. CAPZ creates the RG if it does not exist.",
-                            "default": ""
-                        },
                         "asoAuthentication": {
                             "type": "object",
                             "properties": {
+                                "clientID": {
+                                    "type": "string",
+                                    "default": ""
+                                },
                                 "subscriptionID": {
                                     "type": "string",
                                     "default": ""
                                 },
                                 "tenantID": {
-                                    "type": "string",
-                                    "default": ""
-                                },
-                                "clientID": {
                                     "type": "string",
                                     "default": ""
                                 }
@@ -1004,6 +989,21 @@
                         "kubeletIdentityResourceID": {
                             "type": "string",
                             "description": "User-assigned identity used by the kubelet (typically for ACR pulls).",
+                            "default": ""
+                        },
+                        "location": {
+                            "type": "string",
+                            "description": "Azure region (e.g. westeurope, eastus).",
+                            "default": ""
+                        },
+                        "resourceGroupName": {
+                            "type": "string",
+                            "description": "Resource group that contains the AKS cluster. Defaults to the cluster name when empty. CAPZ creates the RG if it does not exist.",
+                            "default": ""
+                        },
+                        "subscriptionId": {
+                            "type": "string",
+                            "description": "Azure subscription that hosts the AKS cluster.",
                             "default": ""
                         }
                     }
@@ -1038,6 +1038,23 @@
                     "type": "boolean",
                     "default": true
                 },
+                "kubectlImage": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "default": "giantswarm/docker-kubectl"
+                        },
+                        "registry": {
+                            "type": "string",
+                            "default": "gsoci.azurecr.io"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "default": "1.36.1"
+                        }
+                    }
+                },
                 "network": {
                     "type": "object",
                     "properties": {
@@ -1053,23 +1070,6 @@
                                     "default": "none"
                                 }
                             }
-                        }
-                    }
-                },
-                "kubectlImage": {
-                    "type": "object",
-                    "properties": {
-                        "name": {
-                            "type": "string",
-                            "default": "giantswarm/docker-kubectl"
-                        },
-                        "registry": {
-                            "type": "string",
-                            "default": "gsoci.azurecr.io"
-                        },
-                        "tag": {
-                            "type": "string",
-                            "default": "1.36.1"
                         }
                     }
                 },
