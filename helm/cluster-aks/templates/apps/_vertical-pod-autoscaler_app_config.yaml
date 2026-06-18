@@ -1,0 +1,8 @@
+{{/* AKS-specific vertical-pod-autoscaler Helm values*/}}
+{{- define "AKSVerticalPodAutoscalerHelmValues" }}
+vertical-pod-autoscaler:
+  admissionController:
+    extraArgs:
+      # prevent AKS from overriding the VPA webhook configuration
+      webhook-labels: admissions.enforcer/disabled:true
+{{- end }}

@@ -1,0 +1,5 @@
+{{/* AKS-specific teleport-kube-agent Helm values*/}}
+{{- define "AKSTeleportKubeAgentHelmValues" }}
+podMonitor:
+  enabled: false
+{{- end }}

@@ -1,0 +1,57 @@
+global:
+  managementCluster: MCCLUSTER
+
+  release:
+    version: v34.4.0
+
+  metadata:
+    name: test-wc
+    organization: giantswarm
+    preventDeletion: false
+    servicePriority: lowest
+    labels:
+      test.io/testing: test-label
+
+  connectivity:
+    baseDomain: azuretest.gigantic.io
+
+  controlPlane:
+    sku:
+      tier: Standard
+
+  nodePools:
+    system:
+      mode: System
+      vmSize: Standard_D2s_v3
+      osDiskSizeGB: 128
+      osDiskType: Managed
+      osType: Linux
+      minSize: 1
+      maxSize: 2
+      availabilityZones:
+        - "1"
+        - "2"
+        - "3"
+    workers:
+      mode: User
+      vmSize: Standard_D4s_v3
+      osDiskSizeGB: 128
+      osDiskType: Managed
+      osType: Linux
+      minSize: 1
+      maxSize: 2
+      availabilityZones:
+        - "1"
+        - "2"
+        - "3"
+
+  providerSpecific:
+    location: westeurope
+    subscriptionId: 00000000-0000-0000-0000-000000000000
+
+# TODO: This is required until we have an aks release
+cluster:
+  internal:
+    ephemeralConfiguration:
+      offlineTesting:
+        renderWithoutReleaseResource: true
