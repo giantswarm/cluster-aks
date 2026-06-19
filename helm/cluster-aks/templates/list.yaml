@@ -1,0 +1,19 @@
+{{- include "validation" . }}
+{{- with (include "aso-credentials-secret" .) }}
+---
+{{ . }}
+{{- end }}
+{{- with (include "aso-credentials-secret-owner-hook" .) }}
+---
+{{ . }}
+{{- end }}
+{{- with (include "azure-cluster-identity" .) }}
+---
+{{ . }}
+{{- end }}
+---
+{{ include "azure-aso-managed-cluster" . }}
+---
+{{ include "azure-aso-managed-control-plane" . }}
+---
+{{ include "azure-aso-managed-machine-pools" . }}
