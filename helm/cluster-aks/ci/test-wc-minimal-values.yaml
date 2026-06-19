@@ -1,0 +1,29 @@
+global:
+  release:
+    version: v34.4.0
+
+  metadata:
+    name: test-wc-minimal
+    organization: giantswarm
+    servicePriority: lowest
+
+  connectivity:
+    baseDomain: azuretest.gigantic.io
+
+  nodePools:
+    system:
+      mode: System
+      vmSize: Standard_D2s_v3
+    workers:
+      mode: User
+      vmSize: Standard_D4s_v3
+
+  providerSpecific:
+    location: westeurope
+    subscriptionId: 00000000-0000-0000-0000-000000000000
+
+cluster:
+  internal:
+    ephemeralConfiguration:
+      offlineTesting:
+        renderWithoutReleaseResource: true
