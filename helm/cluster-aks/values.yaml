@@ -23,6 +23,8 @@ cluster:
       externalDns:
         configTemplateName: AKSExternalDnsHelmValues
         enable: true
+      externalDnsCrossplaneResources:
+        enable: true
       k8sDnsNodeCache:
         enable: true
       metricsServer:
@@ -128,6 +130,10 @@ cluster:
 global:
   apps:
     azureAksExtras: {}
+    externalDns:
+      extraConfigs:
+        - kind: configMap
+          name: "{{ $.Values.global.metadata.name }}-external-dns-identity"
   connectivity:
     apiServerAccess:
       authorizedIPRanges: []

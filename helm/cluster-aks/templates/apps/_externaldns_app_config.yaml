@@ -7,12 +7,4 @@ domainFilters:
   - "{{ .Values.global.connectivity.baseDomain }}"
 txtOwnerId: giantswarm-io-external-dns
 txtPrefix: {{ include "cluster-aks.resource.name" $ }}
-extraVolumes:
-  - name: azure-config-file
-    hostPath:
-      path: /etc/kubernetes # TODO: this doesn't work on AKS
-extraVolumeMounts:
-  - name: azure-config-file
-    mountPath: /etc/kubernetes
-    readOnly: true
 {{- end }}
