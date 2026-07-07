@@ -1,6 +1,6 @@
 dependencies:
 - name: cluster
-  repository: https://giantswarm.github.io/cluster-test-catalog
-  version: 6.7.1-dev.app-extraco--templating.2026-07-02.08-58-07.h0ea6786
-digest: sha256:1eb92dd330c5e52d93ef03bbdc7bdf56766223c76e81a63ee36e1a702aaa1b73
-generated: "2026-07-02T16:27:48.444440528+02:00"
+  repository: oci://gsoci.azurecr.io/charts/giantswarm
+  version: 6.7.1-dev.external-dn--identity-2.2026-07-07.11-36-10.h0eaa680
+digest: sha256:623397929f04a13641fccadcb2b54325e8413cbf308346a72748cd47f05d7e38
+generated: "2026-07-07T13:38:14.516992387+02:00"

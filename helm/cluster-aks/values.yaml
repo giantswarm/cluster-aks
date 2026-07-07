@@ -24,6 +24,7 @@ cluster:
         configTemplateName: AKSExternalDnsHelmValues
         enable: true
       externalDnsCrossplaneResources:
+        configTemplateName: AKSExternalDNSCrossplaneResources
         enable: true
       k8sDnsNodeCache:
         enable: true
