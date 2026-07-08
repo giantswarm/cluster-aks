@@ -41,9 +41,7 @@ annotation in the ASO resources is omitted and ASO falls back to its default
 credential resolution.
 */}}
 {{- define "cluster-aks.aso.credentialSecretName" -}}
-{{- if .Values.global.providerSpecific.asoAuthentication.clientID -}}
-{{- printf "%s-aso-credentials" (include "cluster-aks.resource.name" .) -}}
-{{- end -}}
+{{- .Values.global.providerSpecific.asoAuthenticationSecretName -}}
 {{- end -}}
 
 {{/*

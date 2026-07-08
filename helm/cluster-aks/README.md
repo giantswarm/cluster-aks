@@ -127,10 +127,7 @@ Properties within the `.global.providerSpecific` object
 
 | **Property** | **Description** | **More Details** |
 | :----------- | :-------------- | :--------------- |
-| `global.providerSpecific.asoAuthentication` | **ASO authentication**|**Type:** `object`<br/>|
-| `global.providerSpecific.asoAuthentication.clientID` | **Client ID**|**Type:** `string`<br/>**Default:** `""`|
-| `global.providerSpecific.asoAuthentication.subscriptionID` | **Subscription ID**|**Type:** `string`<br/>**Default:** `""`|
-| `global.providerSpecific.asoAuthentication.tenantID` | **Tenant ID**|**Type:** `string`<br/>**Default:** `""`|
+| `global.providerSpecific.asoAuthenticationSecretName` | **ASO authentication secret name**|**Type:** `string`<br/>**Default:** `""`|
 | `global.providerSpecific.controlPlaneIdentity` | **Control plane identity** - Identity assigned to the AKS control plane itself (separate from the CAPZ controller identity above).|**Type:** `object`<br/>|
 | `global.providerSpecific.controlPlaneIdentity.type` | **Type**|**Type:** `string`<br/>**Allowed values:** `SystemAssigned`, `UserAssigned`<br/>**Default:** `"SystemAssigned"`|
 | `global.providerSpecific.controlPlaneIdentity.userAssignedIdentityResourceID` | **User-assigned identity resource ID**|**Type:** `string`<br/>**Default:** `""`|

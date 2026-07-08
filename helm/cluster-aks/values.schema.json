@@ -1012,26 +1012,10 @@
                     "type": "object",
                     "title": "Provider-specific configuration",
                     "properties": {
-                        "asoAuthentication": {
-                            "type": "object",
-                            "title": "ASO authentication",
-                            "properties": {
-                                "clientID": {
-                                    "type": "string",
-                                    "title": "Client ID",
-                                    "default": ""
-                                },
-                                "subscriptionID": {
-                                    "type": "string",
-                                    "title": "Subscription ID",
-                                    "default": ""
-                                },
-                                "tenantID": {
-                                    "type": "string",
-                                    "title": "Tenant ID",
-                                    "default": ""
-                                }
-                            }
+                        "asoAuthenticationSecretName": {
+                            "type": "string",
+                            "title": "ASO authentication secret name",
+                            "default": ""
                         },
                         "controlPlaneIdentity": {
                             "type": "object",

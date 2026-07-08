@@ -175,10 +175,7 @@ global:
     preventDeletion: false
     servicePriority: highest
   providerSpecific:
-    asoAuthentication:
-      clientID: ""
-      subscriptionID: ""
-      tenantID: ""
+    asoAuthenticationSecretName: ""
     controlPlaneIdentity:
       type: SystemAssigned
       userAssignedIdentityResourceID: ""
