@@ -1012,11 +1012,22 @@
                     "type": "object",
                     "title": "Provider-specific configuration",
                     "properties": {
-                        "asoAuthenticationSecretName": {
-                            "type": "string",
-                            "title": "ASO authentication secret name",
-                            "description": "Secret used by the Azure Service Operator (ASO) to authenticate with Azure. It must be in the same namespace as the workload cluster. ASO will fallback to the default credential if this is not set.",
-                            "default": ""
+                        "azureClusterIdentity": {
+                            "type": "object",
+                            "title": "Identity",
+                            "description": "AzureClusterIdentity resource to use for this cluster.",
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "title": "Name",
+                                    "default": "cluster-identity"
+                                },
+                                "namespace": {
+                                    "type": "string",
+                                    "title": "Namespace",
+                                    "default": "org-giantswarm"
+                                }
+                            }
                         },
                         "controlPlaneIdentity": {
                             "type": "object",

@@ -19,7 +19,7 @@ spec:
       kind: ManagedCluster
       metadata:
         name: {{ $clusterName }}
-        {{- with .Values.global.providerSpecific.asoAuthenticationSecretName }}
+        {{- with (include "cluster-aks.aso.credentialSecretName" .) }}
         annotations:
           serviceoperator.azure.com/credential-from: {{ . | quote }}
         {{- end }}

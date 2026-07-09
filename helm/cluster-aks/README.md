@@ -127,7 +127,9 @@ Properties within the `.global.providerSpecific` object
 
 | **Property** | **Description** | **More Details** |
 | :----------- | :-------------- | :--------------- |
-| `global.providerSpecific.asoAuthenticationSecretName` | **ASO authentication secret name** - Secret used by the Azure Service Operator (ASO) to authenticate with Azure. It must be in the same namespace as the workload cluster. ASO will fallback to the default credential if this is not set.|**Type:** `string`<br/>**Default:** `""`|
+| `global.providerSpecific.azureClusterIdentity` | **Identity** - AzureClusterIdentity resource to use for this cluster.|**Type:** `object`<br/>|
+| `global.providerSpecific.azureClusterIdentity.name` | **Name**|**Type:** `string`<br/>**Default:** `"cluster-identity"`|
+| `global.providerSpecific.azureClusterIdentity.namespace` | **Namespace**|**Type:** `string`<br/>**Default:** `"org-giantswarm"`|
 | `global.providerSpecific.controlPlaneIdentity` | **Control plane identity** - Identity assigned to the AKS control plane itself (separate from the CAPZ controller identity above).|**Type:** `object`<br/>|
 | `global.providerSpecific.controlPlaneIdentity.type` | **Type**|**Type:** `string`<br/>**Allowed values:** `SystemAssigned`, `UserAssigned`<br/>**Default:** `"SystemAssigned"`|
 | `global.providerSpecific.controlPlaneIdentity.userAssignedIdentityResourceID` | **User-assigned identity resource ID**|**Type:** `string`<br/>**Default:** `""`|

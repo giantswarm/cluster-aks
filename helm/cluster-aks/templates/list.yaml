@@ -1,5 +1,7 @@
 {{- include "validation" . }}
 ---
+{{ include "aso-credentials-secret" . }}
+---
 {{ include "azure-aso-managed-cluster" . }}
 ---
 {{ include "azure-aso-managed-control-plane" . }}

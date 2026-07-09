@@ -10,13 +10,15 @@ metadata:
     {{- include "labels.common" . | nindent 4 }}
   annotations:
     "helm.sh/resource-policy": keep
+    "azure.giantswarm.io/azure-cluster-identity": {{ .Values.global.providerSpecific.azureClusterIdentity.name }}
+    "azure.giantswarm.io/azure-cluster-identity-namespace": {{ .Values.global.providerSpecific.azureClusterIdentity.namespace }}
 spec:
   resources:
     - apiVersion: resources.azure.com/v1api20200601
       kind: ResourceGroup
       metadata:
         name: {{ $clusterName }}
-        {{- with .Values.global.providerSpecific.asoAuthenticationSecretName }}
+        {{- with (include "cluster-aks.aso.credentialSecretName" .) }}
         annotations:
           serviceoperator.azure.com/credential-from: {{ . | quote }}
         {{- end }}
@@ -32,7 +34,7 @@ spec:
       kind: VirtualNetwork
       metadata:
         name: {{ include "cluster-aks.vnet.name" . }}
-        {{- with .Values.global.providerSpecific.asoAuthenticationSecretName }}
+        {{- with (include "cluster-aks.aso.credentialSecretName" .) }}
         annotations:
           serviceoperator.azure.com/credential-from: {{ . | quote }}
         {{- end }}
@@ -52,7 +54,7 @@ spec:
       kind: VirtualNetworksSubnet
       metadata:
         name: {{ include "cluster-aks.subnet.crName" . }}
-        {{- with .Values.global.providerSpecific.asoAuthenticationSecretName }}
+        {{- with (include "cluster-aks.aso.credentialSecretName" .) }}
         annotations:
           serviceoperator.azure.com/credential-from: {{ . | quote }}
         {{- end }}

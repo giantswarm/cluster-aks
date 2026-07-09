@@ -34,6 +34,33 @@ global.providerSpecific.resourceGroupName is unset.
 {{- end -}}
 
 {{/*
+Name of the Kubernetes Secret that holds the Azure credentials used by the
+Azure Service Operator (ASO) to reconcile the embedded Azure resources.
+*/}}
+{{- define "cluster-aks.aso.credentialSecretName" -}}
+{{- printf "%s-aso-credentials" (include "cluster-aks.resource.name" .) -}}
+{{- end -}}
+
+{{/*
+Data for the Kubernetes Secret that holds the Azure credentials used by the
+Azure Service Operator (ASO) to reconcile the embedded Azure resources. The
+data is derived from the AzureClusterIdentity CR referenced by
+global.providerSpecific.azureClusterIdentity.name and global.providerSpecific.azureClusterIdentity.namespace.
+*/}}
+{{- define "cluster-aks.aso.credentialsSecretData" -}}
+{{- $aci := .Values.global.providerSpecific.azureClusterIdentity -}}
+{{- if and $aci.name $aci.namespace -}}
+{{- $aci := lookup "infrastructure.cluster.x-k8s.io/v1beta1" "AzureClusterIdentity" $aci.namespace $aci.name -}}
+AZURE_SUBSCRIPTION_ID: {{ .Values.global.providerSpecific.subscriptionId | quote }}
+AZURE_TENANT_ID: {{ required "Couldn't find a valid tenantID in the provided AzureClusterIdentity" $aci.spec.tenantID | quote }}
+AZURE_CLIENT_ID: {{ required "Couldn't find a valid clientID in the provided AzureClusterIdentity" $aci.spec.clientID | quote }}
+AUTH_MODE: workloadidentity
+{{- else -}}
+{{- fail "global.providerSpecific.azureClusterIdentity.name and global.providerSpecific.azureClusterIdentity.namespace must be set" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Whether the cluster uses a bring-your-own VNet. True when
 global.connectivity.network.vnet.subnetArmId is set, in which case the
 chart does not create a VNet and every node pool references the given
