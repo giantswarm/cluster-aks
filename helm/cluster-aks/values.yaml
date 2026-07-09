@@ -135,6 +135,7 @@ global:
       enablePrivateClusterPublicFQDN: false
       privateDNSZone: ""
     baseDomain: ""
+    dns: {}
     network:
       dnsServiceIP: 172.20.0.10
       pods:

@@ -714,6 +714,20 @@
                             "description": "DNS base domain used by the management cluster's installation.",
                             "default": ""
                         },
+                        "dns": {
+                            "type": "object",
+                            "title": "DNS",
+                            "properties": {
+                                "wildcardCnameTarget": {
+                                    "type": "string",
+                                    "title": "Wildcard CNAME Target",
+                                    "description": "Override the wildcard CNAME record value. If no value is passed defaults to \"ingress\". Only subdomains from the cluster DNS zone are valid.",
+                                    "examples": [
+                                        "gateway"
+                                    ]
+                                }
+                            }
+                        },
                         "network": {
                             "type": "object",
                             "title": "Network",

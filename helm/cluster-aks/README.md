@@ -31,6 +31,8 @@ Properties within the `.global.connectivity` object
 | `global.connectivity.apiServerAccess.enablePrivateClusterPublicFQDN` | **Enable private cluster public FQDN**|**Type:** `boolean`<br/>**Default:** `false`|
 | `global.connectivity.apiServerAccess.privateDNSZone` | **Private DNS zone**|**Type:** `string`<br/>**Default:** `""`|
 | `global.connectivity.baseDomain` | **Base domain** - DNS base domain used by the management cluster's installation.|**Type:** `string`<br/>**Default:** `""`|
+| `global.connectivity.dns` | **DNS**|**Type:** `object`<br/>|
+| `global.connectivity.dns.wildcardCnameTarget` | **Wildcard CNAME Target** - Override the wildcard CNAME record value. If no value is passed defaults to "ingress". Only subdomains from the cluster DNS zone are valid.|**Type:** `string`<br/>**Example:** `"gateway"`<br/>|
 | `global.connectivity.network` | **Network**|**Type:** `object`<br/>|
 | `global.connectivity.network.dnsServiceIP` | **DNS service IP** - Must be within the service CIDR.|**Type:** `string`<br/>**Default:** `"172.20.0.10"`|
 | `global.connectivity.network.pods` | **Pods network** - Pods CIDR — only used by AKS when controlPlane.networking.networkPlugin is kubenet. Ignored for Azure CNI (both node-subnet and overlay modes); in node-subnet mode pods get IPs from vnet.subnet.cidrBlocks. Kept non-empty because the giantswarm/cluster subchart schema requires at least one entry.|**Type:** `object`<br/>|

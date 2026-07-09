@@ -14,6 +14,12 @@ metadata:
     # They are used by our operators to access the Azure subscription and create the resources for this cluster.
     "azure.giantswarm.io/azure-cluster-identity": {{ .Values.global.providerSpecific.azureClusterIdentity.name }}
     "azure.giantswarm.io/azure-cluster-identity-namespace": {{ .Values.global.providerSpecific.azureClusterIdentity.namespace }}
+    {{- if .Values.global.connectivity.dns.wildcardCnameTarget }}
+    {{- if regexMatch "\\." .Values.global.connectivity.dns.wildcardCnameTarget }}
+    {{- fail "global.connectivity.dns.wildcardCnameTarget must be a single word - no FQDNs are allowed" }}
+    {{- end }}
+    network.giantswarm.io/wildcard-cname-target: "{{ .Values.global.connectivity.dns.wildcardCnameTarget }}"
+    {{- end }}
 spec:
   resources:
     - apiVersion: resources.azure.com/v1api20200601
