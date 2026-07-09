@@ -1012,6 +1012,12 @@
                     "type": "object",
                     "title": "Provider-specific configuration",
                     "properties": {
+                        "asoAuthenticationSecretName": {
+                            "type": "string",
+                            "title": "ASO authentication secret name",
+                            "description": "Name of the secret containing the ASO credentials. If empty, the chart creates a secret with the ASO credentials derived from the AzureClusterIdentity resource.",
+                            "default": ""
+                        },
                         "azureClusterIdentity": {
                             "type": "object",
                             "title": "Identity",

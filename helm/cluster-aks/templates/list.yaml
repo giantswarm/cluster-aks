@@ -1,7 +1,9 @@
 {{- include "validation" . }}
 ---
+{{- if not .Values.global.providerSpecific.asoAuthenticationSecretName }}
 {{ include "aso-credentials-secret" . }}
 ---
+{{- end }}
 {{ include "azure-aso-managed-cluster" . }}
 ---
 {{ include "azure-aso-managed-control-plane" . }}

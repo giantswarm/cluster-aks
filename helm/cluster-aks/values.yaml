@@ -175,6 +175,7 @@ global:
     preventDeletion: false
     servicePriority: highest
   providerSpecific:
+    asoAuthenticationSecretName: ""
     azureClusterIdentity:
       name: cluster-identity
       namespace: org-giantswarm

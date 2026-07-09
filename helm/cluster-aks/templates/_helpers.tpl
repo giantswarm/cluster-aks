@@ -38,7 +38,7 @@ Name of the Kubernetes Secret that holds the Azure credentials used by the
 Azure Service Operator (ASO) to reconcile the embedded Azure resources.
 */}}
 {{- define "cluster-aks.aso.credentialSecretName" -}}
-{{- printf "%s-aso-credentials" (include "cluster-aks.resource.name" .) -}}
+{{- .Values.global.providerSpecific.asoAuthenticationSecretName | default (printf "%s-aso-credentials" (include "cluster-aks.resource.name" .)) -}}
 {{- end -}}
 
 {{/*

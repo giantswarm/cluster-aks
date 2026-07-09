@@ -127,6 +127,7 @@ Properties within the `.global.providerSpecific` object
 
 | **Property** | **Description** | **More Details** |
 | :----------- | :-------------- | :--------------- |
+| `global.providerSpecific.asoAuthenticationSecretName` | **ASO authentication secret name** - Name of the secret containing the ASO credentials. If empty, the chart creates a secret with the ASO credentials derived from the AzureClusterIdentity resource.|**Type:** `string`<br/>**Default:** `""`|
 | `global.providerSpecific.azureClusterIdentity` | **Identity** - AzureClusterIdentity resource to use for this cluster.|**Type:** `object`<br/>|
 | `global.providerSpecific.azureClusterIdentity.name` | **Name**|**Type:** `string`<br/>**Default:** `"cluster-identity"`|
 | `global.providerSpecific.azureClusterIdentity.namespace` | **Namespace**|**Type:** `string`<br/>**Default:** `"org-giantswarm"`|
