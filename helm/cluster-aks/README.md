@@ -127,7 +127,7 @@ Properties within the `.global.providerSpecific` object
 
 | **Property** | **Description** | **More Details** |
 | :----------- | :-------------- | :--------------- |
-| `global.providerSpecific.asoAuthenticationSecretName` | **ASO authentication secret name**|**Type:** `string`<br/>**Default:** `""`|
+| `global.providerSpecific.asoAuthenticationSecretName` | **ASO authentication secret name. The secret must be in the same namespace as the workload cluster. ASO will fallback to the default credential if this is not set.**|**Type:** `string`<br/>**Default:** `""`|
 | `global.providerSpecific.controlPlaneIdentity` | **Control plane identity** - Identity assigned to the AKS control plane itself (separate from the CAPZ controller identity above).|**Type:** `object`<br/>|
 | `global.providerSpecific.controlPlaneIdentity.type` | **Type**|**Type:** `string`<br/>**Allowed values:** `SystemAssigned`, `UserAssigned`<br/>**Default:** `"SystemAssigned"`|
 | `global.providerSpecific.controlPlaneIdentity.userAssignedIdentityResourceID` | **User-assigned identity resource ID**|**Type:** `string`<br/>**Default:** `""`|
