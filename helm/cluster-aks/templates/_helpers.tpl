@@ -34,17 +34,6 @@ global.providerSpecific.resourceGroupName is unset.
 {{- end -}}
 
 {{/*
-Name of the Kubernetes Secret that holds the Azure credentials used by the
-Azure Service Operator (ASO) to reconcile the embedded Azure resources.
-Empty when no asoAuthentication.clientID is configured, so the credential-from
-annotation in the ASO resources is omitted and ASO falls back to its default
-credential resolution.
-*/}}
-{{- define "cluster-aks.aso.credentialSecretName" -}}
-{{- .Values.global.providerSpecific.asoAuthenticationSecretName -}}
-{{- end -}}
-
-{{/*
 Whether the cluster uses a bring-your-own VNet. True when
 global.connectivity.network.vnet.subnetArmId is set, in which case the
 chart does not create a VNet and every node pool references the given
@@ -77,13 +66,6 @@ inside the namespace when multiple clusters share it.
 */}}
 {{- define "cluster-aks.subnet.crName" -}}
 {{- printf "%s-%s" (include "cluster-aks.vnet.name" .) (include "cluster-aks.subnet.name" .) -}}
-{{- end -}}
-
-{{/*
-Name of the AzureClusterIdentity CR that mirrors the ASO credentials secret.
-*/}}
-{{- define "cluster-aks.azureClusterIdentity.name" -}}
-{{- printf "%s-identity" (include "cluster-aks.resource.name" .) -}}
 {{- end -}}
 
 {{/*

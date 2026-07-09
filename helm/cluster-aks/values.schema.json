@@ -1014,7 +1014,7 @@
                     "properties": {
                         "asoAuthenticationSecretName": {
                             "type": "string",
-                            "title": "ASO authentication secret name",
+                            "title": "ASO authentication secret name. The secret must be in the same namespace as the workload cluster. ASO will fallback to the default credential if this is not set.",
                             "default": ""
                         },
                         "controlPlaneIdentity": {

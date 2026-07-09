@@ -1,7 +1,6 @@
 {{- define "azure-aso-managed-cluster" -}}
 {{- $clusterName := include "cluster-aks.resource.name" . -}}
 {{- $vnet := .Values.global.connectivity.network.vnet -}}
-{{- $credSecret := include "cluster-aks.aso.credentialSecretName" . -}}
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AzureASOManagedCluster
 metadata:
@@ -17,7 +16,7 @@ spec:
       kind: ResourceGroup
       metadata:
         name: {{ $clusterName }}
-        {{- with $credSecret }}
+        {{- with .Values.global.providerSpecific.asoAuthenticationSecretName }}
         annotations:
           serviceoperator.azure.com/credential-from: {{ . | quote }}
         {{- end }}
@@ -33,7 +32,7 @@ spec:
       kind: VirtualNetwork
       metadata:
         name: {{ include "cluster-aks.vnet.name" . }}
-        {{- with $credSecret }}
+        {{- with .Values.global.providerSpecific.asoAuthenticationSecretName }}
         annotations:
           serviceoperator.azure.com/credential-from: {{ . | quote }}
         {{- end }}
@@ -53,7 +52,7 @@ spec:
       kind: VirtualNetworksSubnet
       metadata:
         name: {{ include "cluster-aks.subnet.crName" . }}
-        {{- with $credSecret }}
+        {{- with .Values.global.providerSpecific.asoAuthenticationSecretName }}
         annotations:
           serviceoperator.azure.com/credential-from: {{ . | quote }}
         {{- end }}

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Do not create ASO credentials Secret from the chart. Must already exist in the namespace.
+
 ## [0.1.0] - 2026-06-19
 
 - added: Initial implementation of the AKS cluster chart.
