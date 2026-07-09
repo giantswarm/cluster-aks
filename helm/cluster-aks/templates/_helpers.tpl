@@ -48,16 +48,16 @@ data is derived from the AzureClusterIdentity CR referenced by
 global.providerSpecific.azureClusterIdentity.name and global.providerSpecific.azureClusterIdentity.namespace.
 */}}
 {{- define "cluster-aks.aso.credentialsSecretData" -}}
-{{- $aci := .Values.global.providerSpecific.azureClusterIdentity -}}
-{{- if and $aci.name $aci.namespace -}}
-{{- $aci := lookup "infrastructure.cluster.x-k8s.io/v1beta1" "AzureClusterIdentity" $aci.namespace $aci.name -}}
+{{- $auth := .Values.global.providerSpecific.azureClusterIdentity -}}
+{{- if and $auth.name $auth.namespace -}}
+{{- $aci := lookup "infrastructure.cluster.x-k8s.io/v1beta1" "AzureClusterIdentity" $auth.namespace $auth.name -}}
 {{- if $aci -}}
 AZURE_SUBSCRIPTION_ID: {{ .Values.global.providerSpecific.subscriptionId | quote }}
 AZURE_TENANT_ID: {{ required "Couldn't find a valid tenantID in the provided AzureClusterIdentity" $aci.spec.tenantID | quote }}
 AZURE_CLIENT_ID: {{ required "Couldn't find a valid clientID in the provided AzureClusterIdentity" $aci.spec.clientID | quote }}
 AUTH_MODE: workloadidentity
 {{- else -}}
-{{- fail (printf "Couldn't find the provided AzureClusterIdentity %s/%s" $aci.namespace $aci.name) -}}
+{{- fail (printf "Couldn't find the provided AzureClusterIdentity %s/%s" $auth.namespace $auth.name) -}}
 {{- end -}}
 {{- else -}}
 {{- fail "global.providerSpecific.azureClusterIdentity.name and global.providerSpecific.azureClusterIdentity.namespace must be set" -}}
