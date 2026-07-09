@@ -51,10 +51,13 @@ global.providerSpecific.azureClusterIdentity.name and global.providerSpecific.az
 {{- $aci := .Values.global.providerSpecific.azureClusterIdentity -}}
 {{- if and $aci.name $aci.namespace -}}
 {{- $aci := lookup "infrastructure.cluster.x-k8s.io/v1beta1" "AzureClusterIdentity" $aci.namespace $aci.name -}}
+{{- if $aci -}}
 AZURE_SUBSCRIPTION_ID: {{ .Values.global.providerSpecific.subscriptionId | quote }}
 AZURE_TENANT_ID: {{ required "Couldn't find a valid tenantID in the provided AzureClusterIdentity" $aci.spec.tenantID | quote }}
 AZURE_CLIENT_ID: {{ required "Couldn't find a valid clientID in the provided AzureClusterIdentity" $aci.spec.clientID | quote }}
 AUTH_MODE: workloadidentity
+{{- else -}}
+{{- fail (printf "Couldn't find the provided AzureClusterIdentity %s/%s" $aci.namespace $aci.name) -}}
 {{- else -}}
 {{- fail "global.providerSpecific.azureClusterIdentity.name and global.providerSpecific.azureClusterIdentity.namespace must be set" -}}
 {{- end -}}
