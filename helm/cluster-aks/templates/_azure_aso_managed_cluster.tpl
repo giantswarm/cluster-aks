@@ -10,6 +10,8 @@ metadata:
     {{- include "labels.common" . | nindent 4 }}
   annotations:
     "helm.sh/resource-policy": keep
+    # These two annotations reference the AzureClusterIdentity resource that is used to derive the ASO credentials that are used to create the Azure resources for this cluster.
+    # They are used by our operators to access the Azure subscription and create the resources for this cluster.
     "azure.giantswarm.io/azure-cluster-identity": {{ .Values.global.providerSpecific.azureClusterIdentity.name }}
     "azure.giantswarm.io/azure-cluster-identity-namespace": {{ .Values.global.providerSpecific.azureClusterIdentity.namespace }}
 spec:
