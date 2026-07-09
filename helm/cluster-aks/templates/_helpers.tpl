@@ -58,6 +58,7 @@ AZURE_CLIENT_ID: {{ required "Couldn't find a valid clientID in the provided Azu
 AUTH_MODE: workloadidentity
 {{- else -}}
 {{- fail (printf "Couldn't find the provided AzureClusterIdentity %s/%s" $aci.namespace $aci.name) -}}
+{{- end -}}
 {{- else -}}
 {{- fail "global.providerSpecific.azureClusterIdentity.name and global.providerSpecific.azureClusterIdentity.namespace must be set" -}}
 {{- end -}}
