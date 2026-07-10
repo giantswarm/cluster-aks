@@ -1,6 +1,4 @@
 {{- define "aso-credentials-secret" -}}
-{{- $auth := .Values.global.providerSpecific.asoAuthentication -}}
-{{- if $auth.clientID -}}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -12,9 +10,5 @@ metadata:
     "helm.sh/resource-policy": keep
 type: Opaque
 stringData:
-  AZURE_SUBSCRIPTION_ID: {{ $auth.subscriptionID | quote }}
-  AZURE_TENANT_ID: {{ $auth.tenantID | quote }}
-  AZURE_CLIENT_ID: {{ $auth.clientID | quote }}
-  AUTH_MODE: workloadidentity
-{{- end -}}
+  {{- include "cluster-aks.aso.credentialsSecretData" . | nindent 2 }}
 {{- end -}}

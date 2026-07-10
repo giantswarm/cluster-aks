@@ -739,6 +739,20 @@
                             "description": "DNS base domain used by the management cluster's installation.",
                             "default": ""
                         },
+                        "dns": {
+                            "type": "object",
+                            "title": "DNS",
+                            "properties": {
+                                "wildcardCnameTarget": {
+                                    "type": "string",
+                                    "title": "Wildcard CNAME Target",
+                                    "description": "Override the wildcard CNAME record value. If no value is passed defaults to \"ingress\". Only subdomains from the cluster DNS zone are valid.",
+                                    "examples": [
+                                        "gateway"
+                                    ]
+                                }
+                            }
+                        },
                         "network": {
                             "type": "object",
                             "title": "Network",
@@ -1037,24 +1051,26 @@
                     "type": "object",
                     "title": "Provider-specific configuration",
                     "properties": {
-                        "asoAuthentication": {
+                        "asoAuthenticationSecretName": {
+                            "type": "string",
+                            "title": "ASO authentication secret name",
+                            "description": "Name of the secret containing the ASO credentials. If empty, the chart creates a secret with the ASO credentials derived from the AzureClusterIdentity resource.",
+                            "default": ""
+                        },
+                        "azureClusterIdentity": {
                             "type": "object",
-                            "title": "ASO authentication",
+                            "title": "Identity",
+                            "description": "AzureClusterIdentity resource to use for this cluster.",
                             "properties": {
-                                "clientID": {
+                                "name": {
                                     "type": "string",
-                                    "title": "Client ID",
-                                    "default": ""
+                                    "title": "Name",
+                                    "default": "cluster-identity"
                                 },
-                                "subscriptionID": {
+                                "namespace": {
                                     "type": "string",
-                                    "title": "Subscription ID",
-                                    "default": ""
-                                },
-                                "tenantID": {
-                                    "type": "string",
-                                    "title": "Tenant ID",
-                                    "default": ""
+                                    "title": "Namespace",
+                                    "default": "org-giantswarm"
                                 }
                             }
                         },

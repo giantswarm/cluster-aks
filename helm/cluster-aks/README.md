@@ -32,6 +32,8 @@ Properties within the `.global.connectivity` object
 | `global.connectivity.apiServerAccess.enablePrivateClusterPublicFQDN` | **Enable private cluster public FQDN**|**Type:** `boolean`<br/>**Default:** `false`|
 | `global.connectivity.apiServerAccess.privateDNSZone` | **Private DNS zone**|**Type:** `string`<br/>**Default:** `""`|
 | `global.connectivity.baseDomain` | **Base domain** - DNS base domain used by the management cluster's installation.|**Type:** `string`<br/>**Default:** `""`|
+| `global.connectivity.dns` | **DNS**|**Type:** `object`<br/>|
+| `global.connectivity.dns.wildcardCnameTarget` | **Wildcard CNAME Target** - Override the wildcard CNAME record value. If no value is passed defaults to "ingress". Only subdomains from the cluster DNS zone are valid.|**Type:** `string`<br/>**Example:** `"gateway"`<br/>|
 | `global.connectivity.network` | **Network**|**Type:** `object`<br/>|
 | `global.connectivity.network.dnsServiceIP` | **DNS service IP** - Must be within the service CIDR.|**Type:** `string`<br/>**Default:** `"172.20.0.10"`|
 | `global.connectivity.network.pods` | **Pods network** - Pods CIDR — only used by AKS when controlPlane.networking.networkPlugin is kubenet. Ignored for Azure CNI (both node-subnet and overlay modes); in node-subnet mode pods get IPs from vnet.subnet.cidrBlocks. Kept non-empty because the giantswarm/cluster subchart schema requires at least one entry.|**Type:** `object`<br/>|
@@ -128,10 +130,10 @@ Properties within the `.global.providerSpecific` object
 
 | **Property** | **Description** | **More Details** |
 | :----------- | :-------------- | :--------------- |
-| `global.providerSpecific.asoAuthentication` | **ASO authentication**|**Type:** `object`<br/>|
-| `global.providerSpecific.asoAuthentication.clientID` | **Client ID**|**Type:** `string`<br/>**Default:** `""`|
-| `global.providerSpecific.asoAuthentication.subscriptionID` | **Subscription ID**|**Type:** `string`<br/>**Default:** `""`|
-| `global.providerSpecific.asoAuthentication.tenantID` | **Tenant ID**|**Type:** `string`<br/>**Default:** `""`|
+| `global.providerSpecific.asoAuthenticationSecretName` | **ASO authentication secret name** - Name of the secret containing the ASO credentials. If empty, the chart creates a secret with the ASO credentials derived from the AzureClusterIdentity resource.|**Type:** `string`<br/>**Default:** `""`|
+| `global.providerSpecific.azureClusterIdentity` | **Identity** - AzureClusterIdentity resource to use for this cluster.|**Type:** `object`<br/>|
+| `global.providerSpecific.azureClusterIdentity.name` | **Name**|**Type:** `string`<br/>**Default:** `"cluster-identity"`|
+| `global.providerSpecific.azureClusterIdentity.namespace` | **Namespace**|**Type:** `string`<br/>**Default:** `"org-giantswarm"`|
 | `global.providerSpecific.controlPlaneIdentity` | **Control plane identity** - Identity assigned to the AKS control plane itself (separate from the CAPZ controller identity above).|**Type:** `object`<br/>|
 | `global.providerSpecific.controlPlaneIdentity.type` | **Type**|**Type:** `string`<br/>**Allowed values:** `SystemAssigned`, `UserAssigned`<br/>**Default:** `"SystemAssigned"`|
 | `global.providerSpecific.controlPlaneIdentity.userAssignedIdentityResourceID` | **User-assigned identity resource ID**|**Type:** `string`<br/>**Default:** `""`|

@@ -48,6 +48,7 @@ global:
   providerSpecific:
     location: westeurope
     subscriptionId: 00000000-0000-0000-0000-000000000000
+    asoAuthenticationSecretName: test-wc-minimal-aso-creds
 
 # TODO: This is required until we have an aks release
 cluster:

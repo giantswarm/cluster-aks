@@ -12,9 +12,6 @@ metadata:
     {{- include "labels.common" . | nindent 4 }}
   annotations:
     "helm.sh/resource-policy": keep
-    {{- if (include "cluster-aks.aso.credentialSecretName" .) }}
-    "azure.giantswarm.io/azure-cluster-identity": {{ include "cluster-aks.azureClusterIdentity.name" . }}
-    {{- end }}
 spec:
   version: {{ include "cluster.component.kubernetes.version" . }}
   resources:
