@@ -686,14 +686,27 @@
                         },
                         "externalDns": {
                             "type": "object",
-                            "title": "external-dns extras",
-                            "default": {
-                                "extraConfigs": [
-                                    {
-                                    "kind": "configMap",
-                                    "name": "{{ $.Values.global.metadata.name }}-external-dns-identity"
-                                    }
-                                ]
+                            "title": "external-dns extra configuration",
+                            "properties": {
+                                "extraConfigs": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "default": [
+                                        {
+                                            "kind": "configMap",
+                                            "name": "{{ $.Values.global.metadata.name }}-external-dns-identity"
+                                        }
+                                    ]
+                                }
                             }
                         }
                     }
