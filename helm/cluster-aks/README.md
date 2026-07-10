@@ -18,6 +18,7 @@ Properties within the `.global.apps` object
 | **Property** | **Description** | **More Details** |
 | :----------- | :-------------- | :--------------- |
 | `global.apps.azureAksExtras` | **Azure AKS extras**|**Type:** `object`<br/>**Default:** `{}`|
+| `global.apps.externalDns` | **external-dns extras**|**Type:** `object`<br/>**Default:** `{}`|
 
 ### Connectivity
 Properties within the `.global.connectivity` object

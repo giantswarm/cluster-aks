@@ -221,6 +221,19 @@
                                         }
                                     }
                                 },
+                                "externalDnsCrossplaneResources": {
+                                    "type": "object",
+                                    "properties": {
+                                        "configTemplateName": {
+                                            "type": "string",
+                                            "default": "AKSExternalDNSCrossplaneResources"
+                                        },
+                                        "enable": {
+                                            "type": "boolean",
+                                            "default": true
+                                        }
+                                    }
+                                },
                                 "k8sDnsNodeCache": {
                                     "type": "object",
                                     "properties": {
@@ -670,6 +683,18 @@
                             "type": "object",
                             "title": "Azure AKS extras",
                             "default": {}
+                        },
+                        "externalDns": {
+                            "type": "object",
+                            "title": "external-dns extras",
+                            "default": {
+                                "extraConfigs": [
+                                    {
+                                    "kind": "configMap",
+                                    "name": "{{ $.Values.global.metadata.name }}-external-dns-identity"
+                                    }
+                                ]
+                            }
                         }
                     }
                 },
