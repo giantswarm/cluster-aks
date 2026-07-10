@@ -135,6 +135,7 @@ global:
       enablePrivateClusterPublicFQDN: false
       privateDNSZone: ""
     baseDomain: ""
+    dns: {}
     network:
       dnsServiceIP: 172.20.0.10
       pods:
@@ -175,10 +176,10 @@ global:
     preventDeletion: false
     servicePriority: highest
   providerSpecific:
-    asoAuthentication:
-      clientID: ""
-      subscriptionID: ""
-      tenantID: ""
+    asoAuthenticationSecretName: ""
+    azureClusterIdentity:
+      name: cluster-identity
+      namespace: org-giantswarm
     controlPlaneIdentity:
       type: SystemAssigned
       userAssignedIdentityResourceID: ""

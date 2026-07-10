@@ -36,13 +36,31 @@ global.providerSpecific.resourceGroupName is unset.
 {{/*
 Name of the Kubernetes Secret that holds the Azure credentials used by the
 Azure Service Operator (ASO) to reconcile the embedded Azure resources.
-Empty when no asoAuthentication.clientID is configured, so the credential-from
-annotation in the ASO resources is omitted and ASO falls back to its default
-credential resolution.
 */}}
 {{- define "cluster-aks.aso.credentialSecretName" -}}
-{{- if .Values.global.providerSpecific.asoAuthentication.clientID -}}
-{{- printf "%s-aso-credentials" (include "cluster-aks.resource.name" .) -}}
+{{- .Values.global.providerSpecific.asoAuthenticationSecretName | default (printf "%s-aso-credentials" (include "cluster-aks.resource.name" .)) -}}
+{{- end -}}
+
+{{/*
+Data for the Kubernetes Secret that holds the Azure credentials used by the
+Azure Service Operator (ASO) to reconcile the embedded Azure resources. The
+data is derived from the AzureClusterIdentity CR referenced by
+global.providerSpecific.azureClusterIdentity.name and global.providerSpecific.azureClusterIdentity.namespace.
+*/}}
+{{- define "cluster-aks.aso.credentialsSecretData" -}}
+{{- $auth := .Values.global.providerSpecific.azureClusterIdentity -}}
+{{- if and $auth.name $auth.namespace -}}
+{{- $aci := lookup "infrastructure.cluster.x-k8s.io/v1beta1" "AzureClusterIdentity" $auth.namespace $auth.name -}}
+{{- if $aci -}}
+AZURE_SUBSCRIPTION_ID: {{ .Values.global.providerSpecific.subscriptionId | quote }}
+AZURE_TENANT_ID: {{ required "Couldn't find a valid tenantID in the provided AzureClusterIdentity" $aci.spec.tenantID | quote }}
+AZURE_CLIENT_ID: {{ required "Couldn't find a valid clientID in the provided AzureClusterIdentity" $aci.spec.clientID | quote }}
+AUTH_MODE: workloadidentity
+{{- else -}}
+{{- fail (printf "Couldn't find the provided AzureClusterIdentity %s/%s" $auth.namespace $auth.name) -}}
+{{- end -}}
+{{- else -}}
+{{- fail "global.providerSpecific.azureClusterIdentity.name and global.providerSpecific.azureClusterIdentity.namespace must be set" -}}
 {{- end -}}
 {{- end -}}
 
@@ -79,13 +97,6 @@ inside the namespace when multiple clusters share it.
 */}}
 {{- define "cluster-aks.subnet.crName" -}}
 {{- printf "%s-%s" (include "cluster-aks.vnet.name" .) (include "cluster-aks.subnet.name" .) -}}
-{{- end -}}
-
-{{/*
-Name of the AzureClusterIdentity CR that mirrors the ASO credentials secret.
-*/}}
-{{- define "cluster-aks.azureClusterIdentity.name" -}}
-{{- printf "%s-identity" (include "cluster-aks.resource.name" .) -}}
 {{- end -}}
 
 {{/*

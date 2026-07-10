@@ -1,7 +1,6 @@
 {{- define "azure-aso-managed-cluster" -}}
 {{- $clusterName := include "cluster-aks.resource.name" . -}}
 {{- $vnet := .Values.global.connectivity.network.vnet -}}
-{{- $credSecret := include "cluster-aks.aso.credentialSecretName" . -}}
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AzureASOManagedCluster
 metadata:
@@ -11,13 +10,23 @@ metadata:
     {{- include "labels.common" . | nindent 4 }}
   annotations:
     "helm.sh/resource-policy": keep
+    # These two annotations reference the AzureClusterIdentity resource that is used to derive the ASO credentials that are used to create the Azure resources for this cluster.
+    # They are used by our operators to access the Azure subscription and create the resources for this cluster.
+    "azure.giantswarm.io/azure-cluster-identity": {{ .Values.global.providerSpecific.azureClusterIdentity.name }}
+    "azure.giantswarm.io/azure-cluster-identity-namespace": {{ .Values.global.providerSpecific.azureClusterIdentity.namespace }}
+    {{- if .Values.global.connectivity.dns.wildcardCnameTarget }}
+    {{- if regexMatch "\\." .Values.global.connectivity.dns.wildcardCnameTarget }}
+    {{- fail "global.connectivity.dns.wildcardCnameTarget must be a single word - no FQDNs are allowed" }}
+    {{- end }}
+    network.giantswarm.io/wildcard-cname-target: "{{ .Values.global.connectivity.dns.wildcardCnameTarget }}"
+    {{- end }}
 spec:
   resources:
     - apiVersion: resources.azure.com/v1api20200601
       kind: ResourceGroup
       metadata:
         name: {{ $clusterName }}
-        {{- with $credSecret }}
+        {{- with (include "cluster-aks.aso.credentialSecretName" .) }}
         annotations:
           serviceoperator.azure.com/credential-from: {{ . | quote }}
         {{- end }}
@@ -33,7 +42,7 @@ spec:
       kind: VirtualNetwork
       metadata:
         name: {{ include "cluster-aks.vnet.name" . }}
-        {{- with $credSecret }}
+        {{- with (include "cluster-aks.aso.credentialSecretName" .) }}
         annotations:
           serviceoperator.azure.com/credential-from: {{ . | quote }}
         {{- end }}
@@ -53,7 +62,7 @@ spec:
       kind: VirtualNetworksSubnet
       metadata:
         name: {{ include "cluster-aks.subnet.crName" . }}
-        {{- with $credSecret }}
+        {{- with (include "cluster-aks.aso.credentialSecretName" .) }}
         annotations:
           serviceoperator.azure.com/credential-from: {{ . | quote }}
         {{- end }}
