@@ -226,7 +226,7 @@
                                     "properties": {
                                         "configTemplateName": {
                                             "type": "string",
-                                            "default": "AKSExternalDNSCrossplaneResources"
+                                            "default": "AKSExternalDnsCrossplaneResources"
                                         },
                                         "enable": {
                                             "type": "boolean",

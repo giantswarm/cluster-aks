@@ -174,7 +174,7 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration.apps.externalDns.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSExternalDnsHelmValues"`|
 | `cluster.providerIntegration.apps.externalDns.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.externalDnsCrossplaneResources` |**None**|**Type:** `object`<br/>|
-| `cluster.providerIntegration.apps.externalDnsCrossplaneResources.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSExternalDNSCrossplaneResources"`|
+| `cluster.providerIntegration.apps.externalDnsCrossplaneResources.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSExternalDnsCrossplaneResources"`|
 | `cluster.providerIntegration.apps.externalDnsCrossplaneResources.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.k8sDnsNodeCache` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.k8sDnsNodeCache.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
