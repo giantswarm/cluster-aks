@@ -18,6 +18,11 @@ Properties within the `.global.apps` object
 | **Property** | **Description** | **More Details** |
 | :----------- | :-------------- | :--------------- |
 | `global.apps.azureAksExtras` | **Azure AKS extras**|**Type:** `object`<br/>**Default:** `{}`|
+| `global.apps.externalDns` | **external-dns extra configuration**|**Type:** `object`<br/>|
+| `global.apps.externalDns.extraConfigs` |**None**|**Type:** `array`<br/>**Default:** `[{"kind":"configMap","name":"{{ $.Values.global.metadata.name }}-external-dns-identity"}]`|
+| `global.apps.externalDns.extraConfigs[*]` |**None**||
+| `global.apps.externalDns.extraConfigs[*].kind` |**None**|**Type:** `string`<br/>|
+| `global.apps.externalDns.extraConfigs[*].name` |**None**|**Type:** `string`<br/>|
 
 ### Connectivity
 Properties within the `.global.connectivity` object
@@ -168,6 +173,9 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration.apps.externalDns` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.externalDns.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSExternalDnsHelmValues"`|
 | `cluster.providerIntegration.apps.externalDns.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
+| `cluster.providerIntegration.apps.externalDnsCrossplaneResources` |**None**|**Type:** `object`<br/>|
+| `cluster.providerIntegration.apps.externalDnsCrossplaneResources.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSExternalDnsCrossplaneResources"`|
+| `cluster.providerIntegration.apps.externalDnsCrossplaneResources.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.k8sDnsNodeCache` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.k8sDnsNodeCache.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.metricsServer` |**None**|**Type:** `object`<br/>|

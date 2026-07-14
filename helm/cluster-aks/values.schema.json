@@ -221,6 +221,19 @@
                                         }
                                     }
                                 },
+                                "externalDnsCrossplaneResources": {
+                                    "type": "object",
+                                    "properties": {
+                                        "configTemplateName": {
+                                            "type": "string",
+                                            "default": "AKSExternalDnsCrossplaneResources"
+                                        },
+                                        "enable": {
+                                            "type": "boolean",
+                                            "default": true
+                                        }
+                                    }
+                                },
                                 "k8sDnsNodeCache": {
                                     "type": "object",
                                     "properties": {
@@ -670,6 +683,31 @@
                             "type": "object",
                             "title": "Azure AKS extras",
                             "default": {}
+                        },
+                        "externalDns": {
+                            "type": "object",
+                            "title": "external-dns extra configuration",
+                            "properties": {
+                                "extraConfigs": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "default": [
+                                        {
+                                            "kind": "configMap",
+                                            "name": "{{ $.Values.global.metadata.name }}-external-dns-identity"
+                                        }
+                                    ]
+                                }
+                            }
                         }
                     }
                 },

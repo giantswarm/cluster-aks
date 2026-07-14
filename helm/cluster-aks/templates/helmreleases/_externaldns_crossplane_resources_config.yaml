@@ -1,0 +1,5 @@
+{{- define "AKSExternalDnsCrossplaneResources" }}
+azure:
+  subscriptionID: {{ .Values.global.providerSpecific.subscriptionId }}
+  location: {{ .Values.global.providerSpecific.location }}
+{{- end }}
