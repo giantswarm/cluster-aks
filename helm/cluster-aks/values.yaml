@@ -121,7 +121,7 @@ global:
     externalDns:
       extraConfigs:
         - kind: configMap
-          name: "{{ $.Values.global.metadata.name }}-external-dns-identity"
+          name: '{{ $.Values.global.metadata.name }}-external-dns-identity'
   connectivity:
     apiServerAccess:
       authorizedIPRanges: []

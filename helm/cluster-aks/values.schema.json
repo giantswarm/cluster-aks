@@ -602,55 +602,7 @@
                                                 },
                                                 "vmSize": {
                                                     "type": "string",
-                                                    "default": "Standard_D2s_v3"
-                                                }
-                                            }
-                                        },
-                                        "workers": {
-                                            "type": "object",
-                                            "properties": {
-                                                "availabilityZones": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "default": [
-                                                        "1",
-                                                        "2",
-                                                        "3"
-                                                    ]
-                                                },
-                                                "enableAutoScaling": {
-                                                    "type": "boolean",
-                                                    "default": true
-                                                },
-                                                "maxSize": {
-                                                    "type": "integer",
-                                                    "default": 2
-                                                },
-                                                "minSize": {
-                                                    "type": "integer",
-                                                    "default": 1
-                                                },
-                                                "mode": {
-                                                    "type": "string",
-                                                    "default": "User"
-                                                },
-                                                "osDiskSizeGB": {
-                                                    "type": "integer",
-                                                    "default": 128
-                                                },
-                                                "osDiskType": {
-                                                    "type": "string",
-                                                    "default": "Managed"
-                                                },
-                                                "osType": {
-                                                    "type": "string",
-                                                    "default": "Linux"
-                                                },
-                                                "vmSize": {
-                                                    "type": "string",
-                                                    "default": "Standard_D2s_v3"
+                                                    "default": "Standard_D2as_v5"
                                                 }
                                             }
                                         }
