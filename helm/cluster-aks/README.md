@@ -260,18 +260,7 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration.workers.defaultNodePools.system.osDiskSizeGB` |**None**|**Type:** `integer`<br/>**Default:** `128`|
 | `cluster.providerIntegration.workers.defaultNodePools.system.osDiskType` |**None**|**Type:** `string`<br/>**Default:** `"Managed"`|
 | `cluster.providerIntegration.workers.defaultNodePools.system.osType` |**None**|**Type:** `string`<br/>**Default:** `"Linux"`|
-| `cluster.providerIntegration.workers.defaultNodePools.system.vmSize` |**None**|**Type:** `string`<br/>**Default:** `"Standard_D2s_v3"`|
-| `cluster.providerIntegration.workers.defaultNodePools.workers` |**None**|**Type:** `object`<br/>|
-| `cluster.providerIntegration.workers.defaultNodePools.workers.availabilityZones` |**None**|**Type:** `array`<br/>**Default:** `["1","2","3"]`|
-| `cluster.providerIntegration.workers.defaultNodePools.workers.availabilityZones[*]` |**None**|**Type:** `string`<br/>|
-| `cluster.providerIntegration.workers.defaultNodePools.workers.enableAutoScaling` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
-| `cluster.providerIntegration.workers.defaultNodePools.workers.maxSize` |**None**|**Type:** `integer`<br/>**Default:** `2`|
-| `cluster.providerIntegration.workers.defaultNodePools.workers.minSize` |**None**|**Type:** `integer`<br/>**Default:** `1`|
-| `cluster.providerIntegration.workers.defaultNodePools.workers.mode` |**None**|**Type:** `string`<br/>**Default:** `"User"`|
-| `cluster.providerIntegration.workers.defaultNodePools.workers.osDiskSizeGB` |**None**|**Type:** `integer`<br/>**Default:** `128`|
-| `cluster.providerIntegration.workers.defaultNodePools.workers.osDiskType` |**None**|**Type:** `string`<br/>**Default:** `"Managed"`|
-| `cluster.providerIntegration.workers.defaultNodePools.workers.osType` |**None**|**Type:** `string`<br/>**Default:** `"Linux"`|
-| `cluster.providerIntegration.workers.defaultNodePools.workers.vmSize` |**None**|**Type:** `string`<br/>**Default:** `"Standard_D2s_v3"`|
+| `cluster.providerIntegration.workers.defaultNodePools.system.vmSize` |**None**|**Type:** `string`<br/>**Default:** `"Standard_D2as_v5"`|
 | `cluster.providerIntegration.workers.kubeadmConfig` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.workers.kubeadmConfig.enabled` |**None**|**Type:** `boolean`<br/>**Default:** `false`|
 

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Update node pool defaults to only include the system pool and use `Standard_D2as_v5` VM family.
+- Fix node pool validation to take into account the defaults.
+
 ## [0.3.0] - 2026-07-15
 
 ### Changed
