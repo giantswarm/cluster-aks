@@ -2,11 +2,12 @@
 Cross-field validation. Produces no output — only `fail` calls as side effects.
 */}}
 {{- define "validation" -}}
-{{- if not .Values.global.nodePools -}}
+{{- $nodePools := .Values.global.nodePools | default .Values.cluster.providerIntegration.workers.defaultNodePools -}}
+{{- if not $nodePools -}}
 {{- fail "global.nodePools must define at least one node pool" -}}
 {{- end -}}
 {{- $systemPools := list -}}
-{{- range $name, $pool := .Values.global.nodePools -}}
+{{- range $name, $pool := $nodePools -}}
   {{- if eq (default "User" $pool.mode) "System" -}}
     {{- $systemPools = append $systemPools $name -}}
   {{- end -}}

@@ -112,20 +112,7 @@ cluster:
           osDiskSizeGB: 128
           osDiskType: Managed
           osType: Linux
-          vmSize: Standard_D2s_v3
-        workers:
-          availabilityZones:
-            - "1"
-            - "2"
-            - "3"
-          enableAutoScaling: true
-          maxSize: 2
-          minSize: 1
-          mode: User
-          osDiskSizeGB: 128
-          osDiskType: Managed
-          osType: Linux
-          vmSize: Standard_D2s_v3
+          vmSize: Standard_D2as_v5
       kubeadmConfig:
         enabled: false
 global:
@@ -134,7 +121,7 @@ global:
     externalDns:
       extraConfigs:
         - kind: configMap
-          name: '{{ $.Values.global.metadata.name }}-external-dns-identity'
+          name: "{{ $.Values.global.metadata.name }}-external-dns-identity"
   connectivity:
     apiServerAccess:
       authorizedIPRanges: []
