@@ -12,7 +12,7 @@ coredns:
         IP: {{ include "cluster.internal.apps.coredns.dns" $ | quote }}
 {{- end }}
 
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: {{ include "cluster-aks.resource.name" $ }}-azure-aks-extras
