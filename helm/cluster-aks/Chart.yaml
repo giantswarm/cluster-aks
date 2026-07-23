@@ -6,7 +6,7 @@ type: application
 name: cluster-aks
 description: A Helm chart for creating Cluster API clusters with the Azure infrastructure provider (CAPZ) in AKS mode.
 appVersion: 0.0.1
-version: 0.3.0
+version: 0.4.0
 home: https://github.com/giantswarm/cluster-aks
 icon: https://s.giantswarm.io/app-icons/azure/1/light.svg
 sources:
