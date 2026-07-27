@@ -23,5 +23,7 @@ Cross-field validation. Produces no output — only `fail` calls as side effects
   {{- if not $vnet.subnet.cidrBlocks -}}
 {{- fail "global.connectivity.network.vnet.subnet.cidrBlocks must be non-empty unless global.connectivity.network.vnet.subnetArmId is set (BYO VNet)" -}}
   {{- end -}}
+{{- else if $vnet.name -}}
+{{- fail "global.connectivity.network.vnet.name is ignored when global.connectivity.network.vnet.subnetArmId is set (BYO VNet); remove one of the two to avoid ambiguous configuration" -}}
 {{- end -}}
 {{- end -}}

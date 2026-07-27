@@ -54,7 +54,7 @@ Properties within the `.global.connectivity` object
 | `global.connectivity.network.vnet.subnet.cidrBlocks` | **CIDR blocks** - CIDR of the chart-created subnet. Must lie within vnet.cidrBlocks.|**Type:** `array`<br/>**Default:** `["10.224.0.0/16"]`|
 | `global.connectivity.network.vnet.subnet.cidrBlocks[*]` |**None**|**Type:** `string`<br/>|
 | `global.connectivity.network.vnet.subnet.name` | **Name** - Name of the chart-created subnet (Azure resource name).|**Type:** `string`<br/>**Default:** `"nodes"`|
-| `global.connectivity.network.vnet.subnetArmId` | **Subnet ARM ID** - ARM ID of an existing subnet to use for all node pools. When set, the chart skips VNet/Subnet creation. Format: /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<vnet>/subnets/<subnet>.|**Type:** `string`<br/>**Default:** `""`|
+| `global.connectivity.network.vnet.subnetArmId` | **Subnet ARM ID** - ARM ID of an existing subnet to use for all node pools (bring-your-own VNet). When set, the chart skips VNet/Subnet creation, cidrBlocks/name/subnet.* above are ignored, and vnet.name must be left empty. Format: /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<vnet>/subnets/<subnet>. Prerequisite: the ASO identity needs the Network Contributor role (or at least Microsoft.Network/virtualNetworks/subnets/join/action) on the subnet's resource group; for a subnet in another subscription, an additional role assignment is required there too.|**Type:** `string`<br/>**Default:** `""`|
 
 ### Control plane
 Properties within the `.global.controlPlane` object
