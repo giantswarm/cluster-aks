@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Raise the default node pool's `maxSize` from 2 to 3, matching other providers, since 2 nodes cannot fit all pods
+
 ## [0.4.0] - 2026-07-23
 
 ### Changed
