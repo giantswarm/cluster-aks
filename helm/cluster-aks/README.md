@@ -154,6 +154,7 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.certExporter` |**None**|**Type:** `object`<br/>|
+| `cluster.providerIntegration.apps.certExporter.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSCertExporterHelmValues"`|
 | `cluster.providerIntegration.apps.certExporter.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.certManager` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.certManager.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSCertManagerHelmValues"`|

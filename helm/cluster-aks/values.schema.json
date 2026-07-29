@@ -132,6 +132,10 @@
                                 "certExporter": {
                                     "type": "object",
                                     "properties": {
+                                        "configTemplateName": {
+                                            "type": "string",
+                                            "default": "AKSCertExporterHelmValues"
+                                        },
                                         "enable": {
                                             "type": "boolean",
                                             "default": true

@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Raise the default node pool's `maxSize` from 2 to 3, matching other providers, since 2 nodes cannot fit all pods
 - Document the `Network Contributor` role prerequisite for the ASO identity when bringing your own VNet via `subnetArmId`.
 
+### Fixed
+
+- Point the cert-exporter daemonset at `/etc/kubernetes/certs`, where AKS nodes keep their certificates, so certificate expiry metrics (`cert_exporter_not_after`) are emitted and the `ClusterCertificateExpirationMetricsMissing` alert no longer fires permanently on AKS clusters.
+
 ## [0.4.0] - 2026-07-23
 
 ### Changed

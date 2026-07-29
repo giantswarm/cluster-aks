@@ -4,6 +4,7 @@ cluster:
   providerIntegration:
     apps:
       certExporter:
+        configTemplateName: AKSCertExporterHelmValues
         enable: true
       certManager:
         configTemplateName: AKSCertManagerHelmValues
