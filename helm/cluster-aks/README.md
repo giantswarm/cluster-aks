@@ -254,7 +254,7 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration.workers.defaultNodePools.system.availabilityZones` |**None**|**Type:** `array`<br/>**Default:** `["1","2","3"]`|
 | `cluster.providerIntegration.workers.defaultNodePools.system.availabilityZones[*]` |**None**|**Type:** `string`<br/>|
 | `cluster.providerIntegration.workers.defaultNodePools.system.enableAutoScaling` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
-| `cluster.providerIntegration.workers.defaultNodePools.system.maxSize` |**None**|**Type:** `integer`<br/>**Default:** `2`|
+| `cluster.providerIntegration.workers.defaultNodePools.system.maxSize` |**None**|**Type:** `integer`<br/>**Default:** `3`|
 | `cluster.providerIntegration.workers.defaultNodePools.system.minSize` |**None**|**Type:** `integer`<br/>**Default:** `1`|
 | `cluster.providerIntegration.workers.defaultNodePools.system.mode` |**None**|**Type:** `string`<br/>**Default:** `"System"`|
 | `cluster.providerIntegration.workers.defaultNodePools.system.osDiskSizeGB` |**None**|**Type:** `integer`<br/>**Default:** `128`|

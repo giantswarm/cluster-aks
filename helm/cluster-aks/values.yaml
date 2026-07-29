@@ -106,7 +106,7 @@ cluster:
             - "2"
             - "3"
           enableAutoScaling: true
-          maxSize: 2
+          maxSize: 3
           minSize: 1
           mode: System
           osDiskSizeGB: 128
