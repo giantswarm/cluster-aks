@@ -11,7 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Validate `global.connectivity.network.vnet.subnetArmId` against an Azure subnet ARM ID pattern, so a malformed BYO VNet reference fails at `helm template`/schema-validation time instead of at ASO reconcile time.
 - Fail rendering if `global.connectivity.network.vnet.subnetArmId` (BYO VNet) is set together with `global.connectivity.network.vnet.name`, since the latter is silently ignored in that case.
-- Add a `ci/test-wc-byo-vnet-values.yaml` fixture exercising the BYO VNet path, so CI covers it.
 
 ### Changed
 
