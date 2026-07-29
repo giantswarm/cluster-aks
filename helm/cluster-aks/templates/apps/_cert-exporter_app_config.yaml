@@ -1,0 +1,11 @@
+{{/* AKS-specific cert-exporter Helm values*/}}
+{{/* https://github.com/giantswarm/cert-exporter/blob/main/helm/cert-exporter/values.yaml*/}}
+{{- define "AKSCertExporterHelmValues" }}
+exporter:
+  # AKS nodes keep their certificates in /etc/kubernetes/certs. The chart default
+  # paths (/etc/kubernetes/ssl and /etc/kubernetes/pki) are empty on AKS nodes
+  # because Azure manages the control plane, so the daemonset would emit no
+  # cert_exporter_not_after metrics and ClusterCertificateExpirationMetricsMissing
+  # would fire permanently.
+  certPath: /etc/kubernetes/certs
+{{- end }}
