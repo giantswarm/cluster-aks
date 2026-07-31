@@ -1,6 +1,6 @@
 dependencies:
 - name: cluster
   repository: https://giantswarm.github.io/cluster-test-catalog
-  version: 6.8.1-dev.cert-manage--e-resources.2026-07-31.14-27-11.haa3df3d
-digest: sha256:c521005552390297ac673f383442fd649b129723dbd4751594121f39986664ac
-generated: "2026-07-31T16:43:30.227114877+02:00"
+  version: 6.8.1-dev.certman-xpres.2026-07-31.14-27-11.haa3df3d
+digest: sha256:9f0196327e5474bdfe13511382d18c09b702cedfc886351f2eacedb2992f085d
+generated: "2026-07-31T18:22:05.401977786+02:00"
