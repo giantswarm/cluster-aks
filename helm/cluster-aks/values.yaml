@@ -9,7 +9,7 @@ cluster:
         configTemplateName: AKSCertManagerHelmValues
         enable: true
       certManagerCrossplaneResources:
-        configTemplateName: AKSCertManagerCrossplaneResources
+        configTemplateName: AKSCertManagerCrossplaneResourcesHelmValues
         enable: true
       chartOperatorExtensions:
         enable: true
