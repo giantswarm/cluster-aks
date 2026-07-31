@@ -158,6 +158,9 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration.apps.certManager` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.certManager.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSCertManagerHelmValues"`|
 | `cluster.providerIntegration.apps.certManager.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
+| `cluster.providerIntegration.apps.certManagerCrossplaneResources` |**None**|**Type:** `object`<br/>|
+| `cluster.providerIntegration.apps.certManagerCrossplaneResources.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSCertManagerCrossplaneResources"`|
+| `cluster.providerIntegration.apps.certManagerCrossplaneResources.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.chartOperatorExtensions` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.chartOperatorExtensions.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.cilium` |**None**|**Type:** `object`<br/>|

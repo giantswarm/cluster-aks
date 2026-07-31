@@ -151,6 +151,19 @@
                                         }
                                     }
                                 },
+                                "certManagerCrossplaneResources": {
+                                    "type": "object",
+                                    "properties": {
+                                        "configTemplateName": {
+                                            "type": "string",
+                                            "default": "AKSCertManagerCrossplaneResources"
+                                        },
+                                        "enable": {
+                                            "type": "boolean",
+                                            "default": true
+                                        }
+                                    }
+                                },
                                 "chartOperatorExtensions": {
                                     "type": "object",
                                     "properties": {
