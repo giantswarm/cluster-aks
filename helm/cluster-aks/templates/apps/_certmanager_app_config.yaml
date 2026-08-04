@@ -3,18 +3,19 @@
 {{- define "AKSCertManagerHelmValues" }}
 ciliumNetworkPolicy:
   enabled: true
-webhook:
-  mutatingWebhookConfigurationAnnotations:
-    # prevent AKS from overriding the VPA webhook configuration
-    admissions.enforcer/disabled: "true"
 
-{{/*
-  Setting up Azure Managed Identity
-  We do this ourselves to avoid having external-dns depend on a webhook.
-  It also requires data from a ConfigMap that is deployed by the WorkloadIdentity resource
-  in the cert-manager-crossplane-resources HelmRelease.
-*/}}
 cert-manager:
+  webhook:
+    mutatingWebhookConfigurationAnnotations:
+      # prevent AKS from overriding the VPA webhook configuration
+      admissions.enforcer/disabled: "true"
+
+  {{/*
+    Setting up Azure Managed Identity
+    We do this ourselves to avoid having external-dns depend on a webhook.
+    It also requires data from a ConfigMap that is deployed by the WorkloadIdentity resource
+    in the cert-manager-crossplane-resources HelmRelease.
+  */}}
   extraEnv:
     - name: AZURE_FEDERATED_TOKEN_FILE
       value: /var/run/secrets/azure/tokens/azure-identity
