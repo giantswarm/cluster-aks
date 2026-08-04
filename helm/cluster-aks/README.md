@@ -18,6 +18,11 @@ Properties within the `.global.apps` object
 | **Property** | **Description** | **More Details** |
 | :----------- | :-------------- | :--------------- |
 | `global.apps.azureAksExtras` | **Azure AKS extras**|**Type:** `object`<br/>**Default:** `{}`|
+| `global.apps.certManager` | **cert-manager extra configuration**|**Type:** `object`<br/>|
+| `global.apps.certManager.extraConfigs` |**None**|**Type:** `array`<br/>**Default:** `[{"kind":"configMap","name":"{{ $.Values.global.metadata.name }}-cert-manager-identity"}]`|
+| `global.apps.certManager.extraConfigs[*]` |**None**||
+| `global.apps.certManager.extraConfigs[*].kind` |**None**|**Type:** `string`<br/>|
+| `global.apps.certManager.extraConfigs[*].name` |**None**|**Type:** `string`<br/>|
 | `global.apps.externalDns` | **external-dns extra configuration**|**Type:** `object`<br/>|
 | `global.apps.externalDns.extraConfigs` |**None**|**Type:** `array`<br/>**Default:** `[{"kind":"configMap","name":"{{ $.Values.global.metadata.name }}-external-dns-identity"}]`|
 | `global.apps.externalDns.extraConfigs[*]` |**None**||
