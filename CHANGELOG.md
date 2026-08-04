@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-08-04
+
 ### Added
 
 - Validate `global.connectivity.network.vnet.subnetArmId` against an Azure subnet ARM ID pattern, so a malformed BYO VNet reference fails at `helm template`/schema-validation time instead of at ASO reconcile time.
@@ -49,7 +51,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added: Post-install/post-upgrade/post-rollback hook that sets an ownerReference on the ASO credentials Secret and on the `AzureClusterIdentity` CR pointing at the `AzureASOManagedCluster`, so they are garbage-collected when the cluster is deleted.
 - changed: `app.giantswarm.io` label group was changed to `application.giantswarm.io`
 
-[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/giantswarm/cluster-aks/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/giantswarm/cluster-aks/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/giantswarm/cluster-aks/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/giantswarm/cluster-aks/compare/v0.1.0...v0.2.0
