@@ -26,7 +26,7 @@ cert-manager:
 
   {{/*
     Setting up Azure Managed Identity
-    We do this ourselves to avoid having external-dns depend on a webhook.
+    We do this ourselves to avoid having cert-manager depend on a webhook.
     It also requires data from a ConfigMap that is deployed by the WorkloadIdentity resource
     in the cert-manager-crossplane-resources HelmRelease.
   */}}
