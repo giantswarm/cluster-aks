@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Add `cert-manager` configuration to enable Workload Identity, and default to `dns01` solver.
+
 ## [0.4.0] - 2026-07-23
 
 ### Changed
