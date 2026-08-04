@@ -34,7 +34,7 @@ spec:
         {{- with $pool.osType | default "Linux" }}
         osType: {{ . }}
         {{- end }}
-        {{- with $pool.osDiskSizeGB | default 30 }}
+        {{- with $pool.osDiskSizeGB | default 50 }}
         osDiskSizeGB: {{ . }}
         {{- end }}
         {{- with $pool.osDiskType | default "Managed" }}
