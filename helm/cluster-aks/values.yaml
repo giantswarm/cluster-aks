@@ -9,6 +9,9 @@ cluster:
       certManager:
         configTemplateName: AKSCertManagerHelmValues
         enable: true
+      certManagerCrossplaneResources:
+        configTemplateName: AKSCertManagerCrossplaneResourcesHelmValues
+        enable: true
       chartOperatorExtensions:
         enable: true
       cilium:
@@ -119,6 +122,10 @@ cluster:
 global:
   apps:
     azureAksExtras: {}
+    certManager:
+      extraConfigs:
+        - kind: configMap
+          name: '{{ $.Values.global.metadata.name }}-cert-manager-identity'
     externalDns:
       extraConfigs:
         - kind: configMap

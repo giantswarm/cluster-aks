@@ -155,6 +155,19 @@
                                         }
                                     }
                                 },
+                                "certManagerCrossplaneResources": {
+                                    "type": "object",
+                                    "properties": {
+                                        "configTemplateName": {
+                                            "type": "string",
+                                            "default": "AKSCertManagerCrossplaneResourcesHelmValues"
+                                        },
+                                        "enable": {
+                                            "type": "boolean",
+                                            "default": true
+                                        }
+                                    }
+                                },
                                 "chartOperatorExtensions": {
                                     "type": "object",
                                     "properties": {
@@ -639,6 +652,31 @@
                             "type": "object",
                             "title": "Azure AKS extras",
                             "default": {}
+                        },
+                        "certManager": {
+                            "type": "object",
+                            "title": "cert-manager extra configuration",
+                            "properties": {
+                                "extraConfigs": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "default": [
+                                        {
+                                            "kind": "configMap",
+                                            "name": "{{ $.Values.global.metadata.name }}-cert-manager-identity"
+                                        }
+                                    ]
+                                }
+                            }
                         },
                         "externalDns": {
                             "type": "object",

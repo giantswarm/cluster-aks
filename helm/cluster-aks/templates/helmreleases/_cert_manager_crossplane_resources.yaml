@@ -1,0 +1,6 @@
+{{- define "AKSCertManagerCrossplaneResourcesHelmValues" }}
+providers:
+  azure:
+    subscriptionId: {{ .Values.global.providerSpecific.subscriptionId }}
+    location: {{ .Values.global.providerSpecific.location }}
+{{- end }}
