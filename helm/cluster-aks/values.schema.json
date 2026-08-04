@@ -132,6 +132,10 @@
                                 "certExporter": {
                                     "type": "object",
                                     "properties": {
+                                        "configTemplateName": {
+                                            "type": "string",
+                                            "default": "AKSCertExporterHelmValues"
+                                        },
                                         "enable": {
                                             "type": "boolean",
                                             "default": true
@@ -591,7 +595,7 @@
                                                 },
                                                 "maxSize": {
                                                     "type": "integer",
-                                                    "default": 2
+                                                    "default": 3
                                                 },
                                                 "minSize": {
                                                     "type": "integer",
@@ -848,8 +852,9 @@
                                         "subnetArmId": {
                                             "type": "string",
                                             "title": "Subnet ARM ID",
-                                            "description": "ARM ID of an existing subnet to use for all node pools. When set, the chart skips VNet/Subnet creation. Format: /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<vnet>/subnets/<subnet>.",
-                                            "default": ""
+                                            "description": "ARM ID of an existing subnet to use for all node pools (bring-your-own VNet). When set, the chart skips VNet/Subnet creation, cidrBlocks/name/subnet.* above are ignored, and vnet.name must be left empty. Format: /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<vnet>/subnets/<subnet>. Prerequisite: the ASO identity needs the Network Contributor role (or at least Microsoft.Network/virtualNetworks/subnets/join/action) on the subnet's resource group; for a subnet in another subscription, an additional role assignment is required there too.",
+                                            "default": "",
+                                            "pattern": "^$|^/subscriptions/[^/]+/resourceGroups/[^/]+/providers/Microsoft\\.Network/virtualNetworks/[^/]+/subnets/[^/]+$"
                                         }
                                     }
                                 }

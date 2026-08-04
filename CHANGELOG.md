@@ -7,9 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Validate `global.connectivity.network.vnet.subnetArmId` against an Azure subnet ARM ID pattern, so a malformed BYO VNet reference fails at `helm template`/schema-validation time instead of at ASO reconcile time.
+- Fail rendering if `global.connectivity.network.vnet.subnetArmId` (BYO VNet) is set together with `global.connectivity.network.vnet.name`, since the latter is silently ignored in that case.
+
 ### Changed
 
+- Raise the default node pool's `maxSize` from 2 to 3, matching other providers, since 2 nodes cannot fit all pods
+- Document the `Network Contributor` role prerequisite for the ASO identity when bringing your own VNet via `subnetArmId`.
 - Add `cert-manager` configuration to enable Workload Identity, and default to `dns01` solver.
+
+### Fixed
+
+- Point the cert-exporter daemonset at `/etc/kubernetes/certs`, where AKS nodes keep their certificates, so certificate expiry metrics (`cert_exporter_not_after`) are emitted and the `ClusterCertificateExpirationMetricsMissing` alert no longer fires permanently on AKS clusters.
 
 ## [0.4.0] - 2026-07-23
 
