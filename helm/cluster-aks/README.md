@@ -18,6 +18,11 @@ Properties within the `.global.apps` object
 | **Property** | **Description** | **More Details** |
 | :----------- | :-------------- | :--------------- |
 | `global.apps.azureAksExtras` | **Azure AKS extras**|**Type:** `object`<br/>**Default:** `{}`|
+| `global.apps.certManager` | **cert-manager extra configuration**|**Type:** `object`<br/>|
+| `global.apps.certManager.extraConfigs` |**None**|**Type:** `array`<br/>**Default:** `[{"kind":"configMap","name":"{{ $.Values.global.metadata.name }}-cert-manager-identity"}]`|
+| `global.apps.certManager.extraConfigs[*]` |**None**||
+| `global.apps.certManager.extraConfigs[*].kind` |**None**|**Type:** `string`<br/>|
+| `global.apps.certManager.extraConfigs[*].name` |**None**|**Type:** `string`<br/>|
 | `global.apps.externalDns` | **external-dns extra configuration**|**Type:** `object`<br/>|
 | `global.apps.externalDns.extraConfigs` |**None**|**Type:** `array`<br/>**Default:** `[{"kind":"configMap","name":"{{ $.Values.global.metadata.name }}-external-dns-identity"}]`|
 | `global.apps.externalDns.extraConfigs[*]` |**None**||
@@ -159,6 +164,9 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration.apps.certManager` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.certManager.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSCertManagerHelmValues"`|
 | `cluster.providerIntegration.apps.certManager.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
+| `cluster.providerIntegration.apps.certManagerCrossplaneResources` |**None**|**Type:** `object`<br/>|
+| `cluster.providerIntegration.apps.certManagerCrossplaneResources.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSCertManagerCrossplaneResourcesHelmValues"`|
+| `cluster.providerIntegration.apps.certManagerCrossplaneResources.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.chartOperatorExtensions` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.chartOperatorExtensions.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.cilium` |**None**|**Type:** `object`<br/>|
