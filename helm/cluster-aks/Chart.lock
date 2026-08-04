@@ -1,6 +1,6 @@
 dependencies:
 - name: cluster
-  repository: https://giantswarm.github.io/cluster-test-catalog
-  version: 6.8.1-dev.certman-xpres.2026-07-31.17-27-18.h45c0181
-digest: sha256:6e78ed845357d5d548ecdb800e173208098ad4a29a84d59e9e65f9263843480f
-generated: "2026-07-31T19:41:03.969065925+02:00"
+  repository: https://giantswarm.github.io/cluster-catalog
+  version: 6.8.0
+digest: sha256:21c9e81747c71baeb00edf0de74728bebc9e27ff48a2e40b3a4267c5aae0b750
+generated: "2026-08-04T12:12:24.515190704+02:00"
