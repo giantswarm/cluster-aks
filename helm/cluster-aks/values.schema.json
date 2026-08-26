@@ -180,10 +180,14 @@
                                 "cilium": {
                                     "type": "object",
                                     "properties": {
+                                        "configTemplateName": {
+                                            "type": "string",
+                                            "default": "AKSCiliumHelmValues"
+                                        },
                                         "enable": {
                                             "type": "boolean",
-                                            "description": "Already managed by AKS.",
-                                            "default": false
+                                            "description": "Cilium is deployed by the cilium-app, since the cluster runs AKS in BYO CNI mode (controlPlane.networking.networkPlugin is none).",
+                                            "default": true
                                         }
                                     }
                                 },
@@ -773,7 +777,7 @@
                                 "pods": {
                                     "type": "object",
                                     "title": "Pods network",
-                                    "description": "Pods CIDR — only used by AKS when controlPlane.networking.networkPlugin is kubenet. Ignored for Azure CNI (both node-subnet and overlay modes); in node-subnet mode pods get IPs from vnet.subnet.cidrBlocks. Kept non-empty because the giantswarm/cluster subchart schema requires at least one entry.",
+                                    "description": "Pods CIDR. In BYO CNI mode (networkPlugin none) this is the pool the cilium app allocates pod IPs from, and it is also used by AKS when networkPlugin is kubenet. Ignored for Azure CNI.",
                                     "properties": {
                                         "cidrBlocks": {
                                             "type": "array",
@@ -920,40 +924,48 @@
                                 "networkDataplane": {
                                     "type": "string",
                                     "title": "Network dataplane",
+                                    "description": "Can only be set when networkPlugin is azure or kubenet.",
                                     "enum": [
+                                        "",
                                         "azure",
                                         "cilium"
                                     ],
-                                    "default": "cilium"
+                                    "default": ""
                                 },
                                 "networkMode": {
                                     "type": "string",
                                     "title": "Network mode",
+                                    "description": "Can only be set when networkPlugin is azure or kubenet.",
                                     "enum": [
+                                        "",
                                         "bridge",
                                         "transparent"
                                     ],
-                                    "default": "transparent"
+                                    "default": ""
                                 },
                                 "networkPlugin": {
                                     "type": "string",
                                     "title": "Network plugin",
+                                    "description": "Set to none to run AKS in BYO CNI mode, where networking is provided by the cilium-app. networkDataplane, networkMode and networkPolicy must be left empty in that case.",
                                     "enum": [
                                         "azure",
-                                        "kubenet"
+                                        "kubenet",
+                                        "none"
                                     ],
-                                    "default": "azure"
+                                    "default": "none"
                                 },
                                 "networkPolicy": {
                                     "type": "string",
                                     "title": "Network policy",
+                                    "description": "Can only be set when networkPlugin is azure or kubenet.",
                                     "enum": [
+                                        "",
                                         "azure",
                                         "calico",
                                         "cilium",
                                         "none"
                                     ],
-                                    "default": "cilium"
+                                    "default": ""
                                 },
                                 "outboundType": {
                                     "type": "string",

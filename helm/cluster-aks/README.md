@@ -45,7 +45,7 @@ Properties within the `.global.connectivity` object
 | `global.connectivity.dns.wildcardCnameTarget` | **Wildcard CNAME Target** - Override the wildcard CNAME record value. If no value is passed defaults to "ingress". Only subdomains from the cluster DNS zone are valid.|**Type:** `string`<br/>**Example:** `"gateway"`<br/>|
 | `global.connectivity.network` | **Network**|**Type:** `object`<br/>|
 | `global.connectivity.network.dnsServiceIP` | **DNS service IP** - Must be within the service CIDR.|**Type:** `string`<br/>**Default:** `"172.20.0.10"`|
-| `global.connectivity.network.pods` | **Pods network** - Pods CIDR — only used by AKS when controlPlane.networking.networkPlugin is kubenet. Ignored for Azure CNI (both node-subnet and overlay modes); in node-subnet mode pods get IPs from vnet.subnet.cidrBlocks. Kept non-empty because the giantswarm/cluster subchart schema requires at least one entry.|**Type:** `object`<br/>|
+| `global.connectivity.network.pods` | **Pods network** - Pods CIDR. In BYO CNI mode (networkPlugin none) this is the pool the cilium app allocates pod IPs from, and it is also used by AKS when networkPlugin is kubenet. Ignored for Azure CNI.|**Type:** `object`<br/>|
 | `global.connectivity.network.pods.cidrBlocks` | **CIDR blocks**|**Type:** `array`<br/>**Default:** `["192.168.0.0/16"]`|
 | `global.connectivity.network.pods.cidrBlocks[*]` |**None**|**Type:** `string`<br/>|
 | `global.connectivity.network.services` | **Services network** - Services CIDR — assigned by AKS for Kubernetes Service IPs. Used to populate Cluster.spec.clusterNetwork.services.|**Type:** `object`<br/>|
@@ -75,10 +75,10 @@ Properties within the `.global.controlPlane` object
 | `global.controlPlane.autoUpgradeChannel` | **Auto-upgrade channel** - Auto-upgrade channel for AKS node image and Kubernetes version updates.|**Type:** `string`<br/>**Allowed values:** `none`, `patch`, `rapid`, `stable`, `node-image`<br/>**Default:** `"none"`|
 | `global.controlPlane.dnsPrefix` | **DNS prefix** - DNS prefix. Defaults to the cluster name when empty.|**Type:** `string`<br/>**Default:** `""`|
 | `global.controlPlane.networking` | **Networking** - AKS networking configuration.|**Type:** `object`<br/>|
-| `global.controlPlane.networking.networkDataplane` | **Network dataplane**|**Type:** `string`<br/>**Allowed values:** `azure`, `cilium`<br/>**Default:** `"cilium"`|
-| `global.controlPlane.networking.networkMode` | **Network mode**|**Type:** `string`<br/>**Allowed values:** `bridge`, `transparent`<br/>**Default:** `"transparent"`|
-| `global.controlPlane.networking.networkPlugin` | **Network plugin**|**Type:** `string`<br/>**Allowed values:** `azure`, `kubenet`<br/>**Default:** `"azure"`|
-| `global.controlPlane.networking.networkPolicy` | **Network policy**|**Type:** `string`<br/>**Allowed values:** `azure`, `calico`, `cilium`, `none`<br/>**Default:** `"cilium"`|
+| `global.controlPlane.networking.networkDataplane` | **Network dataplane** - Can only be set when networkPlugin is azure or kubenet.|**Type:** `string`<br/>**Allowed values:** ``, `azure`, `cilium`<br/>**Default:** `""`|
+| `global.controlPlane.networking.networkMode` | **Network mode** - Can only be set when networkPlugin is azure or kubenet.|**Type:** `string`<br/>**Allowed values:** ``, `bridge`, `transparent`<br/>**Default:** `""`|
+| `global.controlPlane.networking.networkPlugin` | **Network plugin** - Set to none to run AKS in BYO CNI mode, where networking is provided by the cilium-app. networkDataplane, networkMode and networkPolicy must be left empty in that case.|**Type:** `string`<br/>**Allowed values:** `azure`, `kubenet`, `none`<br/>**Default:** `"none"`|
+| `global.controlPlane.networking.networkPolicy` | **Network policy** - Can only be set when networkPlugin is azure or kubenet.|**Type:** `string`<br/>**Allowed values:** ``, `azure`, `calico`, `cilium`, `none`<br/>**Default:** `""`|
 | `global.controlPlane.networking.outboundType` | **Outbound type**|**Type:** `string`<br/>**Allowed values:** `loadBalancer`, `managedNATGateway`, `userAssignedNATGateway`, `userDefinedRouting`<br/>**Default:** `"loadBalancer"`|
 | `global.controlPlane.sku` | **SKU** - AKS SKU tier.|**Type:** `object`<br/>|
 | `global.controlPlane.sku.tier` | **Tier**|**Type:** `string`<br/>**Allowed values:** `Free`, `Premium`, `Standard`<br/>**Default:** `"Standard"`|
@@ -170,7 +170,8 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration.apps.chartOperatorExtensions` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.chartOperatorExtensions.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.cilium` |**None**|**Type:** `object`<br/>|
-| `cluster.providerIntegration.apps.cilium.enable` |Already managed by AKS.|**Type:** `boolean`<br/>**Default:** `false`|
+| `cluster.providerIntegration.apps.cilium.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSCiliumHelmValues"`|
+| `cluster.providerIntegration.apps.cilium.enable` |Cilium is deployed by the cilium-app, since the cluster runs AKS in BYO CNI mode (controlPlane.networking.networkPlugin is none).|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.ciliumServiceMonitors` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.ciliumServiceMonitors.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.clusterAutoscaler` |**None**|**Type:** `object`<br/>|

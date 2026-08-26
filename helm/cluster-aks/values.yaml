@@ -15,7 +15,8 @@ cluster:
       chartOperatorExtensions:
         enable: true
       cilium:
-        enable: false
+        configTemplateName: AKSCiliumHelmValues
+        enable: true
       ciliumServiceMonitors:
         enable: true
       clusterAutoscaler:
@@ -161,10 +162,10 @@ global:
     autoUpgradeChannel: none
     dnsPrefix: ""
     networking:
-      networkDataplane: cilium
-      networkMode: transparent
-      networkPlugin: azure
-      networkPolicy: cilium
+      networkDataplane: ""
+      networkMode: ""
+      networkPlugin: none
+      networkPolicy: ""
       outboundType: loadBalancer
     sku:
       tier: Standard
