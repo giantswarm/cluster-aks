@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Create AKS clusters in BYO CNI mode and deploy the `cilium` app instead of relying on the AKS-managed Azure CNI/Cilium dataplane.
+- Pin the embedded `ManagedCluster` to the `containerservice.azure.com/v20251002preview` API version and disable the AKS-managed kube-proxy in BYO CNI mode, so Cilium's kube-proxy replacement is the only thing programming service NAT.
+
 ## [0.5.0] - 2026-08-04
 
 ### Added

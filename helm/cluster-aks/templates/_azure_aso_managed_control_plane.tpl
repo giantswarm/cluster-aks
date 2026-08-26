@@ -15,7 +15,7 @@ metadata:
 spec:
   version: {{ include "cluster.component.kubernetes.version" . }}
   resources:
-    - apiVersion: containerservice.azure.com/v1api20240901
+    - apiVersion: containerservice.azure.com/v20251002preview
       kind: ManagedCluster
       metadata:
         name: {{ $clusterName }}
@@ -43,6 +43,16 @@ spec:
         networkProfile:
           dnsServiceIP: {{ $net.network.dnsServiceIP | quote }}
           networkPlugin: {{ $cp.networking.networkPlugin }}
+          {{- if eq $cp.networking.networkPlugin "none" }}
+          {{- /*
+            In BYO CNI mode the cilium app runs with kube-proxy replacement, so
+            the AKS-managed kube-proxy must not program service NAT as well.
+            kubeProxyConfig only exists in the preview API version, which is why
+            the ManagedCluster above is pinned to it.
+          */}}
+          kubeProxyConfig:
+            enabled: false
+          {{- end }}
           {{- with $cp.networking.networkDataplane }}
           networkDataplane: {{ . }}
           {{- end }}

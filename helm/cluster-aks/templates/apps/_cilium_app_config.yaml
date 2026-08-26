@@ -1,0 +1,16 @@
+{{/* AKS-specific cilium Helm values*/}}
+{{/* https://github.com/giantswarm/cilium-app/blob/main/helm/cilium/values.yaml*/}}
+{{- define "AKSCiliumHelmValues" }}
+{{/*
+  AKS is created with networkPlugin "none" (BYO CNI), so cilium brings its own
+  CNI configuration and allocates pod IPs itself instead of relying on
+  node.spec.podCIDR, which AKS does not assign in that mode.
+*/}}
+aksbyocni:
+  enabled: true
+ipam:
+  mode: cluster-pool
+  operator:
+    clusterPoolIPv4PodCIDRList:
+      {{- toYaml (.Values.global.connectivity.network.pods.cidrBlocks | default list) | nindent 6 }}
+{{- end }}
