@@ -15,7 +15,7 @@ coredns:
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: OCIRepository
 metadata:
-  name: {{ include "resource.default.name" . }}-azure-aks-extras
+  name: {{ include "cluster-aks.resource.name" $ }}-azure-aks-extras
   namespace: {{ .Release.Namespace }}
   annotations:
     cluster.giantswarm.io/description: {{ .Values.global.metadata.description | quote }}
@@ -50,7 +50,7 @@ spec:
   storageNamespace: kube-system
   chartRef:
     kind: OCIRepository
-    name: {{ include "resource.default.name" . }}-azure-aks-extras
+    name: {{ include "cluster-aks.resource.name" $ }}-azure-aks-extras
   kubeConfig:
     secretRef:
       name: {{ include "cluster-aks.resource.name" $ }}-kubeconfig
