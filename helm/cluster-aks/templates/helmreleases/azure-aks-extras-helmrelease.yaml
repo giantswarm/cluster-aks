@@ -12,6 +12,24 @@ coredns:
         IP: {{ include "cluster.internal.apps.coredns.dns" $ | quote }}
 {{- end }}
 
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: {{ include "resource.default.name" . }}-azure-aks-extras
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    cluster.giantswarm.io/description: {{ .Values.global.metadata.description | quote }}
+  labels:
+    cluster-apps-operator.giantswarm.io/watching: ""
+    {{- include "labels.common" . | nindent 4 }}
+spec:
+  {{- $_ := set $ "appName" "azure-aks-extras" }}
+  url: oci://gsoci.azurecr.io/charts/giantswarm/azure-aks-extras
+  ref:
+    tag: {{ include "cluster.app.version" $ }}
+  interval: 24h
+  timeout: 60s
+---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -30,14 +48,9 @@ spec:
   releaseName: azure-aks-extras
   targetNamespace: kube-system
   storageNamespace: kube-system
-  chart:
-    spec:
-      chart: azure-aks-extras
-      {{- $_ := set $ "appName" "azure-aks-extras" }}
-      version: {{ include "cluster.app.version" $ }}
-      sourceRef:
-        kind: HelmRepository
-        name: {{ include "cluster-aks.resource.name" $ }}-{{ include "cluster.app.catalog" $ }}
+  chartRef:
+    kind: OCIRepository
+    name: {{ include "resource.default.name" . }}-azure-aks-extras
   kubeConfig:
     secretRef:
       name: {{ include "cluster-aks.resource.name" $ }}-kubeconfig
