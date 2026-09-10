@@ -100,13 +100,25 @@ inside the namespace when multiple clusters share it.
 {{- end -}}
 
 {{/*
+The chart's appVersion, sanitized so that it is a valid Kubernetes label
+value: only alphanumerics, '-', '_' and '.' are allowed, the value must
+start and end with an alphanumeric character, and it must not exceed 63
+characters. Dev builds carry an appVersion derived from the branch name and
+commit SHA, which can contain characters (e.g. '+' or '/') that Kubernetes
+rejects.
+*/}}
+{{- define "cluster-aks.appVersion.label" -}}
+{{- regexReplaceAll "[^A-Za-z0-9._-]" (.Chart.AppVersion | default "") "_" | trunc 63 | trimAll "-._" -}}
+{{- end -}}
+
+{{/*
 Common labels applied to every resource rendered by this chart.
 */}}
 {{- define "labels.common" -}}
 app: {{ include "name" . | quote }}
 {{ include "labels.selector" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+app.kubernetes.io/version: {{ include "cluster-aks.appVersion.label" . | quote }}
 application.giantswarm.io/team: {{ index .Chart.Annotations "application.giantswarm.io/team" | quote }}
 helm.sh/chart: {{ include "chart" . | quote }}
 giantswarm.io/cluster: {{ include "cluster-aks.resource.name" . | quote }}

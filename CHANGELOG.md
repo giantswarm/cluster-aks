@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Sanitize the `app.kubernetes.io/version` label value so it is always a valid Kubernetes label. New dev builds are longer and might trigger a validation failure in some cases.
+
 ## [0.5.0] - 2026-08-04
 
 ### Added
