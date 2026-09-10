@@ -11,4 +11,25 @@ userConfig:
                 annotations:
                   # prevent AKS from overriding the VPA webhook configuration
                   admissions.enforcer/disabled: "true"
+
+apps:
+  alloyEvents:
+    dependsOn:
+      - kyverno-crds
+      - prometheus-operator-crd
+      - vertical-pod-autoscaler-crd
+  alloyLogs:
+    dependsOn:
+      - kyverno-crds
+      - prometheus-operator-crd
+      - vertical-pod-autoscaler-crd
+  alloyMetrics:
+    dependsOn:
+      - kyverno-crds
+      - prometheus-operator-crd
+      - vertical-pod-autoscaler-crd
+
+  kubePrometheusStack:
+    dependsOn:
+      - prometheus-operator-crd
 {{- end }}

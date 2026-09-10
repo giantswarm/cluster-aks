@@ -1,0 +1,45 @@
+{{/* AKS-specific security-bundle Helm values*/}}
+{{/* https://github.com/giantswarm/security-bundle/blob/main/helm/security-bundle/values.yaml*/}}
+{{- define "AKSSecurityBundleHelmValues" }}
+userConfig:
+  kyverno:
+    configMap:
+      values:
+        kyverno:
+          admissionController:
+            tolerations:
+            - key: "node.cluster.x-k8s.io/uninitialized"
+              operator: "Exists"
+              effect: "NoSchedule"
+
+apps:
+  cloudNativePG:
+    dependsOn:
+      - prometheus-operator-crd
+
+  falco:
+    dependsOn:
+      - kyverno-crds
+
+  kubescape:
+    dependsOn:
+      - kyverno-crds
+      - kyverno-policy-operator
+
+  kyverno:
+    dependsOn:
+      - kyverno-crds
+      - prometheus-operator-crd
+      - alloy-podlogs-crds
+
+  kyvernoPolicyOperator:
+    dependsOn:
+      - kyverno-crds
+      - kyverno
+      - alloy-podlogs-crds
+
+  trivyOperator:
+    dependsOn:
+      - kyverno-crds
+      - trivy
+{{- end }}
