@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Chart: Update `cluster` to v8.2.0.
+
 ### Fixed
 
 - Sanitize the `app.kubernetes.io/version` label value so it is always a valid Kubernetes label. New dev builds are longer and might trigger a validation failure in some cases.
+- Configure `observability-bundle` and `security-bundle` HelmReleases dependencies to not include `cilium`, since it's not installed on AKS.
 
 ## [0.5.0] - 2026-08-04
 
