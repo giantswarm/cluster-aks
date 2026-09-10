@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-09-10
+
 ### Changed
 
 - Chart: Update `cluster` to v8.2.0.
@@ -60,7 +62,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added: Post-install/post-upgrade/post-rollback hook that sets an ownerReference on the ASO credentials Secret and on the `AzureClusterIdentity` CR pointing at the `AzureASOManagedCluster`, so they are garbage-collected when the cluster is deleted.
 - changed: `app.giantswarm.io` label group was changed to `application.giantswarm.io`
 
-[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/giantswarm/cluster-aks/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/giantswarm/cluster-aks/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/giantswarm/cluster-aks/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/giantswarm/cluster-aks/compare/v0.2.0...v0.3.0
