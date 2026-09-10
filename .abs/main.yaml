@@ -1,6 +1,7 @@
 replace-chart-version-with-git: true
 generate-metadata: true
 chart-dir: ./helm/cluster-aks
+helm-template-extra-values: helm/cluster-aks/ci/ci-values.yaml
 ct-config: .abs/ct.yaml
 destination: ./build
 catalog-base-url: https://giantswarm.github.io/cluster-catalog/
