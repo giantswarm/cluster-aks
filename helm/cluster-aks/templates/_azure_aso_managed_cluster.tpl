@@ -72,4 +72,91 @@ spec:
         azureName: {{ include "cluster-aks.subnet.name" . | quote }}
         addressPrefix: {{ first $vnet.subnet.cidrBlocks | quote }}
     {{- end }}
+    {{- if include "cluster-aks.audit.enabled" . }}
+    {{- $audit := .Values.global.controlPlane.logging.audit }}
+    - apiVersion: eventhub.azure.com/v1api20240101
+      kind: Namespace
+      metadata:
+        name: {{ include "cluster-aks.audit.crName" . }}
+        {{- with (include "cluster-aks.aso.credentialSecretName" .) }}
+        annotations:
+          serviceoperator.azure.com/credential-from: {{ . | quote }}
+        {{- end }}
+      spec:
+        owner:
+          name: {{ $clusterName }}
+        azureName: {{ include "cluster-aks.audit.eventHubNamespace.name" . | quote }}
+        location: {{ .Values.global.providerSpecific.location | quote }}
+        sku:
+          name: Standard
+          tier: Standard
+          capacity: 1
+        {{- with .Values.global.controlPlane.additionalTags }}
+        tags:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+    - apiVersion: eventhub.azure.com/v1api20240101
+      kind: NamespacesEventhub
+      metadata:
+        name: {{ include "cluster-aks.audit.crName" . }}
+        {{- with (include "cluster-aks.aso.credentialSecretName" .) }}
+        annotations:
+          serviceoperator.azure.com/credential-from: {{ . | quote }}
+        {{- end }}
+      spec:
+        owner:
+          name: {{ include "cluster-aks.audit.crName" . }}
+        azureName: {{ include "cluster-aks.audit.eventHub.name" . | quote }}
+        partitionCount: {{ $audit.eventHub.partitionCount }}
+        retentionDescription:
+          cleanupPolicy: Delete
+          retentionTimeInHours: {{ $audit.eventHub.retentionTimeInHours }}
+    - apiVersion: eventhub.azure.com/v1api20240101
+      kind: NamespacesAuthorizationRule
+      metadata:
+        name: {{ include "cluster-aks.audit.crName" . }}
+        {{- with (include "cluster-aks.aso.credentialSecretName" .) }}
+        annotations:
+          serviceoperator.azure.com/credential-from: {{ . | quote }}
+        {{- end }}
+      spec:
+        owner:
+          name: {{ include "cluster-aks.audit.crName" . }}
+        azureName: audit
+        # Manage and Send are required by the diagnostic setting that writes the
+        # stream, Listen by the collector that reads it.
+        rights:
+          - Listen
+          - Manage
+          - Send
+        operatorSpec:
+          secrets:
+            primaryConnectionString:
+              name: {{ include "cluster-aks.audit.connectionStringSecretName" . }}
+              key: primaryConnectionString
+    - apiVersion: insights.azure.com/v1api20210501preview
+      kind: DiagnosticSetting
+      metadata:
+        name: {{ include "cluster-aks.audit.crName" . }}
+        {{- with (include "cluster-aks.aso.credentialSecretName" .) }}
+        annotations:
+          serviceoperator.azure.com/credential-from: {{ . | quote }}
+        {{- end }}
+      spec:
+        # The diagnostic setting is an extension resource on the AKS cluster
+        # itself, which the AzureASOManagedControlPlane creates.
+        owner:
+          group: containerservice.azure.com
+          kind: ManagedCluster
+          name: {{ $clusterName }}
+        azureName: audit
+        eventHubAuthorizationRuleReference:
+          group: eventhub.azure.com
+          kind: NamespacesAuthorizationRule
+          name: {{ include "cluster-aks.audit.crName" . }}
+        eventHubName: {{ include "cluster-aks.audit.eventHub.name" . | quote }}
+        logs:
+          - category: {{ $audit.category | quote }}
+            enabled: true
+    {{- end }}
 {{- end -}}

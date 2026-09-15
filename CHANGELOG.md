@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `global.controlPlane.logging.audit` to ship API server audit logs from the AKS control plane to an Event Hub via an Azure diagnostic setting. Disabled by default.
+
 ## [0.6.0] - 2026-09-10
 
 ### Changed

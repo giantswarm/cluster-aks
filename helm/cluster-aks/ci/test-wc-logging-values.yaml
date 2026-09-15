@@ -1,0 +1,39 @@
+global:
+  release:
+    version: v34.4.0
+
+  metadata:
+    name: test-wc-logging
+    organization: giantswarm
+    servicePriority: lowest
+
+  connectivity:
+    baseDomain: azuretest.gigantic.io
+
+  controlPlane:
+    logging:
+      audit:
+        enabled: true
+        category: kube-audit
+        eventHub:
+          partitionCount: 8
+          retentionTimeInHours: 48
+
+  nodePools:
+    system:
+      mode: System
+      vmSize: Standard_D2s_v3
+    workers:
+      mode: User
+      vmSize: Standard_D4s_v3
+
+  providerSpecific:
+    location: westeurope
+    subscriptionId: 00000000-0000-0000-0000-000000000000
+    asoAuthenticationSecretName: test-wc-logging-aso-creds
+
+cluster:
+  internal:
+    ephemeralConfiguration:
+      offlineTesting:
+        renderWithoutReleaseResource: true

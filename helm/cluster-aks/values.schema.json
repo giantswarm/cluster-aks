@@ -912,6 +912,65 @@
                             "description": "DNS prefix. Defaults to the cluster name when empty.",
                             "default": ""
                         },
+                        "logging": {
+                            "type": "object",
+                            "title": "Logging",
+                            "description": "Control plane logging. On AKS the API server runs on Microsoft's infrastructure, so its logs are only reachable through an Azure diagnostic setting.",
+                            "properties": {
+                                "audit": {
+                                    "type": "object",
+                                    "title": "Audit",
+                                    "description": "Ship Kubernetes API server audit logs off the AKS control plane into an Event Hub, from where they are ingested into Loki.",
+                                    "properties": {
+                                        "category": {
+                                            "type": "string",
+                                            "title": "Category",
+                                            "description": "Azure diagnostic log category to collect. `kube-audit-admin` excludes get and list events and is considerably cheaper than `kube-audit`.",
+                                            "enum": [
+                                                "kube-audit-admin",
+                                                "kube-audit"
+                                            ],
+                                            "default": "kube-audit-admin"
+                                        },
+                                        "enabled": {
+                                            "type": "boolean",
+                                            "title": "Enabled",
+                                            "description": "Enable or disable API server audit logging (https://learn.microsoft.com/en-us/azure/aks/monitor-aks). Creates an Event Hub namespace, which is billed separately.",
+                                            "default": false
+                                        },
+                                        "eventHub": {
+                                            "type": "object",
+                                            "title": "Event Hub",
+                                            "description": "Event Hub that the audit log stream is delivered to.",
+                                            "properties": {
+                                                "namespaceName": {
+                                                    "type": "string",
+                                                    "title": "Namespace name",
+                                                    "description": "Name of the Event Hub namespace. Must be globally unique across Azure. Defaults to the cluster name suffixed with `-audit-` and a hash of the subscription and resource group.",
+                                                    "default": ""
+                                                },
+                                                "partitionCount": {
+                                                    "type": "integer",
+                                                    "title": "Partition count",
+                                                    "description": "Number of partitions of the audit Event Hub.",
+                                                    "default": 4,
+                                                    "maximum": 32,
+                                                    "minimum": 1
+                                                },
+                                                "retentionTimeInHours": {
+                                                    "type": "integer",
+                                                    "title": "Retention time in hours",
+                                                    "description": "How long unread audit events are retained in the Event Hub before they are dropped.",
+                                                    "default": 24,
+                                                    "maximum": 168,
+                                                    "minimum": 1
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
                         "networking": {
                             "type": "object",
                             "title": "Networking",
