@@ -1,0 +1,10 @@
+{{/* AKS-specific node-exporter Helm values*/}}
+{{/* https://github.com/giantswarm/node-exporter-app/blob/main/helm/node-exporter-app/values.yaml*/}}
+{{- define "AKSNodeExporterHelmValues" }}
+# The systemd collector opens a D-Bus connection to the host. AKS Ubuntu nodes
+# run the container under the default containerd AppArmor profile, which has no
+# D-Bus rules, so dbus-daemon refuses the connection and the collector fails on
+# every scrape. It produces no node_systemd_* metrics on AKS either way, since
+# Azure manages the node's systemd units.
+disableSystemdCollector: true
+{{- end }}

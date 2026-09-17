@@ -203,6 +203,7 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration.apps.networkPolicies.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSNetworkPoliciesHelmValues"`|
 | `cluster.providerIntegration.apps.networkPolicies.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.nodeExporter` |**None**|**Type:** `object`<br/>|
+| `cluster.providerIntegration.apps.nodeExporter.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSNodeExporterHelmValues"`|
 | `cluster.providerIntegration.apps.nodeExporter.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.observabilityBundle` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.observabilityBundle.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSObservabilityBundleHelmValues"`|

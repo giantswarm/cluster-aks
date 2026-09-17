@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add `global.controlPlane.logging.audit` to ship API server audit logs from the AKS control plane to an Event Hub via an Azure diagnostic setting. Disabled by default.
 
+### Fixed
+
+- Turn the node-exporter systemd collector off on AKS. The collector opens a D-Bus connection to the host, which is refused on AKS Ubuntu nodes because the container runs under the default containerd AppArmor profile. It failed on every scrape, logging an error per node per minute and exporting no `node_systemd_*` metrics. Needs node-exporter-app with `disableSystemdCollector`.
+
 ## [0.6.0] - 2026-09-10
 
 ### Changed
