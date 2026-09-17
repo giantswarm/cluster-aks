@@ -172,3 +172,54 @@ would collapse onto the same line.
 {{- define "azureMachinePoolBootstrap" }}
 dataSecretName: ""
 {{- end }}
+
+{{/*
+Whether API server audit logging is enabled. On AKS the API server runs on
+Microsoft's infrastructure, so there is no audit.log on any node we own and
+the logs have to be collected through an Azure diagnostic setting instead.
+*/}}
+{{- define "cluster-aks.audit.enabled" -}}
+{{- if .Values.global.controlPlane.logging.audit.enabled -}}true{{- end -}}
+{{- end -}}
+
+{{/*
+Azure name of the Event Hub namespace that receives the audit log stream.
+Event Hub namespace names have to be globally unique across Azure, so the
+default appends a hash of the subscription and resource group to the cluster
+name. Override with global.controlPlane.logging.audit.eventHub.namespaceName.
+*/}}
+{{- define "cluster-aks.audit.eventHubNamespace.name" -}}
+{{- with .Values.global.controlPlane.logging.audit.eventHub.namespaceName -}}
+{{- . -}}
+{{- else -}}
+{{- $scope := printf "%s/%s" .Values.global.providerSpecific.subscriptionId (include "cluster-aks.resourceGroup.name" .) -}}
+{{- /* Azure caps Event Hub namespace names at 50 characters. */ -}}
+{{- $prefix := include "cluster-aks.resource.name" . | trunc 35 | trimSuffix "-" -}}
+{{- printf "%s-audit-%s" $prefix (sha256sum $scope | trunc 8) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Azure name of the Event Hub that the audit log stream is delivered to. Kept
+independent of the diagnostic log category so that switching between
+kube-audit-admin and kube-audit does not recreate the hub.
+*/}}
+{{- define "cluster-aks.audit.eventHub.name" -}}
+audit
+{{- end -}}
+
+{{/*
+Kubernetes object name shared by the audit Event Hub CRs. Prefixed with the
+cluster name so that several clusters can live in the same namespace.
+*/}}
+{{- define "cluster-aks.audit.crName" -}}
+{{- printf "%s-audit" (include "cluster-aks.resource.name" .) -}}
+{{- end -}}
+
+{{/*
+Name of the Secret that ASO writes the Event Hub connection string to. The
+log collector reads the stream with these credentials.
+*/}}
+{{- define "cluster-aks.audit.connectionStringSecretName" -}}
+{{- printf "%s-audit-eventhub" (include "cluster-aks.resource.name" .) -}}
+{{- end -}}

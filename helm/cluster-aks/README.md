@@ -74,6 +74,14 @@ Properties within the `.global.controlPlane` object
 | `global.controlPlane.additionalTags.*` |**None**|**Type:** `string`<br/>|
 | `global.controlPlane.autoUpgradeChannel` | **Auto-upgrade channel** - Auto-upgrade channel for AKS node image and Kubernetes version updates.|**Type:** `string`<br/>**Allowed values:** `none`, `patch`, `rapid`, `stable`, `node-image`<br/>**Default:** `"none"`|
 | `global.controlPlane.dnsPrefix` | **DNS prefix** - DNS prefix. Defaults to the cluster name when empty.|**Type:** `string`<br/>**Default:** `""`|
+| `global.controlPlane.logging` | **Logging** - Control plane logging. On AKS the API server runs on Microsoft's infrastructure, so its logs are only reachable through an Azure diagnostic setting.|**Type:** `object`<br/>|
+| `global.controlPlane.logging.audit` | **Audit** - Ship Kubernetes API server audit logs off the AKS control plane into an Event Hub, from where they are ingested into Loki.|**Type:** `object`<br/>|
+| `global.controlPlane.logging.audit.category` | **Category** - Azure diagnostic log category to collect. `kube-audit-admin` excludes get and list events and is considerably cheaper than `kube-audit`.|**Type:** `string`<br/>**Allowed values:** `kube-audit-admin`, `kube-audit`<br/>**Default:** `"kube-audit-admin"`|
+| `global.controlPlane.logging.audit.enabled` | **Enabled** - Enable or disable API server audit logging (https://learn.microsoft.com/en-us/azure/aks/monitor-aks). Creates an Event Hub namespace, which is billed separately.|**Type:** `boolean`<br/>**Default:** `false`|
+| `global.controlPlane.logging.audit.eventHub` | **Event Hub** - Event Hub that the audit log stream is delivered to.|**Type:** `object`<br/>|
+| `global.controlPlane.logging.audit.eventHub.namespaceName` | **Namespace name** - Name of the Event Hub namespace. Must be globally unique across Azure. Defaults to the cluster name suffixed with `-audit-` and a hash of the subscription and resource group.|**Type:** `string`<br/>**Default:** `""`|
+| `global.controlPlane.logging.audit.eventHub.partitionCount` | **Partition count** - Number of partitions of the audit Event Hub.|**Type:** `integer`<br/>**Default:** `4`|
+| `global.controlPlane.logging.audit.eventHub.retentionTimeInHours` | **Retention time in hours** - How long unread audit events are retained in the Event Hub before they are dropped.|**Type:** `integer`<br/>**Default:** `24`|
 | `global.controlPlane.networking` | **Networking** - AKS networking configuration.|**Type:** `object`<br/>|
 | `global.controlPlane.networking.networkDataplane` | **Network dataplane**|**Type:** `string`<br/>**Allowed values:** `azure`, `cilium`<br/>**Default:** `"cilium"`|
 | `global.controlPlane.networking.networkMode` | **Network mode**|**Type:** `string`<br/>**Allowed values:** `bridge`, `transparent`<br/>**Default:** `"transparent"`|

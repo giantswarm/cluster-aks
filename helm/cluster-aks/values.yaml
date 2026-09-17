@@ -161,6 +161,14 @@ global:
     additionalTags: {}
     autoUpgradeChannel: none
     dnsPrefix: ""
+    logging:
+      audit:
+        category: kube-audit-admin
+        enabled: false
+        eventHub:
+          namespaceName: ""
+          partitionCount: 4
+          retentionTimeInHours: 24
     networking:
       networkDataplane: cilium
       networkMode: transparent
