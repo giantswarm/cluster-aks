@@ -295,6 +295,10 @@
                                 "nodeExporter": {
                                     "type": "object",
                                     "properties": {
+                                        "configTemplateName": {
+                                            "type": "string",
+                                            "default": "AKSNodeExporterHelmValues"
+                                        },
                                         "enable": {
                                             "type": "boolean",
                                             "default": true
