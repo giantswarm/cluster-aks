@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `global.controlPlane.disableLocalAccounts` to turn off AKS local accounts, so the static cluster-admin credential can no longer be issued and all API server authentication goes through Entra ID. When set, the chart also points the ManagedCluster at `<cluster>-user-kubeconfig` via `operatorSpec.secrets.userCredentials`, because ASO cannot list admin credentials on such a cluster and CAPZ needs to own `<cluster>-kubeconfig` itself. Requires `global.controlPlane.aadProfile.managed: true`, which is validated at render time.
+
 ### Fixed
 
 - Turn the node-exporter systemd collector off on AKS. The collector opens a D-Bus connection to the host, which is refused on AKS Ubuntu nodes because the container runs under the default containerd AppArmor profile. It failed on every scrape, logging an error per node per minute and exporting no `node_systemd_*` metrics. Needs node-exporter-app with `disableSystemdCollector`.

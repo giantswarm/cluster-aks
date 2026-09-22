@@ -910,6 +910,12 @@
                             ],
                             "default": "none"
                         },
+                        "disableLocalAccounts": {
+                            "type": "boolean",
+                            "title": "Disable local accounts",
+                            "description": "Disable AKS local accounts, so the static cluster-admin credential cannot be issued and all API server authentication goes through Entra ID. Requires aadProfile.managed: true. The ASO identity must also be granted cluster-admin in the workload cluster (Azure Kubernetes Service RBAC Cluster Admin Role when Azure RBAC is enabled, otherwise membership of one of aadProfile.adminGroupObjectIDs), because CAPZ reaches the cluster with an Entra token issued for that identity.",
+                            "default": false
+                        },
                         "dnsPrefix": {
                             "type": "string",
                             "title": "DNS prefix",

@@ -69,6 +69,18 @@ spec:
           adminGroupObjectIDs:
             {{- toYaml ($cp.aadProfile.adminGroupObjectIDs | default list) | nindent 12 }}
         {{- end }}
+        {{- if $cp.disableLocalAccounts }}
+        disableLocalAccounts: true
+        operatorSpec:
+          secrets:
+            # ASO cannot list admin credentials on a cluster with local accounts disabled, so it must
+            # write user credentials instead. The name must differ from `<cluster>-kubeconfig`, which
+            # CAPZ owns: it copies this Secret there after replacing the kubelogin `exec` block with
+            # an Entra token the CAPI controllers can use directly.
+            userCredentials:
+              name: {{ $clusterName }}-user-kubeconfig
+              key: value
+        {{- end }}
         {{- if or $net.apiServerAccess.enablePrivateCluster $net.apiServerAccess.authorizedIPRanges }}
         apiServerAccessProfile:
           enablePrivateCluster: {{ $net.apiServerAccess.enablePrivateCluster }}
