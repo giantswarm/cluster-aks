@@ -160,6 +160,7 @@ global:
     aadProfile: {}
     additionalTags: {}
     autoUpgradeChannel: none
+    disableLocalAccounts: false
     dnsPrefix: ""
     networking:
       networkDataplane: cilium
