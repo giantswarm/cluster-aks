@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-09-23
+
 ### Added
 
 - Add `global.controlPlane.disableLocalAccounts` to turn off AKS local accounts, so the static cluster-admin credential can no longer be issued and all API server authentication goes through Entra ID. When set, the chart also points the ManagedCluster at `<cluster>-user-kubeconfig` via `operatorSpec.secrets.userCredentials`, because ASO cannot list admin credentials on such a cluster and CAPZ needs to own `<cluster>-kubeconfig` itself. Requires `global.controlPlane.aadProfile.managed: true`, which is validated at render time.
@@ -70,7 +72,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added: Post-install/post-upgrade/post-rollback hook that sets an ownerReference on the ASO credentials Secret and on the `AzureClusterIdentity` CR pointing at the `AzureASOManagedCluster`, so they are garbage-collected when the cluster is deleted.
 - changed: `app.giantswarm.io` label group was changed to `application.giantswarm.io`
 
-[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/giantswarm/cluster-aks/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/giantswarm/cluster-aks/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/giantswarm/cluster-aks/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/giantswarm/cluster-aks/compare/v0.3.0...v0.4.0
