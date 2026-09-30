@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Publish the chart to `cluster-catalog` / `cluster-test-catalog` instead of `giantswarm-catalog` / `giantswarm-test-catalog`.
+
+### Added
+
+- Add a pull request template and a release PR body that trigger the `cluster-test-suites` E2E tests.
+
 ## [0.7.0] - 2026-09-23
 
 ### Added
