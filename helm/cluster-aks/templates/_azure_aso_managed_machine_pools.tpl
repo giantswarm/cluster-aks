@@ -14,6 +14,11 @@ metadata:
   labels:
     {{- include "labels.common" $root | nindent 4 }}
     giantswarm.io/machine-pool: {{ $clusterName }}-{{ $poolName }}
+  annotations:
+    # Helm deletes AzureASOManagedMachinePools before the Cluster on uninstall. If CAPZ reconciles that deletion
+    # before the Cluster is marked for deletion, it deletes the ManagedClustersAgentPool on its own, which Azure
+    # rejects for the last system pool. Keeping it lets CAPI delete it together with the Cluster instead.
+    "helm.sh/resource-policy": keep
 spec:
   resources:
     - apiVersion: containerservice.azure.com/v1api20240901
