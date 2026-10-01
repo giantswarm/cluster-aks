@@ -95,10 +95,11 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
-        {{- if ne $cp.autoUpgradeChannel "none" }}
         autoUpgradeProfile:
-          upgradeChannel: {{ $cp.autoUpgradeChannel }}
-        {{- end }}
+          # The Kubernetes version is controlled by the Giant Swarm release, so AKS must never
+          # upgrade it on its own. Node OS upgrades are independent and never change it.
+          upgradeChannel: none
+          nodeOSUpgradeChannel: {{ $ps.nodeOSUpgrade.channel }}
         {{- with $ps.kubeletIdentityResourceID }}
         identityProfile:
           kubeletidentity:
@@ -109,4 +110,43 @@ spec:
         tags:
           {{- toYaml . | nindent 10 }}
         {{- end }}
+    {{- if include "cluster-aks.nodeOSUpgrade.maintenanceWindow.enabled" . }}
+    {{- $mw := $ps.nodeOSUpgrade.maintenanceWindow }}
+    - apiVersion: containerservice.azure.com/v1api20240901
+      kind: MaintenanceConfiguration
+      metadata:
+        name: {{ $clusterName }}-aksmanagednodeosupgradeschedule
+        {{- with (include "cluster-aks.aso.credentialSecretName" .) }}
+        annotations:
+          serviceoperator.azure.com/credential-from: {{ . | quote }}
+        {{- end }}
+      spec:
+        # AKS only accepts these fixed names, which are not valid Kubernetes object names.
+        azureName: aksManagedNodeOSUpgradeSchedule
+        owner:
+          name: {{ $clusterName }}
+        maintenanceWindow:
+          durationHours: {{ $mw.durationHours }}
+          schedule:
+            {{- range $type, $schedule := $mw.schedule }}
+            {{- if $schedule }}
+            {{ $type }}:
+              {{- toYaml $schedule | nindent 14 }}
+            {{- end }}
+            {{- end }}
+          startTime: {{ $mw.startTime | quote }}
+          {{- with $mw.utcOffset }}
+          utcOffset: {{ . | quote }}
+          {{- end }}
+          {{- with $mw.startDate }}
+          startDate: {{ . | quote }}
+          {{- end }}
+          {{- with $mw.notAllowedDates }}
+          notAllowedDates:
+            {{- range . }}
+            - start: {{ .start | quote }}
+              end: {{ .end | quote }}
+            {{- end }}
+          {{- end }}
+    {{- end }}
 {{- end -}}

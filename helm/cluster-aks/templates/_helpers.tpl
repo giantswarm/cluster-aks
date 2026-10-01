@@ -42,6 +42,22 @@ Azure Service Operator (ASO) to reconcile the embedded Azure resources.
 {{- end -}}
 
 {{/*
+Non-empty when any field of global.providerSpecific.nodeOSUpgrade.maintenanceWindow is set.
+The generated values.yaml contains empty objects for every schedule type, so the window
+counts as configured only once one of them, or any other field, has a value.
+*/}}
+{{- define "cluster-aks.nodeOSUpgrade.maintenanceWindow.enabled" -}}
+{{- $mw := .Values.global.providerSpecific.nodeOSUpgrade.maintenanceWindow | default dict -}}
+{{- $scheduled := false -}}
+{{- range $_, $schedule := ($mw.schedule | default dict) -}}
+  {{- if $schedule -}}{{- $scheduled = true -}}{{- end -}}
+{{- end -}}
+{{- if or $scheduled $mw.durationHours $mw.startTime $mw.utcOffset $mw.startDate $mw.notAllowedDates -}}
+true
+{{- end -}}
+{{- end -}}
+
+{{/*
 Data for the Kubernetes Secret that holds the Azure credentials used by the
 Azure Service Operator (ASO) to reconcile the embedded Azure resources. The
 data is derived from the AzureClusterIdentity CR referenced by
