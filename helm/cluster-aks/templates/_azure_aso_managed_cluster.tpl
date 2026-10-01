@@ -8,6 +8,9 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "labels.common" . | nindent 4 }}
+    {{- with (include "cluster-aks.labels.preventDeletion" .) }}
+    {{- . | nindent 4 }}
+    {{- end }}
   annotations:
     "helm.sh/resource-policy": keep
     # These two annotations reference the AzureClusterIdentity resource that is used to derive the ASO credentials that are used to create the Azure resources for this cluster.
