@@ -10,10 +10,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Publish the chart to `cluster-catalog` / `cluster-test-catalog` instead of `giantswarm-catalog` / `giantswarm-test-catalog`.
+- Always render `autoUpgradeProfile.upgradeChannel: none` on the ManagedCluster, so AKS never upgrades the Kubernetes version on its own; it is controlled only by the Giant Swarm release.
+- Disallow additional properties in `global.controlPlane`, `global.providerSpecific` and their nested objects, so mistyped or removed values fail schema validation instead of being silently ignored.
 
 ### Added
 
 - Add a pull request template and a release PR body that trigger the `cluster-test-suites` E2E tests.
+- Add `global.providerSpecific.nodeOSUpgrade.channel` to choose the AKS node OS auto-upgrade channel (`NodeImage`, `SecurityPatch`, `Unmanaged` or `None`) independently of the Kubernetes version. It defaults to `NodeImage`, which is what AKS already applies to clusters that don't set it, so existing clusters keep their weekly node image upgrades.
+- Add `global.providerSpecific.nodeOSUpgrade.maintenanceWindow` to restrict when node OS upgrades may start. When set, the chart adds an `aksManagedNodeOSUpgradeSchedule` `MaintenanceConfiguration` to the `AzureASOManagedControlPlane` resources. Exactly one of the `daily`, `weekly`, `absoluteMonthly` or `relativeMonthly` schedules must be set, which is validated at render time.
+
+### Removed
+
+- Remove `global.controlPlane.autoUpgradeChannel`. Its `patch`, `rapid` and `stable` values upgraded the Kubernetes version outside the Giant Swarm release; use `global.providerSpecific.nodeOSUpgrade` for automatic OS upgrades instead. Values that still set it now fail schema validation.
 
 ## [0.7.0] - 2026-09-23
 
