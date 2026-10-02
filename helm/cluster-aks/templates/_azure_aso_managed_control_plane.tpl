@@ -10,6 +10,9 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "labels.common" . | nindent 4 }}
+    {{- with (include "cluster-aks.labels.preventDeletion" .) }}
+    {{- . | nindent 4 }}
+    {{- end }}
   annotations:
     "helm.sh/resource-policy": keep
 spec:
