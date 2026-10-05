@@ -81,10 +81,10 @@ spec:
         operatorSpec:
           configMaps:
             oidcIssuerProfile:
-              name: {{ $clusterName }}-cluster-configs
+              name: {{ $clusterName }}-cluster-aso-exports
               key: oidcIssuerProfile
             principalId:
-              name: {{ $clusterName }}-cluster-configs
+              name: {{ $clusterName }}-cluster-aso-exports
               key: principalId
         {{- if $cp.disableLocalAccounts }}
           secrets:
