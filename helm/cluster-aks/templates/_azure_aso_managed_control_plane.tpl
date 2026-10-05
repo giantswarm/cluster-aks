@@ -75,7 +75,6 @@ spec:
           adminGroupObjectIDs:
             {{- toYaml ($cp.aadProfile.adminGroupObjectIDs | default list) | nindent 12 }}
         {{- end }}
-        {{- if $cp.disableLocalAccounts }}
         disableLocalAccounts: true
         operatorSpec:
           configMaps:
@@ -85,6 +84,7 @@ spec:
             principalId:
               name: {{ $clusterName }}-cluster-configs
               key: principalId
+        {{- if $cp.disableLocalAccounts }}
           secrets:
             # ASO cannot list admin credentials on a cluster with local accounts disabled, so it must
             # write user credentials instead. The name must differ from `<cluster>-kubeconfig`, which
