@@ -75,7 +75,9 @@ spec:
           adminGroupObjectIDs:
             {{- toYaml ($cp.aadProfile.adminGroupObjectIDs | default list) | nindent 12 }}
         {{- end }}
+        {{- if $cp.disableLocalAccounts }}
         disableLocalAccounts: true
+        {{- end }}
         operatorSpec:
           configMaps:
             oidcIssuerProfile:
