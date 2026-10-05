@@ -66,6 +66,9 @@ spec:
           {{- end }}
         oidcIssuerProfile:
           enabled: true
+        securityProfile:
+          workloadIdentity:
+            enabled: true
         {{- if hasKey $cp.aadProfile "managed" }}
         aadProfile:
           managed: {{ $cp.aadProfile.managed }}
@@ -75,6 +78,13 @@ spec:
         {{- if $cp.disableLocalAccounts }}
         disableLocalAccounts: true
         operatorSpec:
+          configMaps:
+            oidcIssuerProfile:
+              name: {{ $clusterName }}-cluster-configs
+              key: oidcIssuerProfile
+            principalId:
+              name: {{ $clusterName }}-cluster-configs
+              key: principalId
           secrets:
             # ASO cannot list admin credentials on a cluster with local accounts disabled, so it must
             # write user credentials instead. The name must differ from `<cluster>-kubeconfig`, which
