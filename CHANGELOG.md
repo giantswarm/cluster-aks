@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add a pull request template and a release PR body that trigger the `cluster-test-suites` E2E tests.
 - Add the `giantswarm.io/prevent-deletion` label to `AzureASOManagedCluster` and `AzureASOManagedControlPlane` when `global.metadata.preventDeletion` is enabled.
+- Enable Workload Identity.
+- Project `{{$clusterName}}-cluster-aso-exports` ConfigMap with OIDC issuer profile and principal ID.
 
 ### Fixed
 
