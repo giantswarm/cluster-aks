@@ -10,6 +10,9 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "labels.common" . | nindent 4 }}
+    {{- with (include "cluster-aks.labels.preventDeletion" .) }}
+    {{- . | nindent 4 }}
+    {{- end }}
   annotations:
     "helm.sh/resource-policy": keep
 spec:
@@ -63,6 +66,9 @@ spec:
           {{- end }}
         oidcIssuerProfile:
           enabled: true
+        securityProfile:
+          workloadIdentity:
+            enabled: true
         {{- if hasKey $cp.aadProfile "managed" }}
         aadProfile:
           managed: {{ $cp.aadProfile.managed }}
@@ -71,7 +77,16 @@ spec:
         {{- end }}
         {{- if $cp.disableLocalAccounts }}
         disableLocalAccounts: true
+        {{- end }}
         operatorSpec:
+          configMaps:
+            oidcIssuerProfile:
+              name: {{ $clusterName }}-cluster-aso-exports
+              key: oidcIssuerProfile
+            principalId:
+              name: {{ $clusterName }}-cluster-aso-exports
+              key: principalId
+        {{- if $cp.disableLocalAccounts }}
           secrets:
             # ASO cannot list admin credentials on a cluster with local accounts disabled, so it must
             # write user credentials instead. The name must differ from `<cluster>-kubeconfig`, which

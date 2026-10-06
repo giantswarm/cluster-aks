@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-10-05
+
 ### Changed
 
 - Publish the chart to `cluster-catalog` / `cluster-test-catalog` instead of `giantswarm-catalog` / `giantswarm-test-catalog`.
@@ -18,10 +20,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add a pull request template and a release PR body that trigger the `cluster-test-suites` E2E tests.
 - Add `global.providerSpecific.nodeOSUpgrade.channel` to choose the AKS node OS auto-upgrade channel (`NodeImage`, `SecurityPatch`, `Unmanaged` or `None`) independently of the Kubernetes version. It defaults to `NodeImage`, which is what AKS already applies to clusters that don't set it, so existing clusters keep their weekly node image upgrades.
 - Add `global.providerSpecific.nodeOSUpgrade.maintenanceWindow` to restrict when node OS upgrades may start. When set, the chart adds an `aksManagedNodeOSUpgradeSchedule` `MaintenanceConfiguration` to the `AzureASOManagedControlPlane` resources. Exactly one of the `daily`, `weekly`, `absoluteMonthly` or `relativeMonthly` schedules must be set, which is validated at render time.
+- Add the `giantswarm.io/prevent-deletion` label to `AzureASOManagedCluster` and `AzureASOManagedControlPlane` when `global.metadata.preventDeletion` is enabled.
+- Enable Workload Identity.
+- Project `{{$clusterName}}-cluster-aso-exports` ConfigMap with OIDC issuer profile and principal ID.
+
 
 ### Removed
 
 - Remove `global.controlPlane.autoUpgradeChannel`. Its `patch`, `rapid` and `stable` values upgraded the Kubernetes version outside the Giant Swarm release; use `global.providerSpecific.nodeOSUpgrade` for automatic OS upgrades instead. Values that still set it now fail schema validation.
+
+### Fixed
+
+- Add `helm.sh/resource-policy: keep` to `AzureASOManagedMachinePool` resources so they are deleted by CAPI with the cluster rather than by Helm.
 
 ## [0.7.0] - 2026-09-23
 
@@ -88,7 +98,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added: Post-install/post-upgrade/post-rollback hook that sets an ownerReference on the ASO credentials Secret and on the `AzureClusterIdentity` CR pointing at the `AzureASOManagedCluster`, so they are garbage-collected when the cluster is deleted.
 - changed: `app.giantswarm.io` label group was changed to `application.giantswarm.io`
 
-[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/giantswarm/cluster-aks/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/giantswarm/cluster-aks/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/giantswarm/cluster-aks/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/giantswarm/cluster-aks/compare/v0.4.0...v0.5.0

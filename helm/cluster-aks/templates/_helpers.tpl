@@ -146,6 +146,16 @@ cluster.x-k8s.io/watch-filter: capi
 {{- end -}}
 
 {{/*
+Deletion prevention label, enforced by the
+block-resource-deletion-if-has-prevent-deletion-label Kyverno policy.
+*/}}
+{{- define "cluster-aks.labels.preventDeletion" -}}
+{{- if .Values.global.metadata.preventDeletion -}}
+giantswarm.io/prevent-deletion: "true"
+{{- end -}}
+{{- end -}}
+
+{{/*
 Selector labels
 */}}
 {{- define "labels.selector" -}}
