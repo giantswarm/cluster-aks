@@ -189,7 +189,7 @@ Microsoft's infrastructure, so there is no audit.log on any node we own and
 the logs have to be collected through an Azure diagnostic setting instead.
 */}}
 {{- define "cluster-aks.audit.enabled" -}}
-{{- if .Values.global.controlPlane.logging.audit.enabled -}}true{{- end -}}
+{{- if .Values.global.controlPlane.logging.audit.enabled -}}true{{- else -}}false{{- end -}}
 {{- end -}}
 
 {{/*
@@ -211,8 +211,8 @@ name. Override with global.controlPlane.logging.audit.eventHub.namespaceName.
 
 {{/*
 Azure name of the Event Hub that the audit log stream is delivered to. Kept
-independent of the diagnostic log category so that switching between
-kube-audit-admin and kube-audit does not recreate the hub.
+independent of `global.controlPlane.logging.audit.category` so that switching
+between `kube-audit-admin` and `kube-audit` does not recreate the hub.
 */}}
 {{- define "cluster-aks.audit.eventHub.name" -}}
 audit

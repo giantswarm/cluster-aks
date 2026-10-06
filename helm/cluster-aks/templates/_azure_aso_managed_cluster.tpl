@@ -75,7 +75,7 @@ spec:
         azureName: {{ include "cluster-aks.subnet.name" . | quote }}
         addressPrefix: {{ first $vnet.subnet.cidrBlocks | quote }}
     {{- end }}
-    {{- if include "cluster-aks.audit.enabled" . }}
+    {{- if eq (include "cluster-aks.audit.enabled" .) "true" }}
     {{- $audit := .Values.global.controlPlane.logging.audit }}
     - apiVersion: eventhub.azure.com/v1api20240101
       kind: Namespace

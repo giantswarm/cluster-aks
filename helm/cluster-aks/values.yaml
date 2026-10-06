@@ -169,7 +169,7 @@ global:
         eventHub:
           namespaceName: ""
           partitionCount: 4
-          retentionTimeInHours: 24
+          retentionTimeInHours: 168
     networking:
       networkDataplane: cilium
       networkMode: transparent

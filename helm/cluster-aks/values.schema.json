@@ -930,7 +930,7 @@
                                 "audit": {
                                     "type": "object",
                                     "title": "Audit",
-                                    "description": "Ship Kubernetes API server audit logs off the AKS control plane into an Event Hub, from where they are ingested into Loki.",
+                                    "description": "Ship Kubernetes API server audit logs off the AKS control plane into an Event Hub, from where a collector ingests them into Loki. On AKS the API server runs on Microsoft's infrastructure, so an Azure diagnostic setting is the only way to get these logs.",
                                     "properties": {
                                         "category": {
                                             "type": "string",
@@ -951,7 +951,7 @@
                                         "eventHub": {
                                             "type": "object",
                                             "title": "Event Hub",
-                                            "description": "Event Hub that the audit log stream is delivered to.",
+                                            "description": "Event Hub that the audit log stream is delivered to. The hub is a transport buffer, not the system of record: a collector drains it into Loki, which is where audit logs are queried and retained long term.",
                                             "properties": {
                                                 "namespaceName": {
                                                     "type": "string",
@@ -970,8 +970,8 @@
                                                 "retentionTimeInHours": {
                                                     "type": "integer",
                                                     "title": "Retention time in hours",
-                                                    "description": "How long unread audit events are retained in the Event Hub before they are dropped.",
-                                                    "default": 24,
+                                                    "description": "How long unread audit events are kept in the Event Hub before they are dropped. This only bounds how long a collector may be down without losing events, since Loki holds the long-term copy. 168 hours (7 days) is the maximum the Standard tier allows and is included in the price, so there is no reason to set it lower.",
+                                                    "default": 168,
                                                     "maximum": 168,
                                                     "minimum": 1
                                                 }
