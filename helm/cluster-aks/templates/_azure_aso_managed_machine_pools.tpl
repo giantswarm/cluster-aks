@@ -52,10 +52,8 @@ spec:
         availabilityZones:
           {{- toYaml . | nindent 10 }}
         {{- end }}
-        {{- with $pool.nodeLabels }}
         nodeLabels:
-          {{- toYaml . | nindent 10 }}
-        {{- end }}
+          {{- merge (dict "giantswarm.io/machine-pool" (printf "%s-%s" $clusterName $poolName)) ($pool.nodeLabels | default dict) | toYaml | nindent 10 }}
         {{- with $pool.taints }}
         nodeTaints:
           {{- range . }}
