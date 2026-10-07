@@ -111,7 +111,7 @@ spec:
           {{- end }}
         {{- end }}
         autoUpgradeProfile:
-          # The Kubernetes version is controlled by the Giant Swarm release, so AKS must never
+          # The Kubernetes version is controlled by the Giant Swarm `Release`, so AKS must never
           # upgrade it on its own. Node OS upgrades are independent and never change it.
           upgradeChannel: none
           nodeOSUpgradeChannel: {{ $ps.nodeOSUpgrade.channel }}
@@ -136,7 +136,6 @@ spec:
           serviceoperator.azure.com/credential-from: {{ . | quote }}
         {{- end }}
       spec:
-        # AKS only accepts these fixed names, which are not valid Kubernetes object names.
         azureName: aksManagedNodeOSUpgradeSchedule
         owner:
           name: {{ $clusterName }}

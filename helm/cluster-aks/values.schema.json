@@ -1140,7 +1140,7 @@
                                 "maintenanceWindow": {
                                     "type": "object",
                                     "title": "Maintenance window",
-                                    "description": "Window in which AKS may start node OS upgrades (aksManagedNodeOSUpgradeSchedule). If unset, upgrades can start at any time.",
+                                    "description": "Window in which AKS may start node OS upgrades. If unset, upgrades can start at any time.",
                                     "additionalProperties": false,
                                     "properties": {
                                         "durationHours": {
