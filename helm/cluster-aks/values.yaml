@@ -190,12 +190,7 @@ global:
     location: ""
     nodeOSUpgrade:
       channel: NodeImage
-      maintenanceWindow:
-        schedule:
-          absoluteMonthly: {}
-          daily: {}
-          relativeMonthly: {}
-          weekly: {}
+      maintenanceWindow: {}
     resourceGroupName: ""
     subscriptionId: ""
 internal:

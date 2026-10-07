@@ -150,7 +150,7 @@ Properties within the `.global.providerSpecific` object
 | `global.providerSpecific.location` | **Location** - Azure region (e.g. westeurope, eastus).|**Type:** `string`<br/>**Default:** `""`|
 | `global.providerSpecific.nodeOSUpgrade` | **Node OS upgrade** - Automatic OS patching for all node pools. Never changes the Kubernetes version, which follows the Giant Swarm release.|**Type:** `object`<br/>|
 | `global.providerSpecific.nodeOSUpgrade.channel` | **Channel** - NodeImage: weekly reimage to a new node image. SecurityPatch: AKS-tested security patches, live where possible. Unmanaged: OS-native patching. None: no OS updates.|**Type:** `string`<br/>**Allowed values:** `NodeImage`, `SecurityPatch`, `Unmanaged`, `None`<br/>**Default:** `"NodeImage"`|
-| `global.providerSpecific.nodeOSUpgrade.maintenanceWindow` | **Maintenance window** - Window in which AKS may start node OS upgrades. If unset, upgrades can start at any time.|**Type:** `object`<br/>|
+| `global.providerSpecific.nodeOSUpgrade.maintenanceWindow` | **Maintenance window** - Window in which AKS may start node OS upgrades. If unset, upgrades can start at any time.|**Type:** `object`<br/>**Default:** `{}`|
 | `global.providerSpecific.nodeOSUpgrade.maintenanceWindow.durationHours` | **Duration hours** - Length of the maintenance window in hours, between 4 and 24.|**Type:** `integer`<br/>|
 | `global.providerSpecific.nodeOSUpgrade.maintenanceWindow.notAllowedDates` | **Not allowed dates** - Date ranges in which no maintenance may start, even if they overlap with the window.|**Type:** `array`<br/>|
 | `global.providerSpecific.nodeOSUpgrade.maintenanceWindow.notAllowedDates[*]` |**None**|**Type:** `object`<br/>|

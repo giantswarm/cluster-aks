@@ -30,34 +30,4 @@ Cross-field validation. Produces no output — only `fail` calls as side effects
 {{- if and $cp.disableLocalAccounts (not $cp.aadProfile.managed) -}}
 {{- fail "global.controlPlane.disableLocalAccounts requires global.controlPlane.aadProfile.managed: true; AKS only accepts disabling local accounts on Entra-integrated clusters, and without it no client (including CAPZ) can authenticate to the API server" -}}
 {{- end -}}
-{{- if include "cluster-aks.nodeOSUpgrade.maintenanceWindow.enabled" . -}}
-  {{- $mw := .Values.global.providerSpecific.nodeOSUpgrade.maintenanceWindow -}}
-  {{- $prefix := "global.providerSpecific.nodeOSUpgrade.maintenanceWindow" -}}
-  {{- if not $mw.durationHours -}}
-{{- fail (printf "%s.durationHours is required when a maintenance window is configured" $prefix) -}}
-  {{- end -}}
-  {{- if not $mw.startTime -}}
-{{- fail (printf "%s.startTime is required when a maintenance window is configured" $prefix) -}}
-  {{- end -}}
-  {{- /* Fields each schedule type needs; the schema only checks their types and ranges. */ -}}
-  {{- $requiredFields := dict
-        "daily" (list "intervalDays")
-        "weekly" (list "dayOfWeek" "intervalWeeks")
-        "absoluteMonthly" (list "dayOfMonth" "intervalMonths")
-        "relativeMonthly" (list "dayOfWeek" "intervalMonths" "weekIndex") -}}
-  {{- $types := list -}}
-  {{- range $type, $schedule := ($mw.schedule | default dict) -}}
-    {{- if $schedule -}}
-      {{- $types = append $types $type -}}
-      {{- range $field := get $requiredFields $type -}}
-        {{- if not (hasKey $schedule $field) -}}
-{{- fail (printf "%s.schedule.%s.%s is required" $prefix $type $field) -}}
-        {{- end -}}
-      {{- end -}}
-    {{- end -}}
-  {{- end -}}
-  {{- if ne (len $types) 1 -}}
-{{- fail (printf "%s.schedule must set exactly one of daily, weekly, absoluteMonthly or relativeMonthly, got: %s" $prefix (join ", " $types | default "none")) -}}
-  {{- end -}}
-{{- end -}}
 {{- end -}}

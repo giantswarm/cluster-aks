@@ -125,8 +125,8 @@ spec:
         tags:
           {{- toYaml . | nindent 10 }}
         {{- end }}
-    {{- if include "cluster-aks.nodeOSUpgrade.maintenanceWindow.enabled" . }}
-    {{- $mw := $ps.nodeOSUpgrade.maintenanceWindow }}
+    {{- $maintenanceWindow := $ps.nodeOSUpgrade.maintenanceWindow }}
+    {{- if $maintenanceWindow }}
     - apiVersion: containerservice.azure.com/v1api20240901
       kind: MaintenanceConfiguration
       metadata:
@@ -140,22 +140,17 @@ spec:
         owner:
           name: {{ $clusterName }}
         maintenanceWindow:
-          durationHours: {{ $mw.durationHours }}
+          durationHours: {{ $maintenanceWindow.durationHours }}
           schedule:
-            {{- range $type, $schedule := $mw.schedule }}
-            {{- if $schedule }}
-            {{ $type }}:
-              {{- toYaml $schedule | nindent 14 }}
-            {{- end }}
-            {{- end }}
-          startTime: {{ $mw.startTime | quote }}
-          {{- with $mw.utcOffset }}
+            {{- toYaml $maintenanceWindow.schedule | nindent 12 }}
+          startTime: {{ $maintenanceWindow.startTime | quote }}
+          {{- with $maintenanceWindow.utcOffset }}
           utcOffset: {{ . | quote }}
           {{- end }}
-          {{- with $mw.startDate }}
+          {{- with $maintenanceWindow.startDate }}
           startDate: {{ . | quote }}
           {{- end }}
-          {{- with $mw.notAllowedDates }}
+          {{- with $maintenanceWindow.notAllowedDates }}
           notAllowedDates:
             {{- range . }}
             - start: {{ .start | quote }}
