@@ -869,11 +869,13 @@
                 "controlPlane": {
                     "type": "object",
                     "title": "Control plane",
+                    "additionalProperties": false,
                     "properties": {
                         "aadProfile": {
                             "type": "object",
                             "title": "AAD profile",
                             "description": "AAD integration. When managed: true, AKS uses AAD for Kubernetes API authentication.",
+                            "additionalProperties": false,
                             "properties": {
                                 "adminGroupObjectIDs": {
                                     "type": "array",
@@ -897,19 +899,6 @@
                             },
                             "default": {}
                         },
-                        "autoUpgradeChannel": {
-                            "type": "string",
-                            "title": "Auto-upgrade channel",
-                            "description": "Auto-upgrade channel for AKS node image and Kubernetes version updates.",
-                            "enum": [
-                                "none",
-                                "patch",
-                                "rapid",
-                                "stable",
-                                "node-image"
-                            ],
-                            "default": "none"
-                        },
                         "disableLocalAccounts": {
                             "type": "boolean",
                             "title": "Disable local accounts",
@@ -926,6 +915,7 @@
                             "type": "object",
                             "title": "Networking",
                             "description": "AKS networking configuration.",
+                            "additionalProperties": false,
                             "properties": {
                                 "networkDataplane": {
                                     "type": "string",
@@ -982,6 +972,7 @@
                             "type": "object",
                             "title": "SKU",
                             "description": "AKS SKU tier.",
+                            "additionalProperties": false,
                             "properties": {
                                 "tier": {
                                     "type": "string",
@@ -1068,6 +1059,7 @@
                 "providerSpecific": {
                     "type": "object",
                     "title": "Provider-specific configuration",
+                    "additionalProperties": false,
                     "properties": {
                         "asoAuthenticationSecretName": {
                             "type": "string",
@@ -1079,6 +1071,7 @@
                             "type": "object",
                             "title": "Identity",
                             "description": "AzureClusterIdentity resource to use for this cluster.",
+                            "additionalProperties": false,
                             "properties": {
                                 "name": {
                                     "type": "string",
@@ -1096,6 +1089,7 @@
                             "type": "object",
                             "title": "Control plane identity",
                             "description": "Identity assigned to the AKS control plane itself (separate from the CAPZ controller identity above).",
+                            "additionalProperties": false,
                             "properties": {
                                 "type": {
                                     "type": "string",
@@ -1124,6 +1118,258 @@
                             "title": "Location",
                             "description": "Azure region (e.g. westeurope, eastus).",
                             "default": ""
+                        },
+                        "nodeOSUpgrade": {
+                            "type": "object",
+                            "title": "Node OS upgrade",
+                            "description": "Automatic OS patching for all node pools. Never changes the Kubernetes version, which follows the Giant Swarm release.",
+                            "additionalProperties": false,
+                            "properties": {
+                                "channel": {
+                                    "type": "string",
+                                    "title": "Channel",
+                                    "description": "NodeImage: weekly reimage to a new node image. SecurityPatch: AKS-tested security patches, live where possible. Unmanaged: OS-native patching. None: no OS updates.",
+                                    "enum": [
+                                        "NodeImage",
+                                        "SecurityPatch",
+                                        "Unmanaged",
+                                        "None"
+                                    ],
+                                    "default": "NodeImage"
+                                },
+                                "maintenanceWindow": {
+                                    "type": "object",
+                                    "title": "Maintenance window",
+                                    "description": "Window in which AKS may start node OS upgrades. If unset, upgrades can start at any time.",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "durationHours": {
+                                            "type": "integer",
+                                            "title": "Duration hours",
+                                            "description": "Length of the maintenance window in hours, between 4 and 24.",
+                                            "maximum": 24,
+                                            "minimum": 4
+                                        },
+                                        "notAllowedDates": {
+                                            "type": "array",
+                                            "title": "Not allowed dates",
+                                            "description": "Date ranges in which no maintenance may start, even if they overlap with the window.",
+                                            "items": {
+                                                "type": "object",
+                                                "required": [
+                                                    "start",
+                                                    "end"
+                                                ],
+                                                "additionalProperties": false,
+                                                "properties": {
+                                                    "end": {
+                                                        "type": "string",
+                                                        "title": "End",
+                                                        "description": "Last day of the blocked date range, in YYYY-MM-DD format.",
+                                                        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+                                                    },
+                                                    "start": {
+                                                        "type": "string",
+                                                        "title": "Start",
+                                                        "description": "First day of the blocked date range, in YYYY-MM-DD format.",
+                                                        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "schedule": {
+                                            "type": "object",
+                                            "title": "Schedule",
+                                            "description": "Recurrence of the maintenance window. Set exactly one of daily, weekly, absoluteMonthly or relativeMonthly.",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "absoluteMonthly": {
+                                                    "type": "object",
+                                                    "title": "Absolute monthly",
+                                                    "description": "Run on a fixed day of the month, e.g. every month on the 1st.",
+                                                    "required": [
+                                                        "dayOfMonth",
+                                                        "intervalMonths"
+                                                    ],
+                                                    "additionalProperties": false,
+                                                    "properties": {
+                                                        "dayOfMonth": {
+                                                            "type": "integer",
+                                                            "title": "Day of month",
+                                                            "description": "Day of the month on which the maintenance window opens, between 1 and 31.",
+                                                            "maximum": 31,
+                                                            "minimum": 1
+                                                        },
+                                                        "intervalMonths": {
+                                                            "type": "integer",
+                                                            "title": "Interval months",
+                                                            "description": "Number of months between maintenance windows, between 1 and 6.",
+                                                            "maximum": 6,
+                                                            "minimum": 1
+                                                        }
+                                                    }
+                                                },
+                                                "daily": {
+                                                    "type": "object",
+                                                    "title": "Daily",
+                                                    "description": "Open the maintenance window every N days (only supported for node OS upgrades).",
+                                                    "required": [
+                                                        "intervalDays"
+                                                    ],
+                                                    "additionalProperties": false,
+                                                    "properties": {
+                                                        "intervalDays": {
+                                                            "type": "integer",
+                                                            "title": "Interval days",
+                                                            "description": "Number of days between maintenance windows, between 1 and 7.",
+                                                            "maximum": 7,
+                                                            "minimum": 1
+                                                        }
+                                                    }
+                                                },
+                                                "relativeMonthly": {
+                                                    "type": "object",
+                                                    "title": "Relative monthly",
+                                                    "description": "Run on a weekday of a given week of the month, e.g. every month on the last Sunday.",
+                                                    "required": [
+                                                        "dayOfWeek",
+                                                        "intervalMonths",
+                                                        "weekIndex"
+                                                    ],
+                                                    "additionalProperties": false,
+                                                    "properties": {
+                                                        "dayOfWeek": {
+                                                            "type": "string",
+                                                            "title": "Day of week",
+                                                            "description": "Weekday on which the maintenance window opens, from Monday to Sunday.",
+                                                            "enum": [
+                                                                "Monday",
+                                                                "Tuesday",
+                                                                "Wednesday",
+                                                                "Thursday",
+                                                                "Friday",
+                                                                "Saturday",
+                                                                "Sunday"
+                                                            ]
+                                                        },
+                                                        "intervalMonths": {
+                                                            "type": "integer",
+                                                            "title": "Interval months",
+                                                            "description": "Number of months between maintenance windows, between 1 and 6.",
+                                                            "maximum": 6,
+                                                            "minimum": 1
+                                                        },
+                                                        "weekIndex": {
+                                                            "type": "string",
+                                                            "title": "Week index",
+                                                            "description": "Week of the month in which the window opens: First, Second, Third, Fourth or Last.",
+                                                            "enum": [
+                                                                "First",
+                                                                "Second",
+                                                                "Third",
+                                                                "Fourth",
+                                                                "Last"
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "weekly": {
+                                                    "type": "object",
+                                                    "title": "Weekly",
+                                                    "description": "Open the maintenance window on a given weekday, every N weeks.",
+                                                    "required": [
+                                                        "dayOfWeek",
+                                                        "intervalWeeks"
+                                                    ],
+                                                    "additionalProperties": false,
+                                                    "properties": {
+                                                        "dayOfWeek": {
+                                                            "type": "string",
+                                                            "title": "Day of week",
+                                                            "description": "Weekday on which the maintenance window opens, from Monday to Sunday.",
+                                                            "enum": [
+                                                                "Monday",
+                                                                "Tuesday",
+                                                                "Wednesday",
+                                                                "Thursday",
+                                                                "Friday",
+                                                                "Saturday",
+                                                                "Sunday"
+                                                            ]
+                                                        },
+                                                        "intervalWeeks": {
+                                                            "type": "integer",
+                                                            "title": "Interval weeks",
+                                                            "description": "Number of weeks between maintenance windows, between 1 and 4.",
+                                                            "maximum": 4,
+                                                            "minimum": 1
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "maxProperties": 1,
+                                            "minProperties": 1
+                                        },
+                                        "startDate": {
+                                            "type": "string",
+                                            "title": "Start date",
+                                            "description": "Date from which the window takes effect (YYYY-MM-DD). Defaults to the creation date.",
+                                            "examples": [
+                                                "2026-10-05"
+                                            ],
+                                            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+                                        },
+                                        "startTime": {
+                                            "type": "string",
+                                            "title": "Start",
+                                            "description": "Time of day the window opens (HH:MM), in the time zone given by utcOffset.",
+                                            "examples": [
+                                                "02:00"
+                                            ],
+                                            "pattern": "^[0-2][0-9]:[0-5][0-9]$"
+                                        },
+                                        "utcOffset": {
+                                            "type": "string",
+                                            "title": "UTC offset",
+                                            "description": "Time zone of startTime, e.g. +02:00. Defaults to +00:00.",
+                                            "examples": [
+                                                "+02:00"
+                                            ],
+                                            "pattern": "^[-+][0-9]{2}:[0-9]{2}$"
+                                        }
+                                    },
+                                    "default": {},
+                                    "dependencies": {
+                                        "durationHours": [
+                                            "schedule",
+                                            "startTime"
+                                        ],
+                                        "notAllowedDates": [
+                                            "durationHours",
+                                            "schedule",
+                                            "startTime"
+                                        ],
+                                        "schedule": [
+                                            "durationHours",
+                                            "startTime"
+                                        ],
+                                        "startDate": [
+                                            "durationHours",
+                                            "schedule",
+                                            "startTime"
+                                        ],
+                                        "startTime": [
+                                            "durationHours",
+                                            "schedule"
+                                        ],
+                                        "utcOffset": [
+                                            "durationHours",
+                                            "schedule",
+                                            "startTime"
+                                        ]
+                                    }
+                                }
+                            }
                         },
                         "resourceGroupName": {
                             "type": "string",

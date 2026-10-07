@@ -49,6 +49,19 @@ global:
     location: westeurope
     subscriptionId: 00000000-0000-0000-0000-000000000000
     asoAuthenticationSecretName: test-wc-minimal-aso-creds
+    nodeOSUpgrade:
+      channel: SecurityPatch
+      maintenanceWindow:
+        schedule:
+          weekly:
+            dayOfWeek: Sunday
+            intervalWeeks: 1
+        durationHours: 4
+        startTime: "02:00"
+        utcOffset: "+02:00"
+        notAllowedDates:
+          - start: "2026-12-20"
+            end: "2027-01-03"
 
 # TODO: This is required until we have an aks release
 cluster:

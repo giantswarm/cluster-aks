@@ -159,7 +159,6 @@ global:
   controlPlane:
     aadProfile: {}
     additionalTags: {}
-    autoUpgradeChannel: none
     disableLocalAccounts: false
     dnsPrefix: ""
     networking:
@@ -189,6 +188,9 @@ global:
       userAssignedIdentityResourceID: ""
     kubeletIdentityResourceID: ""
     location: ""
+    nodeOSUpgrade:
+      channel: NodeImage
+      maintenanceWindow: {}
     resourceGroupName: ""
     subscriptionId: ""
 internal:
