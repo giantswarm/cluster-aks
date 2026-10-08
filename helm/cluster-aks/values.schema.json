@@ -926,11 +926,13 @@
                             "type": "object",
                             "title": "Logging",
                             "description": "Control plane logging. On AKS the API server runs on Microsoft's infrastructure, so its logs are only reachable through an Azure diagnostic setting.",
+                            "additionalProperties": false,
                             "properties": {
                                 "audit": {
                                     "type": "object",
                                     "title": "Audit",
                                     "description": "Ship Kubernetes API server audit logs off the AKS control plane into an Event Hub, from where a collector ingests them into Loki. On AKS the API server runs on Microsoft's infrastructure, so an Azure diagnostic setting is the only way to get these logs.",
+                                    "additionalProperties": false,
                                     "properties": {
                                         "category": {
                                             "type": "string",
@@ -952,6 +954,7 @@
                                             "type": "object",
                                             "title": "Event Hub",
                                             "description": "Event Hub that the audit log stream is delivered to. The hub is a transport buffer, not the system of record: a collector drains it into Loki, which is where audit logs are queried and retained long term.",
+                                            "additionalProperties": false,
                                             "properties": {
                                                 "namespaceName": {
                                                     "type": "string",

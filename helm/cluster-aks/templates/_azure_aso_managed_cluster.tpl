@@ -75,8 +75,11 @@ spec:
         azureName: {{ include "cluster-aks.subnet.name" . | quote }}
         addressPrefix: {{ first $vnet.subnet.cidrBlocks | quote }}
     {{- end }}
-    {{- if eq (include "cluster-aks.audit.enabled" .) "true" }}
+    {{- /* On AKS the API server runs on Microsoft's infrastructure, so there is no
+           audit.log on any node we own. The logs are collected through an Azure
+           diagnostic setting streaming into an Event Hub instead. */}}
     {{- $audit := .Values.global.controlPlane.logging.audit }}
+    {{- if $audit.enabled }}
     - apiVersion: eventhub.azure.com/v1api20240101
       kind: Namespace
       metadata:

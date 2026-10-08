@@ -184,15 +184,6 @@ dataSecretName: ""
 {{- end }}
 
 {{/*
-Whether API server audit logging is enabled. On AKS the API server runs on
-Microsoft's infrastructure, so there is no audit.log on any node we own and
-the logs have to be collected through an Azure diagnostic setting instead.
-*/}}
-{{- define "cluster-aks.audit.enabled" -}}
-{{- if .Values.global.controlPlane.logging.audit.enabled -}}true{{- else -}}false{{- end -}}
-{{- end -}}
-
-{{/*
 Azure name of the Event Hub namespace that receives the audit log stream.
 Event Hub namespace names have to be globally unique across Azure, so the
 default appends a hash of the subscription and resource group to the cluster
