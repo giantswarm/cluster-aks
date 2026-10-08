@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add the `giantswarm.io/prevent-deletion` label to `AzureASOManagedCluster` and `AzureASOManagedControlPlane` when `global.metadata.preventDeletion` is enabled.
 - Enable Workload Identity.
 - Project `{{$clusterName}}-cluster-aso-exports` ConfigMap with OIDC issuer profile and principal ID.
+- Add `global.controlPlane.logging.audit` to ship API server audit logs from the AKS control plane to an Event Hub via an Azure diagnostic setting. Disabled by default.
 
 ### Fixed
 
