@@ -81,6 +81,12 @@
                 "spotMaxPrice": {
                     "type": "string"
                 },
+                "subnetArmId": {
+                    "type": "string",
+                    "title": "Subnet ARM ID",
+                    "description": "ARM ID of an existing subnet for this node pool, overriding global.connectivity.network.vnet.subnetArmId. Only allowed in bring-your-own VNet mode (global.connectivity.network.vnet.subnetArmId set), and the subnet must be in the same VNet. Falls back to global.connectivity.network.vnet.subnetArmId when unset. The ASO identity needs Microsoft.Network/virtualNetworks/subnets/join/action on this subnet too. With networkPlugin kubenet, the AKS route table must be associated with this subnet as well.",
+                    "pattern": "^$|^/subscriptions/[^/]+/resourceGroups/[^/]+/providers/Microsoft\\.Network/virtualNetworks/[^/]+/subnets/[^/]+$"
+                },
                 "taints": {
                     "type": "array",
                     "items": {
@@ -856,7 +862,7 @@
                                         "subnetArmId": {
                                             "type": "string",
                                             "title": "Subnet ARM ID",
-                                            "description": "ARM ID of an existing subnet to use for all node pools (bring-your-own VNet). When set, the chart skips VNet/Subnet creation, cidrBlocks/name/subnet.* above are ignored, and vnet.name must be left empty. Format: /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<vnet>/subnets/<subnet>. Prerequisite: the ASO identity needs the Network Contributor role (or at least Microsoft.Network/virtualNetworks/subnets/join/action) on the subnet's resource group; for a subnet in another subscription, an additional role assignment is required there too.",
+                                            "description": "ARM ID of an existing subnet to use as the default for all node pools (bring-your-own VNet); setting it enables BYO VNet mode. When set, the chart skips VNet/Subnet creation, cidrBlocks/name/subnet.* above are ignored, and vnet.name must be left empty. Individual node pools can use a different subnet in the same VNet via global.nodePools.<pool>.subnetArmId. Format: /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<vnet>/subnets/<subnet>. Prerequisite: the ASO identity needs the Network Contributor role (or at least Microsoft.Network/virtualNetworks/subnets/join/action) on the subnet's resource group; for a subnet in another subscription, an additional role assignment is required there too.",
                                             "default": "",
                                             "pattern": "^$|^/subscriptions/[^/]+/resourceGroups/[^/]+/providers/Microsoft\\.Network/virtualNetworks/[^/]+/subnets/[^/]+$"
                                         }

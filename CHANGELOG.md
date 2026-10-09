@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add an optional per-node-pool `subnetArmId` override for bring-your-own VNet clusters, so node pools can use different subnets in the same VNet.
+
 ## [0.8.0] - 2026-10-05
 
 ### Changed
