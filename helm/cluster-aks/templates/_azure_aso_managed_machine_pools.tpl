@@ -78,7 +78,7 @@ spec:
         {{- end }}
         {{- if include "cluster-aks.vnet.byo" $root }}
         vnetSubnetReference:
-          armId: {{ $root.Values.global.connectivity.network.vnet.subnetArmId | quote }}
+          armId: {{ $pool.subnetArmId | default $root.Values.global.connectivity.network.vnet.subnetArmId | quote }}
         {{- else }}
         vnetSubnetReference:
           group: network.azure.com
