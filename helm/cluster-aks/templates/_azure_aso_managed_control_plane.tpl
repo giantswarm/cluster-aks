@@ -46,6 +46,7 @@ spec:
         networkProfile:
           dnsServiceIP: {{ $net.network.dnsServiceIP | quote }}
           networkPlugin: {{ $cp.networking.networkPlugin }}
+          networkPluginMode: overlay
           {{- with $cp.networking.networkDataplane }}
           networkDataplane: {{ . }}
           {{- end }}
