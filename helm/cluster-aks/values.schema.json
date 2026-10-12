@@ -931,6 +931,7 @@
                                     "type": "string",
                                     "title": "Network dataplane",
                                     "enum": [
+                                        "",
                                         "azure",
                                         "cilium"
                                     ],
@@ -940,6 +941,7 @@
                                     "type": "string",
                                     "title": "Network mode",
                                     "enum": [
+                                        "",
                                         "bridge",
                                         "transparent"
                                     ],
@@ -950,7 +952,8 @@
                                     "title": "Network plugin",
                                     "enum": [
                                         "azure",
-                                        "kubenet"
+                                        "kubenet",
+                                        "none"
                                     ],
                                     "default": "azure"
                                 },
@@ -958,6 +961,7 @@
                                     "type": "string",
                                     "title": "Network policy",
                                     "enum": [
+                                        "",
                                         "azure",
                                         "calico",
                                         "cilium",

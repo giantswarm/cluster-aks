@@ -76,10 +76,10 @@ Properties within the `.global.controlPlane` object
 | `global.controlPlane.disableLocalAccounts` | **Disable local accounts** - Disable AKS local accounts, so the static cluster-admin credential cannot be issued and all API server authentication goes through Entra ID. Requires aadProfile.managed: true. The ASO identity must also be granted cluster-admin in the workload cluster (Azure Kubernetes Service RBAC Cluster Admin Role when Azure RBAC is enabled, otherwise membership of one of aadProfile.adminGroupObjectIDs), because CAPZ reaches the cluster with an Entra token issued for that identity.|**Type:** `boolean`<br/>**Default:** `false`|
 | `global.controlPlane.dnsPrefix` | **DNS prefix** - DNS prefix. Defaults to the cluster name when empty.|**Type:** `string`<br/>**Default:** `""`|
 | `global.controlPlane.networking` | **Networking** - AKS networking configuration.|**Type:** `object`<br/>|
-| `global.controlPlane.networking.networkDataplane` | **Network dataplane**|**Type:** `string`<br/>**Allowed values:** `azure`, `cilium`<br/>**Default:** `"cilium"`|
-| `global.controlPlane.networking.networkMode` | **Network mode**|**Type:** `string`<br/>**Allowed values:** `bridge`, `transparent`<br/>**Default:** `"transparent"`|
-| `global.controlPlane.networking.networkPlugin` | **Network plugin**|**Type:** `string`<br/>**Allowed values:** `azure`, `kubenet`<br/>**Default:** `"azure"`|
-| `global.controlPlane.networking.networkPolicy` | **Network policy**|**Type:** `string`<br/>**Allowed values:** `azure`, `calico`, `cilium`, `none`<br/>**Default:** `"cilium"`|
+| `global.controlPlane.networking.networkDataplane` | **Network dataplane**|**Type:** `string`<br/>**Allowed values:** ``, `azure`, `cilium`<br/>**Default:** `"cilium"`|
+| `global.controlPlane.networking.networkMode` | **Network mode**|**Type:** `string`<br/>**Allowed values:** ``, `bridge`, `transparent`<br/>**Default:** `"transparent"`|
+| `global.controlPlane.networking.networkPlugin` | **Network plugin**|**Type:** `string`<br/>**Allowed values:** `azure`, `kubenet`, `none`<br/>**Default:** `"azure"`|
+| `global.controlPlane.networking.networkPolicy` | **Network policy**|**Type:** `string`<br/>**Allowed values:** ``, `azure`, `calico`, `cilium`, `none`<br/>**Default:** `"cilium"`|
 | `global.controlPlane.networking.outboundType` | **Outbound type**|**Type:** `string`<br/>**Allowed values:** `loadBalancer`, `managedNATGateway`, `userAssignedNATGateway`, `userDefinedRouting`<br/>**Default:** `"loadBalancer"`|
 | `global.controlPlane.sku` | **SKU** - AKS SKU tier.|**Type:** `object`<br/>|
 | `global.controlPlane.sku.tier` | **Tier**|**Type:** `string`<br/>**Allowed values:** `Free`, `Premium`, `Standard`<br/>**Default:** `"Standard"`|
