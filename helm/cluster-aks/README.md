@@ -118,7 +118,7 @@ Properties within the `.global.nodePools` object
 | `global.nodePools.PATTERN.availabilityZones` |**None**|**Type:** `array`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
 | `global.nodePools.PATTERN.availabilityZones[*]` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
 | `global.nodePools.PATTERN.enableAutoScaling` |**None**|**Type:** `boolean`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Default:** `true`|
-| `global.nodePools.PATTERN.maxPods` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.maxPods` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Default:** `110`|
 | `global.nodePools.PATTERN.maxSize` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
 | `global.nodePools.PATTERN.minSize` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
 | `global.nodePools.PATTERN.mode` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Allowed values:** `System`, `User`<br/>**Default:** `"User"`|

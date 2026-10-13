@@ -22,6 +22,7 @@
                 },
                 "maxPods": {
                     "type": "integer",
+                    "default": 110,
                     "minimum": 0
                 },
                 "maxSize": {
