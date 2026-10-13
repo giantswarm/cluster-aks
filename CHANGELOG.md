@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Configure k8s-dns-node-cache for AKS so it redirects DNS traffic to the node-local cache.
 - Increase default value of node pool setting `maxPods` to 110 regardless of network mode.
 
 ## [0.8.0] - 2026-10-05

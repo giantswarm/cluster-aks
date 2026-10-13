@@ -195,6 +195,7 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration.apps.externalDnsCrossplaneResources.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSExternalDnsCrossplaneResources"`|
 | `cluster.providerIntegration.apps.externalDnsCrossplaneResources.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.k8sDnsNodeCache` |**None**|**Type:** `object`<br/>|
+| `cluster.providerIntegration.apps.k8sDnsNodeCache.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSK8sDnsNodeCacheHelmValues"`|
 | `cluster.providerIntegration.apps.k8sDnsNodeCache.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.metricsServer` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.metricsServer.enable` |Already managed by AKS.|**Type:** `boolean`<br/>**Default:** `false`|

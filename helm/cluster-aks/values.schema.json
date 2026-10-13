@@ -255,6 +255,10 @@
                                 "k8sDnsNodeCache": {
                                     "type": "object",
                                     "properties": {
+                                        "configTemplateName": {
+                                            "type": "string",
+                                            "default": "AKSK8sDnsNodeCacheHelmValues"
+                                        },
                                         "enable": {
                                             "type": "boolean",
                                             "default": true
