@@ -74,6 +74,14 @@ Properties within the `.global.controlPlane` object
 | `global.controlPlane.additionalTags.*` |**None**|**Type:** `string`<br/>|
 | `global.controlPlane.disableLocalAccounts` | **Disable local accounts** - Disable AKS local accounts, so the static cluster-admin credential cannot be issued and all API server authentication goes through Entra ID. Requires aadProfile.managed: true. The ASO identity must also be granted cluster-admin in the workload cluster (Azure Kubernetes Service RBAC Cluster Admin Role when Azure RBAC is enabled, otherwise membership of one of aadProfile.adminGroupObjectIDs), because CAPZ reaches the cluster with an Entra token issued for that identity.|**Type:** `boolean`<br/>**Default:** `false`|
 | `global.controlPlane.dnsPrefix` | **DNS prefix** - DNS prefix. Defaults to the cluster name when empty.|**Type:** `string`<br/>**Default:** `""`|
+| `global.controlPlane.logging` | **Logging** - Control plane logging. On AKS the API server runs on Microsoft's infrastructure, so its logs are only reachable through an Azure diagnostic setting.|**Type:** `object`<br/>|
+| `global.controlPlane.logging.audit` | **Audit** - Ship Kubernetes API server audit logs off the AKS control plane into an Event Hub, from where a collector ingests them into Loki. On AKS the API server runs on Microsoft's infrastructure, so an Azure diagnostic setting is the only way to get these logs.|**Type:** `object`<br/>|
+| `global.controlPlane.logging.audit.category` | **Category** - Azure diagnostic log category to collect. `kube-audit-admin` excludes get and list events and is considerably cheaper than `kube-audit`.|**Type:** `string`<br/>**Allowed values:** `kube-audit-admin`, `kube-audit`<br/>**Default:** `"kube-audit-admin"`|
+| `global.controlPlane.logging.audit.enabled` | **Enabled** - Enable or disable API server audit logging (https://learn.microsoft.com/en-us/azure/aks/monitor-aks). Creates an Event Hub namespace, which is billed separately.|**Type:** `boolean`<br/>**Default:** `false`|
+| `global.controlPlane.logging.audit.eventHub` | **Event Hub** - Event Hub that the audit log stream is delivered to. The hub is a transport buffer, not the system of record: a collector drains it into Loki, which is where audit logs are queried and retained long term.|**Type:** `object`<br/>|
+| `global.controlPlane.logging.audit.eventHub.namespaceName` | **Namespace name** - Name of the Event Hub namespace. Must be globally unique across Azure. Defaults to the cluster name suffixed with `-audit-` and a hash of the subscription and resource group.|**Type:** `string`<br/>**Default:** `""`|
+| `global.controlPlane.logging.audit.eventHub.partitionCount` | **Partition count** - Number of partitions of the audit Event Hub.|**Type:** `integer`<br/>**Default:** `4`|
+| `global.controlPlane.logging.audit.eventHub.retentionTimeInHours` | **Retention time in hours** - How long unread audit events are kept in the Event Hub before they are dropped. This only bounds how long a collector may be down without losing events, since Loki holds the long-term copy. 168 hours (7 days) is the maximum the Standard tier allows and is included in the price, so there is no reason to set it lower.|**Type:** `integer`<br/>**Default:** `168`|
 | `global.controlPlane.networking` | **Networking** - AKS networking configuration.|**Type:** `object`<br/>|
 | `global.controlPlane.networking.networkDataplane` | **Network dataplane**|**Type:** `string`<br/>**Allowed values:** `azure`, `cilium`<br/>**Default:** `"cilium"`|
 | `global.controlPlane.networking.networkMode` | **Network mode**|**Type:** `string`<br/>**Allowed values:** `bridge`, `transparent`<br/>**Default:** `"transparent"`|
@@ -109,7 +117,7 @@ Properties within the `.global.nodePools` object
 | `global.nodePools.PATTERN.availabilityZones` |**None**|**Type:** `array`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
 | `global.nodePools.PATTERN.availabilityZones[*]` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
 | `global.nodePools.PATTERN.enableAutoScaling` |**None**|**Type:** `boolean`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Default:** `true`|
-| `global.nodePools.PATTERN.maxPods` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
+| `global.nodePools.PATTERN.maxPods` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Default:** `110`|
 | `global.nodePools.PATTERN.maxSize` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
 | `global.nodePools.PATTERN.minSize` |**None**|**Type:** `integer`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>|
 | `global.nodePools.PATTERN.mode` |**None**|**Type:** `string`<br/>**Key pattern:**<br/>`PATTERN`=`^[a-z0-9]{1,12}$`<br/>**Allowed values:** `System`, `User`<br/>**Default:** `"User"`|
@@ -210,6 +218,7 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration.apps.externalDnsCrossplaneResources.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSExternalDnsCrossplaneResources"`|
 | `cluster.providerIntegration.apps.externalDnsCrossplaneResources.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.k8sDnsNodeCache` |**None**|**Type:** `object`<br/>|
+| `cluster.providerIntegration.apps.k8sDnsNodeCache.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSK8sDnsNodeCacheHelmValues"`|
 | `cluster.providerIntegration.apps.k8sDnsNodeCache.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.metricsServer` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.metricsServer.enable` |Already managed by AKS.|**Type:** `boolean`<br/>**Default:** `false`|
