@@ -7,9 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Always render `autoUpgradeProfile.upgradeChannel: none` on the ManagedCluster, so AKS never upgrades the Kubernetes version on its own; it is controlled only by the Giant Swarm `Release`.
+- Disallow additional properties in `global.controlPlane`, `global.providerSpecific` and their nested objects, so mistyped or removed values fail schema validation instead of being silently ignored.
+- Bump `OCIRepository` resources from the `source.toolkit.fluxcd.io/v1beta2` API to `source.toolkit.fluxcd.io/v1`.
+
 ### Added
 
+- Add `global.providerSpecific.nodeOSUpgrade.channel` to choose the AKS node OS auto-upgrade channel (`NodeImage`, `SecurityPatch`, `Unmanaged` or `None`) independently of the Kubernetes version. It defaults to `NodeImage`, which is what AKS already applies to clusters that don't set it, so existing clusters keep their weekly node image upgrades.
+- Add `global.providerSpecific.nodeOSUpgrade.maintenanceWindow` to restrict when node OS upgrades may start. When set, the chart adds an `aksManagedNodeOSUpgradeSchedule` `MaintenanceConfiguration` to the `AzureASOManagedControlPlane` resources. Exactly one of the `daily`, `weekly`, `absoluteMonthly` or `relativeMonthly` schedules must be set, which the values schema validates.
 - Add the `giantswarm.io/machine-pool` label to the nodes of each node pool.
+
+## [0.8.1] - 2026-10-13
+
+### Fixed
+
+- Configure k8s-dns-node-cache for AKS so it redirects DNS traffic to the node-local cache.
+- Increase default value of node pool setting `maxPods` to 110 regardless of network mode.
 
 ## [0.8.0] - 2026-10-05
 
@@ -23,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add the `giantswarm.io/prevent-deletion` label to `AzureASOManagedCluster` and `AzureASOManagedControlPlane` when `global.metadata.preventDeletion` is enabled.
 - Enable Workload Identity.
 - Project `{{$clusterName}}-cluster-aso-exports` ConfigMap with OIDC issuer profile and principal ID.
+- Add `global.controlPlane.logging.audit` to ship API server audit logs from the AKS control plane to an Event Hub via an Azure diagnostic setting. Disabled by default.
 
 ### Fixed
 
@@ -93,7 +109,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added: Post-install/post-upgrade/post-rollback hook that sets an ownerReference on the ASO credentials Secret and on the `AzureClusterIdentity` CR pointing at the `AzureASOManagedCluster`, so they are garbage-collected when the cluster is deleted.
 - changed: `app.giantswarm.io` label group was changed to `application.giantswarm.io`
 
-[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.8.1...HEAD
+[0.8.1]: https://github.com/giantswarm/cluster-aks/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/giantswarm/cluster-aks/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/giantswarm/cluster-aks/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/giantswarm/cluster-aks/compare/v0.5.0...v0.6.0

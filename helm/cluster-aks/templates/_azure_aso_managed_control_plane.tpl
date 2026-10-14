@@ -110,10 +110,11 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
         {{- end }}
-        {{- if ne $cp.autoUpgradeChannel "none" }}
         autoUpgradeProfile:
-          upgradeChannel: {{ $cp.autoUpgradeChannel }}
-        {{- end }}
+          # The Kubernetes version is controlled by the Giant Swarm `Release`, so AKS must never
+          # upgrade it on its own. Node OS upgrades are independent and never change it.
+          upgradeChannel: none
+          nodeOSUpgradeChannel: {{ $ps.nodeOSUpgrade.channel }}
         {{- with $ps.kubeletIdentityResourceID }}
         identityProfile:
           kubeletidentity:
@@ -124,4 +125,37 @@ spec:
         tags:
           {{- toYaml . | nindent 10 }}
         {{- end }}
+    {{- $maintenanceWindow := $ps.nodeOSUpgrade.maintenanceWindow }}
+    {{- if $maintenanceWindow }}
+    - apiVersion: containerservice.azure.com/v1api20240901
+      kind: MaintenanceConfiguration
+      metadata:
+        name: {{ $clusterName }}-aksmanagednodeosupgradeschedule
+        {{- with (include "cluster-aks.aso.credentialSecretName" .) }}
+        annotations:
+          serviceoperator.azure.com/credential-from: {{ . | quote }}
+        {{- end }}
+      spec:
+        azureName: aksManagedNodeOSUpgradeSchedule
+        owner:
+          name: {{ $clusterName }}
+        maintenanceWindow:
+          durationHours: {{ $maintenanceWindow.durationHours }}
+          schedule:
+            {{- toYaml $maintenanceWindow.schedule | nindent 12 }}
+          startTime: {{ $maintenanceWindow.startTime | quote }}
+          {{- with $maintenanceWindow.utcOffset }}
+          utcOffset: {{ . | quote }}
+          {{- end }}
+          {{- with $maintenanceWindow.startDate }}
+          startDate: {{ . | quote }}
+          {{- end }}
+          {{- with $maintenanceWindow.notAllowedDates }}
+          notAllowedDates:
+            {{- range . }}
+            - start: {{ .start | quote }}
+              end: {{ .end | quote }}
+            {{- end }}
+          {{- end }}
+    {{- end }}
 {{- end -}}
