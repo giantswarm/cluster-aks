@@ -27,6 +27,9 @@ Cross-field validation. Produces no output — only `fail` calls as side effects
 {{- fail "global.connectivity.network.vnet.name is ignored when global.connectivity.network.vnet.subnetArmId is set (BYO VNet); remove one of the two to avoid ambiguous configuration" -}}
 {{- end -}}
 {{- $cp := .Values.global.controlPlane -}}
+{{- if and (eq $cp.networking.networkPlugin "none") (not .Values.global.connectivity.cni.managed) -}}
+{{- fail "global.controlPlane.networking.networkPlugin none requires global.connectivity.cni.managed: true; without it the cluster would have no CNI" -}}
+{{- end -}}
 {{- if and $cp.disableLocalAccounts (not $cp.aadProfile.managed) -}}
 {{- fail "global.controlPlane.disableLocalAccounts requires global.controlPlane.aadProfile.managed: true; AKS only accepts disabling local accounts on Entra-integrated clusters, and without it no client (including CAPZ) can authenticate to the API server" -}}
 {{- end -}}

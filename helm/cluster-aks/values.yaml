@@ -15,7 +15,8 @@ cluster:
       chartOperatorExtensions:
         enable: true
       cilium:
-        enable: false
+        configTemplateName: AKSCiliumHelmValues
+        enable: true
       ciliumServiceMonitors:
         enable: true
       clusterAutoscaler:
@@ -139,6 +140,8 @@ global:
       enablePrivateClusterPublicFQDN: false
       privateDNSZone: ""
     baseDomain: ""
+    cni:
+      managed: false
     dns: {}
     network:
       dnsServiceIP: 172.20.0.10
