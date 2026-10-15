@@ -1,6 +1,6 @@
 dependencies:
 - name: cluster
   repository: https://giantswarm.github.io/cluster-test-catalog
-  version: 9.1.1-rf1dfa38et20261015113519h23b670f
-digest: sha256:433159d79cfa404a610593c194a91f432410252f45f36b4b012d243c6f86dc64
-generated: "2026-10-15T13:37:54.277160311+02:00"
+  version: 9.1.1-rf1dfa38et20261015113827h793e99c
+digest: sha256:f18764419b46e67e1cc0c0d39b92b87a7fb66fed35ef4c1e48077db6c761e90b
+generated: "2026-10-15T15:32:00.0345642+02:00"
