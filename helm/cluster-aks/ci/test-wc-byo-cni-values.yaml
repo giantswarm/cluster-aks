@@ -1,0 +1,36 @@
+global:
+  release:
+    version: v34.4.0
+
+  metadata:
+    name: test-wc-byo-cni
+    organization: giantswarm
+    servicePriority: lowest
+
+  connectivity:
+    baseDomain: azuretest.gigantic.io
+    cni:
+      managed: true
+    network:
+      pods:
+        cidrBlocks:
+          - 192.168.0.0/16
+
+  nodePools:
+    system:
+      mode: System
+      vmSize: Standard_D2s_v3
+    workers:
+      mode: User
+      vmSize: Standard_D4s_v3
+
+  providerSpecific:
+    location: westeurope
+    subscriptionId: 00000000-0000-0000-0000-000000000000
+    asoAuthenticationSecretName: test-wc-byo-cni-aso-creds
+
+cluster:
+  internal:
+    ephemeralConfiguration:
+      offlineTesting:
+        renderWithoutReleaseResource: true

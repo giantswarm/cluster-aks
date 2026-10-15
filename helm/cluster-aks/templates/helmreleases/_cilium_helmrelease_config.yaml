@@ -1,0 +1,16 @@
+{{/* AKS-specific cilium Helm values, only rendered on BYO CNI clusters (global.connectivity.cni.managed) */}}
+{{/* https://github.com/giantswarm/cilium-app/blob/main/helm/cilium/values.yaml */}}
+{{- define "AKSCiliumHelmValues" }}
+aksbyocni:
+  enabled: true
+ipam:
+  mode: cluster-pool
+  operator:
+    clusterPoolIPv4PodCIDRList:
+      - {{ first $.Values.global.connectivity.network.pods.cidrBlocks | quote }}
+k8sServiceHost: ""
+kubeProxyReplacement: "false"
+socketLB:
+  enabled: true
+  hostNamespaceOnly: true
+{{- end }}
