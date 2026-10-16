@@ -3,6 +3,14 @@
 {{- define "AKSNetworkPoliciesHelmValues" }}
 allowEgressToDNS:
   enabled: true
+allowEgressToUpstreamDNS:
+  enabled: true
+  namespaces:
+    - "kube-system"
+  cidrs:
+    - "168.63.129.16/32"
+azureWorkloadIdentityWebhook:
+  enabled: true
 konnectivityAgent:
   enabled: true
   namespaces:
