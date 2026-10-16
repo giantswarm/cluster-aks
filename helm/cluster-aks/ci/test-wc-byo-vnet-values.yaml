@@ -20,6 +20,10 @@ global:
     workers:
       mode: User
       vmSize: Standard_D4s_v3
+    infra:
+      mode: User
+      vmSize: Standard_D4s_v3
+      subnetArmId: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/existing-network-rg/providers/Microsoft.Network/virtualNetworks/existing-vnet/subnets/infra-subnet
 
   providerSpecific:
     location: westeurope
