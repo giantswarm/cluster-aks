@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Allow the AKS workload identity webhook and pods using Azure DNS in `kube-system` through the network-policies default deny.
 - Add `global.providerSpecific.nodeOSUpgrade.channel` to choose the AKS node OS auto-upgrade channel (`NodeImage`, `SecurityPatch`, `Unmanaged` or `None`) independently of the Kubernetes version. It defaults to `NodeImage`, which is what AKS already applies to clusters that don't set it, so existing clusters keep their weekly node image upgrades.
 - Add `global.providerSpecific.nodeOSUpgrade.maintenanceWindow` to restrict when node OS upgrades may start. When set, the chart adds an `aksManagedNodeOSUpgradeSchedule` `MaintenanceConfiguration` to the `AzureASOManagedControlPlane` resources. Exactly one of the `daily`, `weekly`, `absoluteMonthly` or `relativeMonthly` schedules must be set, which the values schema validates.
 - Add the `giantswarm.io/machine-pool` label to the nodes of each node pool.
