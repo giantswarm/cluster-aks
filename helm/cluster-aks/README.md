@@ -41,11 +41,13 @@ Properties within the `.global.connectivity` object
 | `global.connectivity.apiServerAccess.enablePrivateClusterPublicFQDN` | **Enable private cluster public FQDN**|**Type:** `boolean`<br/>**Default:** `false`|
 | `global.connectivity.apiServerAccess.privateDNSZone` | **Private DNS zone**|**Type:** `string`<br/>**Default:** `""`|
 | `global.connectivity.baseDomain` | **Base domain** - DNS base domain used by the management cluster's installation.|**Type:** `string`<br/>**Default:** `""`|
+| `global.connectivity.cni` | **CNI**|**Type:** `object`<br/>|
+| `global.connectivity.cni.managed` | **Managed CNI** - BYO CNI opt-in, for new clusters only. When true, AKS installs no CNI (networkPlugin none) and Giant Swarm installs and operates Cilium. When false, the cluster uses AKS-managed networking. Unsupported until the BYO CNI mode is declared supported, see the README.|**Type:** `boolean`<br/>**Default:** `false`|
 | `global.connectivity.dns` | **DNS**|**Type:** `object`<br/>|
 | `global.connectivity.dns.wildcardCnameTarget` | **Wildcard CNAME Target** - Override the wildcard CNAME record value. If no value is passed defaults to "ingress". Only subdomains from the cluster DNS zone are valid.|**Type:** `string`<br/>**Example:** `"gateway"`<br/>|
 | `global.connectivity.network` | **Network**|**Type:** `object`<br/>|
 | `global.connectivity.network.dnsServiceIP` | **DNS service IP** - Must be within the service CIDR.|**Type:** `string`<br/>**Default:** `"172.20.0.10"`|
-| `global.connectivity.network.pods` | **Pods network** - Pods CIDR — only used by AKS when controlPlane.networking.networkPlugin is kubenet. Ignored for Azure CNI (both node-subnet and overlay modes); in node-subnet mode pods get IPs from vnet.subnet.cidrBlocks. Kept non-empty because the giantswarm/cluster subchart schema requires at least one entry.|**Type:** `object`<br/>|
+| `global.connectivity.network.pods` | **Pods network** - Pods CIDR. Used by AKS with kubenet, and as the Cilium cluster pool on BYO CNI clusters (global.connectivity.cni.managed), where it must not overlap the VNet, peered or on-premises networks, the service CIDR or the AKS reserved ranges. Ignored for Azure CNI. Kept non-empty because the giantswarm/cluster subchart schema requires at least one entry.|**Type:** `object`<br/>|
 | `global.connectivity.network.pods.cidrBlocks` | **CIDR blocks**|**Type:** `array`<br/>**Default:** `["192.168.0.0/16"]`|
 | `global.connectivity.network.pods.cidrBlocks[*]` |**None**|**Type:** `string`<br/>|
 | `global.connectivity.network.services` | **Services network** - Services CIDR — assigned by AKS for Kubernetes Service IPs. Used to populate Cluster.spec.clusterNetwork.services.|**Type:** `object`<br/>|
@@ -83,10 +85,10 @@ Properties within the `.global.controlPlane` object
 | `global.controlPlane.logging.audit.eventHub.partitionCount` | **Partition count** - Number of partitions of the audit Event Hub.|**Type:** `integer`<br/>**Default:** `4`|
 | `global.controlPlane.logging.audit.eventHub.retentionTimeInHours` | **Retention time in hours** - How long unread audit events are kept in the Event Hub before they are dropped. This only bounds how long a collector may be down without losing events, since Loki holds the long-term copy. 168 hours (7 days) is the maximum the Standard tier allows and is included in the price, so there is no reason to set it lower.|**Type:** `integer`<br/>**Default:** `168`|
 | `global.controlPlane.networking` | **Networking** - AKS networking configuration.|**Type:** `object`<br/>|
-| `global.controlPlane.networking.networkDataplane` | **Network dataplane**|**Type:** `string`<br/>**Allowed values:** `azure`, `cilium`<br/>**Default:** `"cilium"`|
-| `global.controlPlane.networking.networkMode` | **Network mode**|**Type:** `string`<br/>**Allowed values:** `bridge`, `transparent`<br/>**Default:** `"transparent"`|
-| `global.controlPlane.networking.networkPlugin` | **Network plugin**|**Type:** `string`<br/>**Allowed values:** `azure`, `kubenet`<br/>**Default:** `"azure"`|
-| `global.controlPlane.networking.networkPolicy` | **Network policy**|**Type:** `string`<br/>**Allowed values:** `azure`, `calico`, `cilium`, `none`<br/>**Default:** `"cilium"`|
+| `global.controlPlane.networking.networkDataplane` | **Network dataplane** - Ignored when global.connectivity.cni.managed is true.|**Type:** `string`<br/>**Allowed values:** `azure`, `cilium`<br/>**Default:** `"cilium"`|
+| `global.controlPlane.networking.networkMode` | **Network mode** - Ignored when global.connectivity.cni.managed is true.|**Type:** `string`<br/>**Allowed values:** `bridge`, `transparent`<br/>**Default:** `"transparent"`|
+| `global.controlPlane.networking.networkPlugin` | **Network plugin** - Rendered as none when global.connectivity.cni.managed is true. Setting none without it fails.|**Type:** `string`<br/>**Allowed values:** `azure`, `kubenet`, `none`<br/>**Default:** `"azure"`|
+| `global.controlPlane.networking.networkPolicy` | **Network policy** - Ignored when global.connectivity.cni.managed is true.|**Type:** `string`<br/>**Allowed values:** `azure`, `calico`, `cilium`, `none`<br/>**Default:** `"cilium"`|
 | `global.controlPlane.networking.outboundType` | **Outbound type**|**Type:** `string`<br/>**Allowed values:** `loadBalancer`, `managedNATGateway`, `userAssignedNATGateway`, `userDefinedRouting`<br/>**Default:** `"loadBalancer"`|
 | `global.controlPlane.sku` | **SKU** - AKS SKU tier.|**Type:** `object`<br/>|
 | `global.controlPlane.sku.tier` | **Tier**|**Type:** `string`<br/>**Allowed values:** `Free`, `Premium`, `Standard`<br/>**Default:** `"Standard"`|
@@ -202,7 +204,8 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration.apps.chartOperatorExtensions` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.chartOperatorExtensions.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.cilium` |**None**|**Type:** `object`<br/>|
-| `cluster.providerIntegration.apps.cilium.enable` |Already managed by AKS.|**Type:** `boolean`<br/>**Default:** `false`|
+| `cluster.providerIntegration.apps.cilium.configTemplateName` |**None**|**Type:** `string`<br/>**Default:** `"AKSCiliumHelmValues"`|
+| `cluster.providerIntegration.apps.cilium.enable` |Only rendered when global.connectivity.cni.managed is true.|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.ciliumServiceMonitors` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.ciliumServiceMonitors.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.clusterAutoscaler` |**None**|**Type:** `object`<br/>|

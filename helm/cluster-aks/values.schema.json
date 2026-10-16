@@ -181,10 +181,14 @@
                                 "cilium": {
                                     "type": "object",
                                     "properties": {
+                                        "configTemplateName": {
+                                            "type": "string",
+                                            "default": "AKSCiliumHelmValues"
+                                        },
                                         "enable": {
                                             "type": "boolean",
-                                            "description": "Already managed by AKS.",
-                                            "default": false
+                                            "description": "Only rendered when global.connectivity.cni.managed is true.",
+                                            "default": true
                                         }
                                     }
                                 },
@@ -755,6 +759,18 @@
                             "description": "DNS base domain used by the management cluster's installation.",
                             "default": ""
                         },
+                        "cni": {
+                            "type": "object",
+                            "title": "CNI",
+                            "properties": {
+                                "managed": {
+                                    "type": "boolean",
+                                    "title": "Managed CNI",
+                                    "description": "BYO CNI opt-in, for new clusters only. When true, AKS installs no CNI (networkPlugin none) and Giant Swarm installs and operates Cilium. When false, the cluster uses AKS-managed networking. Unsupported until the BYO CNI mode is declared supported, see the README.",
+                                    "default": false
+                                }
+                            }
+                        },
                         "dns": {
                             "type": "object",
                             "title": "DNS",
@@ -782,7 +798,7 @@
                                 "pods": {
                                     "type": "object",
                                     "title": "Pods network",
-                                    "description": "Pods CIDR — only used by AKS when controlPlane.networking.networkPlugin is kubenet. Ignored for Azure CNI (both node-subnet and overlay modes); in node-subnet mode pods get IPs from vnet.subnet.cidrBlocks. Kept non-empty because the giantswarm/cluster subchart schema requires at least one entry.",
+                                    "description": "Pods CIDR. Used by AKS with kubenet, and as the Cilium cluster pool on BYO CNI clusters (global.connectivity.cni.managed), where it must not overlap the VNet, peered or on-premises networks, the service CIDR or the AKS reserved ranges. Ignored for Azure CNI. Kept non-empty because the giantswarm/cluster subchart schema requires at least one entry.",
                                     "properties": {
                                         "cidrBlocks": {
                                             "type": "array",
@@ -987,6 +1003,7 @@
                                 "networkDataplane": {
                                     "type": "string",
                                     "title": "Network dataplane",
+                                    "description": "Ignored when global.connectivity.cni.managed is true.",
                                     "enum": [
                                         "azure",
                                         "cilium"
@@ -996,6 +1013,7 @@
                                 "networkMode": {
                                     "type": "string",
                                     "title": "Network mode",
+                                    "description": "Ignored when global.connectivity.cni.managed is true.",
                                     "enum": [
                                         "bridge",
                                         "transparent"
@@ -1005,15 +1023,18 @@
                                 "networkPlugin": {
                                     "type": "string",
                                     "title": "Network plugin",
+                                    "description": "Rendered as none when global.connectivity.cni.managed is true. Setting none without it fails.",
                                     "enum": [
                                         "azure",
-                                        "kubenet"
+                                        "kubenet",
+                                        "none"
                                     ],
                                     "default": "azure"
                                 },
                                 "networkPolicy": {
                                     "type": "string",
                                     "title": "Network policy",
+                                    "description": "Ignored when global.connectivity.cni.managed is true.",
                                     "enum": [
                                         "azure",
                                         "calico",
