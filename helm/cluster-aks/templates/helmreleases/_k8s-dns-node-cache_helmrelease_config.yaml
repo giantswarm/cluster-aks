@@ -1,0 +1,12 @@
+{{/* AKS-specific k8s-dns-node-cache Helm values*/}}
+{{/* https://github.com/giantswarm/k8s-dns-node-cache-app/blob/main/helm/k8s-dns-node-cache-app/values.yaml */}}
+{{- define "AKSK8sDnsNodeCacheHelmValues" }}
+cluster:
+  kubernetes:
+    DNS:
+      IP: {{ $.Values.global.connectivity.network.dnsServiceIP | quote }}
+      serviceName: kube-dns
+upstreamService:
+  appName: kube-dns
+  podPort: 53
+{{- end }}

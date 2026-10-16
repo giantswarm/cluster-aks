@@ -31,6 +31,7 @@ cluster:
         configTemplateName: AKSExternalDnsCrossplaneResources
         enable: true
       k8sDnsNodeCache:
+        configTemplateName: AKSK8sDnsNodeCacheHelmValues
         enable: true
       metricsServer:
         enable: false
@@ -159,9 +160,16 @@ global:
   controlPlane:
     aadProfile: {}
     additionalTags: {}
-    autoUpgradeChannel: none
     disableLocalAccounts: false
     dnsPrefix: ""
+    logging:
+      audit:
+        category: kube-audit-admin
+        enabled: false
+        eventHub:
+          namespaceName: ""
+          partitionCount: 4
+          retentionTimeInHours: 168
     networking:
       networkDataplane: cilium
       networkMode: transparent
@@ -189,6 +197,9 @@ global:
       userAssignedIdentityResourceID: ""
     kubeletIdentityResourceID: ""
     location: ""
+    nodeOSUpgrade:
+      channel: NodeImage
+      maintenanceWindow: {}
     resourceGroupName: ""
     subscriptionId: ""
 internal:

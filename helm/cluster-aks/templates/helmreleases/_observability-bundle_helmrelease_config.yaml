@@ -5,6 +5,11 @@ userConfig:
     configMap:
       values:
         kube-prometheus-stack:
+          coreDns:
+            service:
+              selector:
+                # AKS-managed CoreDNS pods are labeled `k8s-app: kube-dns` instead of `k8s-app: coredns`
+                k8s-app: kube-dns
           prometheusOperator:
             admissionWebhooks:
               mutatingWebhookConfiguration:
