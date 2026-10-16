@@ -68,7 +68,7 @@ AUTH_MODE: workloadidentity
 Whether the cluster uses a bring-your-own VNet. True when
 global.connectivity.network.vnet.subnetArmId is set, in which case the
 chart does not create a VNet and every node pool references the given
-subnet by ARM ID.
+subnet by ARM ID, unless it overrides it with its own subnetArmId.
 */}}
 {{- define "cluster-aks.vnet.byo" -}}
 {{- if .Values.global.connectivity.network.vnet.subnetArmId -}}true{{- end -}}
