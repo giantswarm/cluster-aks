@@ -18,7 +18,7 @@ metadata:
 spec:
   version: {{ include "cluster.component.kubernetes.version" . }}
   resources:
-    - apiVersion: containerservice.azure.com/v1api20240901
+    - apiVersion: containerservice.azure.com/v1api20250801
       kind: ManagedCluster
       metadata:
         name: {{ $clusterName }}
@@ -127,7 +127,7 @@ spec:
         {{- end }}
     {{- $maintenanceWindow := $ps.nodeOSUpgrade.maintenanceWindow }}
     {{- if $maintenanceWindow }}
-    - apiVersion: containerservice.azure.com/v1api20240901
+    - apiVersion: containerservice.azure.com/v1api20250801
       kind: MaintenanceConfiguration
       metadata:
         name: {{ $clusterName }}-aksmanagednodeosupgradeschedule

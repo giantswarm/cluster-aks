@@ -41,7 +41,7 @@ spec:
           {{- toYaml . | nindent 10 }}
         {{- end }}
     {{- if not (include "cluster-aks.vnet.byo" .) }}
-    - apiVersion: network.azure.com/v1api20240301
+    - apiVersion: network.azure.com/v20250301
       kind: VirtualNetwork
       metadata:
         name: {{ include "cluster-aks.vnet.name" . }}
@@ -61,7 +61,7 @@ spec:
         tags:
           {{- toYaml . | nindent 10 }}
         {{- end }}
-    - apiVersion: network.azure.com/v1api20240301
+    - apiVersion: network.azure.com/v20250301
       kind: VirtualNetworksSubnet
       metadata:
         name: {{ include "cluster-aks.subnet.crName" . }}
