@@ -7,12 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-19
+
 
 ### Changed
 
 - Always render `autoUpgradeProfile.upgradeChannel: none` on the ManagedCluster, so AKS never upgrades the Kubernetes version on its own; it is controlled only by the Giant Swarm `Release`.
 - Disallow additional properties in `global.controlPlane`, `global.providerSpecific` and their nested objects, so mistyped or removed values fail schema validation instead of being silently ignored.
 - Bump `OCIRepository` resources from the `source.toolkit.fluxcd.io/v1beta2` API to `source.toolkit.fluxcd.io/v1`.
+- Bump ASO `containerservice.azure.com` resources to `v1api20250801` and `network.azure.com` resources to `v20250301`.
 
 ### Added
 
@@ -116,7 +119,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added: Post-install/post-upgrade/post-rollback hook that sets an ownerReference on the ASO credentials Secret and on the `AzureClusterIdentity` CR pointing at the `AzureASOManagedCluster`, so they are garbage-collected when the cluster is deleted.
 - changed: `app.giantswarm.io` label group was changed to `application.giantswarm.io`
 
-[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.8.1...HEAD
+[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/giantswarm/cluster-aks/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/giantswarm/cluster-aks/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/giantswarm/cluster-aks/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/giantswarm/cluster-aks/compare/v0.6.0...v0.7.0

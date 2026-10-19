@@ -21,7 +21,7 @@ metadata:
     "helm.sh/resource-policy": keep
 spec:
   resources:
-    - apiVersion: containerservice.azure.com/v1api20240901
+    - apiVersion: containerservice.azure.com/v1api20250801
       kind: ManagedClustersAgentPool
       metadata:
         name: {{ $clusterName }}-{{ $poolName }}
