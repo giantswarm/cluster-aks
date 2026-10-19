@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Bump the `cluster` chart to v9.2.0.
+
+### Added
+
+- Add the BYO CNI opt-in `global.connectivity.cni.managed` (default `false`). When `true`, AKS installs no CNI and the cluster runs Giant Swarm's Cilium with AKS BYO CNI values. Not supported yet.
+
 ## [0.9.0] - 2026-10-19
 
 
