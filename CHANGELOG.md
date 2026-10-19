@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Turn off only the `cilium` dependency of the observability-bundle apps, using the map format of `apps.<appName>.dependsOn` that the next major version of observability-bundle requires.
+
 ## [0.9.0] - 2026-10-19
 
 

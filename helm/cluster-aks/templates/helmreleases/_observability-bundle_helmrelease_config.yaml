@@ -17,24 +17,19 @@ userConfig:
                   # prevent AKS from overriding the VPA webhook configuration
                   admissions.enforcer/disabled: "true"
 
+# AKS manages Cilium itself, so there is no `cilium` HelmRelease to wait for
 apps:
   alloyEvents:
     dependsOn:
-      - kyverno-crds
-      - prometheus-operator-crd
-      - vertical-pod-autoscaler-crd
+      cilium: false
   alloyLogs:
     dependsOn:
-      - kyverno-crds
-      - prometheus-operator-crd
-      - vertical-pod-autoscaler-crd
+      cilium: false
   alloyMetrics:
     dependsOn:
-      - kyverno-crds
-      - prometheus-operator-crd
-      - vertical-pod-autoscaler-crd
+      cilium: false
 
   kubePrometheusStack:
     dependsOn:
-      - prometheus-operator-crd
+      cilium: false
 {{- end }}
