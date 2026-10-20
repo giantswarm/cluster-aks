@@ -45,6 +45,9 @@ spec:
           tier: {{ $cp.sku.tier }}
         networkProfile:
           dnsServiceIP: {{ $net.network.dnsServiceIP | quote }}
+          {{- if $net.cni.managed }}
+          networkPlugin: none
+          {{- else }}
           networkPlugin: {{ $cp.networking.networkPlugin }}
           {{- with $cp.networking.networkDataplane }}
           networkDataplane: {{ . }}
@@ -54,6 +57,7 @@ spec:
           {{- end }}
           {{- with $cp.networking.networkPolicy }}
           networkPolicy: {{ . }}
+          {{- end }}
           {{- end }}
           outboundType: {{ $cp.networking.outboundType }}
           {{- with (first ($net.network.services.cidrBlocks | default list)) }}

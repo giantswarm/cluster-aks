@@ -50,6 +50,36 @@ Here is an example that would install the app to workload cluster `abc12`:
 
 See our [full reference on how to configure apps](https://docs.giantswarm.io/tutorials/fleet-management/app-platform/app-configuration/) for more details.
 
+## BYO CNI (opt-in)
+
+> [!WARNING]
+> Not supported yet. Use it on test clusters only until the mode is declared supported.
+
+By default, clusters use AKS-managed networking (Azure CNI powered by Cilium), and Microsoft supports the pod network. A new cluster can instead opt into BYO CNI:
+
+```yaml
+global:
+  connectivity:
+    cni:
+      managed: true
+    network:
+      pods:
+        cidrBlocks:
+          - 192.168.0.0/16
+```
+
+AKS then installs no CNI (`networkPlugin: none`, with `networkDataplane`, `networkMode` and `networkPolicy` ignored), and the Release installs Giant Swarm's Cilium with the AKS BYO CNI values: VXLAN tunnelling, cluster-pool IPAM from the pod CIDR, no kube-proxy replacement and socket LB for the host namespace. Apps that need the pod network wait for Cilium. Cilium is tuned per cluster through `global.apps.cilium.values`, as on other providers.
+
+Constraints:
+
+- New clusters only. AKS can't change the network plugin of a running cluster.
+- Pod IPs are on an overlay. Pods aren't reachable from the VNet, peered or on-premises networks except through Services, and their egress is SNATed to the node IP.
+- Exactly one pod CIDR block, which must not overlap the VNet, peered or on-premises networks, the service CIDR or the AKS reserved ranges.
+- No Windows node pools and no API server VNet integration.
+- kube-proxy stays (AKS-managed, iptables). Cilium features that need kube-proxy replacement, such as eBPF host routing, aren't available.
+- Webhooks behind a default deny must allow ingress from the `host` and `remote-node` entities, because the API server reaches pods through the hostNetwork Konnectivity agent.
+- Microsoft supports the control plane, Konnectivity and the node VMs. Giant Swarm supports the pod network, Cilium and network policies.
+
 ## Compatibility
 
 This app has been tested to work with the following workload cluster release versions:
