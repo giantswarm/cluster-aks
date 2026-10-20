@@ -17,19 +17,19 @@ userConfig:
                   # prevent AKS from overriding the VPA webhook configuration
                   admissions.enforcer/disabled: "true"
 
-# AKS manages Cilium itself, so there is no `cilium` HelmRelease to wait for
+# Only BYO CNI clusters have a `cilium` HelmRelease to wait for, otherwise AKS manages Cilium itself
 apps:
   alloyEvents:
     dependsOn:
-      cilium: false
+      cilium: {{ $.Values.global.connectivity.cni.managed }}
   alloyLogs:
     dependsOn:
-      cilium: false
+      cilium: {{ $.Values.global.connectivity.cni.managed }}
   alloyMetrics:
     dependsOn:
-      cilium: false
+      cilium: {{ $.Values.global.connectivity.cni.managed }}
 
   kubePrometheusStack:
     dependsOn:
-      cilium: false
+      cilium: {{ $.Values.global.connectivity.cni.managed }}
 {{- end }}
