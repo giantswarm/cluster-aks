@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add the BYO CNI opt-in `global.connectivity.cni.managed` (default `false`). When `true`, AKS installs no CNI and the cluster runs Giant Swarm's Cilium with AKS BYO CNI values. Not supported yet.
 
+### Fixed
+
+- Fix the security-bundle values key `apps.cloudNativePG` to `apps.cloudnativePG`, so that the cloudnative-pg HelmRelease no longer depends on the `cilium` HelmRelease, which AKS doesn't have.
+
 ## [0.9.0] - 2026-10-19
 
 
