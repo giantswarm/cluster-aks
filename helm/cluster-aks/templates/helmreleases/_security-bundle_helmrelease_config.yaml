@@ -19,27 +19,42 @@ apps:
 
   falco:
     dependsOn:
+      {{- if $.Values.global.connectivity.cni.managed }}
+      - cilium
+      {{- end }}
       - kyverno-crds
 
   kubescape:
     dependsOn:
+      {{- if $.Values.global.connectivity.cni.managed }}
+      - cilium
+      {{- end }}
       - kyverno-crds
       - kyverno-policy-operator
 
   kyverno:
     dependsOn:
+      {{- if $.Values.global.connectivity.cni.managed }}
+      - cilium
+      {{- end }}
       - kyverno-crds
       - prometheus-operator-crd
       - alloy-podlogs-crds
 
   kyvernoPolicyOperator:
     dependsOn:
+      {{- if $.Values.global.connectivity.cni.managed }}
+      - cilium
+      {{- end }}
       - kyverno-crds
       - kyverno
       - alloy-podlogs-crds
 
   trivyOperator:
     dependsOn:
+      {{- if $.Values.global.connectivity.cni.managed }}
+      - cilium
+      {{- end }}
       - kyverno-crds
       - trivy
 {{- end }}

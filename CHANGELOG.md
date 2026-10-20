@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Bump the `cluster` chart to v9.2.0.
+- Make the security-bundle apps depend on Cilium on BYO CNI clusters, as the bundle does by default.
 
 ### Added
 
