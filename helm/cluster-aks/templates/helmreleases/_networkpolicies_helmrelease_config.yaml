@@ -3,6 +3,22 @@
 {{- define "AKSNetworkPoliciesHelmValues" }}
 allowEgressToDNS:
   enabled: true
+# AKS add-ons in kube-system that the default deny would otherwise break.
+# Pods with dnsPolicy: Default (e.g. coredns-autoscaler) resolve through Azure DNS
+# instead of CoreDNS, so they need direct egress to it.
+allowEgressToUpstreamDNS:
+  enabled: true
+  namespaces:
+    - "kube-system"
+  cidrs:
+    # https://learn.microsoft.com/en-us/azure/virtual-network/what-is-ip-address-168-63-129-16
+    - "168.63.129.16/32"
+# Workload identity is always enabled on AKS clusters, and its webhook has failurePolicy: Fail.
+# The webhook must reach the API server, and the API server calls it through the Konnectivity
+# agent. Without this policy the webhook crash-loops and pods labelled
+# azure.workload.identity/use=true are rejected.
+azureWorkloadIdentityWebhook:
+  enabled: true
 konnectivityAgent:
   enabled: true
   namespaces:
