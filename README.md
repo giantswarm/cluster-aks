@@ -80,6 +80,40 @@ Constraints:
 - Webhooks behind a default deny must allow ingress from the `host` and `remote-node` entities, because the API server reaches pods through the hostNetwork Konnectivity agent.
 - Microsoft supports the control plane, Konnectivity and the node VMs. Giant Swarm supports the pod network, Cilium and network policies.
 
+## Azure CNI Overlay and ACNS
+
+On AKS-managed networking, a cluster can use Azure CNI Overlay and Advanced Container Networking Services (ACNS):
+
+```yaml
+global:
+  connectivity:
+    network:
+      pods:
+        cidrBlocks:
+          - 100.64.0.0/16
+  controlPlane:
+    networking:
+      networkPluginMode: overlay
+      advancedNetworking:
+        enabled: true
+        observability:
+          enabled: true
+        security:
+          enabled: true
+          advancedNetworkPolicies: L7
+```
+
+Overlay gives pods IPs from the pod CIDR instead of the VNet. ACNS observability provides Hubble network metrics and flow logs, and ACNS security provides FQDN filtering (the default) or L7 network policies.
+
+Constraints:
+
+- Overlay is a creation-time choice. Existing clusters can't be migrated from Azure CNI node-subnet.
+- Exactly one pod CIDR block, which must not overlap the VNet, peered or on-premises networks, or the service CIDR.
+- Pod egress is SNATed to the node IP and pod IPs aren't routable outside the cluster, so allowlists must use node or subnet IPs.
+- Overlay and ACNS require `networkPlugin: azure`. Overlay doesn't support `networkMode: bridge`, and ACNS security requires `networkDataplane: cilium`.
+- ACNS is a paid Azure add-on billed to the cluster's subscription. It can be turned on or off on an existing cluster. With `advancedNetworking.enabled` unset, the chart leaves the AKS setting untouched; set it to `false` to disable ACNS. Observability and security require `enabled: true`.
+- Neither can be combined with the BYO CNI opt-in.
+
 ## Compatibility
 
 This app has been tested to work with the following workload cluster release versions:

@@ -41,6 +41,32 @@ Cross-field validation. Produces no output — only `fail` calls as side effects
 {{- if and (eq $cp.networking.networkPlugin "none") (not .Values.global.connectivity.cni.managed) -}}
 {{- fail "global.controlPlane.networking.networkPlugin none requires global.connectivity.cni.managed: true; without it the cluster would have no CNI" -}}
 {{- end -}}
+{{- $networking := $cp.networking -}}
+{{- $acns := $networking.advancedNetworking -}}
+{{- $acnsOn := $acns.enabled -}}
+{{- if and (or $acns.observability.enabled $acns.security.enabled) (not $acnsOn) -}}
+{{- fail "global.controlPlane.networking.advancedNetworking.observability.enabled and security.enabled require global.controlPlane.networking.advancedNetworking.enabled: true" -}}
+{{- end -}}
+{{- if $networking.networkPluginMode -}}
+  {{- if ne $networking.networkPlugin "azure" -}}
+{{- fail "global.controlPlane.networking.networkPluginMode overlay requires global.controlPlane.networking.networkPlugin azure" -}}
+  {{- end -}}
+  {{- if eq $networking.networkMode "bridge" -}}
+{{- fail "global.controlPlane.networking.networkPluginMode overlay doesn't support global.controlPlane.networking.networkMode bridge; use transparent" -}}
+  {{- end -}}
+{{- end -}}
+{{- if and $acnsOn (ne $networking.networkPlugin "azure") -}}
+{{- fail "global.controlPlane.networking.advancedNetworking requires global.controlPlane.networking.networkPlugin azure" -}}
+{{- end -}}
+{{- if and $acns.security.enabled (ne $networking.networkDataplane "cilium") -}}
+{{- fail "global.controlPlane.networking.advancedNetworking.security.enabled requires global.controlPlane.networking.networkDataplane cilium" -}}
+{{- end -}}
+{{- if and $acns.security.advancedNetworkPolicies (not $acns.security.enabled) -}}
+{{- fail "global.controlPlane.networking.advancedNetworking.security.advancedNetworkPolicies requires global.controlPlane.networking.advancedNetworking.security.enabled: true" -}}
+{{- end -}}
+{{- if and .Values.global.connectivity.cni.managed (or $networking.networkPluginMode $acnsOn) -}}
+{{- fail "global.controlPlane.networking.networkPluginMode and global.controlPlane.networking.advancedNetworking are AKS-managed networking features and can't be used with the BYO CNI opt-in global.connectivity.cni.managed: true" -}}
+{{- end -}}
 {{- if and $cp.disableLocalAccounts (not $cp.aadProfile.managed) -}}
 {{- fail "global.controlPlane.disableLocalAccounts requires global.controlPlane.aadProfile.managed: true; AKS only accepts disabling local accounts on Entra-integrated clusters, and without it no client (including CAPZ) can authenticate to the API server" -}}
 {{- end -}}
