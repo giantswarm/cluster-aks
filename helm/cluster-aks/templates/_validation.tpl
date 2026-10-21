@@ -44,4 +44,7 @@ Cross-field validation. Produces no output — only `fail` calls as side effects
 {{- if and $cp.disableLocalAccounts (not $cp.aadProfile.managed) -}}
 {{- fail "global.controlPlane.disableLocalAccounts requires global.controlPlane.aadProfile.managed: true; AKS only accepts disabling local accounts on Entra-integrated clusters, and without it no client (including CAPZ) can authenticate to the API server" -}}
 {{- end -}}
+{{- if and $cp.aadProfile.enableAzureRBAC (not $cp.aadProfile.managed) -}}
+{{- fail "global.controlPlane.aadProfile.enableAzureRBAC requires global.controlPlane.aadProfile.managed: true; AKS only supports Azure RBAC on Entra-integrated clusters" -}}
+{{- end -}}
 {{- end -}}

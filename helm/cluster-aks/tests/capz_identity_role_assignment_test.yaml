@@ -1,0 +1,113 @@
+suite: CAPZ identity Azure RBAC role assignment
+templates:
+  - templates/list.yaml
+values:
+  - ../ci/test-wc-minimal-values.yaml
+set:
+  global.managementCluster: mymc
+kubernetesProvider:
+  scheme:
+    "managedidentity.azure.upbound.io/v1beta1/UserAssignedIdentity":
+      gvr:
+        group: managedidentity.azure.upbound.io
+        version: v1beta1
+        resource: userassignedidentities
+      namespaced: false
+  objects:
+    - apiVersion: managedidentity.azure.upbound.io/v1beta1
+      kind: UserAssignedIdentity
+      metadata:
+        name: mymc-capz
+      status:
+        atProvider:
+          principalId: 11111111-1111-1111-1111-111111111111
+    - apiVersion: managedidentity.azure.upbound.io/v1beta1
+      kind: UserAssignedIdentity
+      metadata:
+        name: pendingmc-capz
+tests:
+  - it: renders no role assignment when Azure RBAC is disabled
+    set:
+      global.controlPlane.aadProfile.managed: true
+    asserts:
+      - containsDocument:
+          apiVersion: authorization.azure.upbound.io/v1beta1
+          kind: RoleAssignment
+        not: true
+      - notExists:
+          path: spec.resources[0].spec.aadProfile.enableAzureRBAC
+        documentSelector:
+          path: kind
+          value: AzureASOManagedControlPlane
+
+  - it: enables Azure RBAC on the managed cluster
+    set:
+      global.controlPlane.aadProfile.managed: true
+      global.controlPlane.aadProfile.enableAzureRBAC: true
+    asserts:
+      - equal:
+          path: spec.resources[0].spec.aadProfile.enableAzureRBAC
+          value: true
+        documentSelector:
+          path: kind
+          value: AzureASOManagedControlPlane
+
+  - it: grants the CAPZ identity AKS RBAC Cluster Admin on the resource group
+    set:
+      global.controlPlane.aadProfile.managed: true
+      global.controlPlane.aadProfile.enableAzureRBAC: true
+    documentSelector:
+      path: kind
+      value: RoleAssignment
+    asserts:
+      - equal:
+          path: metadata.name
+          value: test-wc-minimal-capz-aks-rbac-cluster-admin
+      - equal:
+          path: spec.forProvider
+          value:
+            principalId: 11111111-1111-1111-1111-111111111111
+            principalType: ServicePrincipal
+            roleDefinitionId: /subscriptions/00000000-0000-0000-0000-000000000000/providers/Microsoft.Authorization/roleDefinitions/b1ff04bb-8a4e-4dc4-8eb5-8693973ce19b
+            scope: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/test-wc-minimal
+      - equal:
+          path: spec.providerConfigRef.name
+          value: mymc
+
+  - it: scopes the role assignment to a custom resource group
+    set:
+      global.controlPlane.aadProfile.managed: true
+      global.controlPlane.aadProfile.enableAzureRBAC: true
+      global.providerSpecific.resourceGroupName: my-rg
+    documentSelector:
+      path: kind
+      value: RoleAssignment
+    asserts:
+      - equal:
+          path: spec.forProvider.scope
+          value: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/my-rg
+
+  - it: fails when the CAPZ identity is not observed on the management cluster
+    set:
+      global.managementCluster: othermc
+      global.controlPlane.aadProfile.managed: true
+      global.controlPlane.aadProfile.enableAzureRBAC: true
+    asserts:
+      - failedTemplate:
+          errorPattern: Couldn't find the Crossplane UserAssignedIdentity othermc-capz
+
+  - it: fails when the CAPZ identity reports no principal ID yet
+    set:
+      global.managementCluster: pendingmc
+      global.controlPlane.aadProfile.managed: true
+      global.controlPlane.aadProfile.enableAzureRBAC: true
+    asserts:
+      - failedTemplate:
+          errorPattern: The Crossplane UserAssignedIdentity pendingmc-capz doesn't report a principalId yet
+
+  - it: requires Entra integration for Azure RBAC
+    set:
+      global.controlPlane.aadProfile.enableAzureRBAC: true
+    asserts:
+      - failedTemplate:
+          errorPattern: enableAzureRBAC requires global.controlPlane.aadProfile.managed

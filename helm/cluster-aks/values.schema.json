@@ -911,6 +911,11 @@
                                         "type": "string"
                                     }
                                 },
+                                "enableAzureRBAC": {
+                                    "type": "boolean",
+                                    "title": "Enable Azure RBAC",
+                                    "description": "Authorize Kubernetes API requests with Azure RBAC in addition to Kubernetes RBAC. Requires managed: true. When enabled, the chart grants the management cluster's CAPZ identity the Azure Kubernetes Service RBAC Cluster Admin role on the cluster's resource group. The identity's object ID is read from the observe-only Crossplane UserAssignedIdentity `<managementCluster>-capz`, which must exist on the management cluster."
+                                },
                                 "managed": {
                                     "type": "boolean",
                                     "title": "Managed"
@@ -929,7 +934,7 @@
                         "disableLocalAccounts": {
                             "type": "boolean",
                             "title": "Disable local accounts",
-                            "description": "Disable AKS local accounts, so the static cluster-admin credential cannot be issued and all API server authentication goes through Entra ID. Requires aadProfile.managed: true. The ASO identity must also be granted cluster-admin in the workload cluster (Azure Kubernetes Service RBAC Cluster Admin Role when Azure RBAC is enabled, otherwise membership of one of aadProfile.adminGroupObjectIDs), because CAPZ reaches the cluster with an Entra token issued for that identity.",
+                            "description": "Disable AKS local accounts, so the static cluster-admin credential cannot be issued and all API server authentication goes through Entra ID. Requires aadProfile.managed: true. The ASO identity must also be granted cluster-admin in the workload cluster, because CAPZ reaches the cluster with an Entra token issued for that identity. With aadProfile.enableAzureRBAC: true the chart grants it; otherwise the identity must be a member of one of aadProfile.adminGroupObjectIDs.",
                             "default": false
                         },
                         "dnsPrefix": {

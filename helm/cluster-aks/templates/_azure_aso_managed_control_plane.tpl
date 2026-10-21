@@ -78,6 +78,9 @@ spec:
           managed: {{ $cp.aadProfile.managed }}
           adminGroupObjectIDs:
             {{- toYaml ($cp.aadProfile.adminGroupObjectIDs | default list) | nindent 12 }}
+          {{- if $cp.aadProfile.enableAzureRBAC }}
+          enableAzureRBAC: true
+          {{- end }}
         {{- end }}
         {{- if $cp.disableLocalAccounts }}
         disableLocalAccounts: true

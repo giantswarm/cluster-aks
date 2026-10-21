@@ -65,6 +65,22 @@ AUTH_MODE: workloadidentity
 {{- end -}}
 
 {{/*
+Object ID of the management cluster's CAPZ identity. Neither the
+AzureClusterIdentity nor anything else on the management cluster records it,
+so each management cluster carries an observe-only Crossplane
+UserAssignedIdentity named `<managementCluster>-capz` that points at the
+identity, and its status reports the object ID.
+*/}}
+{{- define "cluster-aks.capzIdentity.principalId" -}}
+{{- $name := printf "%s-capz" .Values.global.managementCluster -}}
+{{- $identity := lookup "managedidentity.azure.upbound.io/v1beta1" "UserAssignedIdentity" "" $name -}}
+{{- if not $identity -}}
+{{- fail (printf "Couldn't find the Crossplane UserAssignedIdentity %s; it must exist on the management cluster, observing its CAPZ identity, when global.controlPlane.aadProfile.enableAzureRBAC is true" $name) -}}
+{{- end -}}
+{{- dig "status" "atProvider" "principalId" "" $identity | required (printf "The Crossplane UserAssignedIdentity %s doesn't report a principalId yet" $name) -}}
+{{- end -}}
+
+{{/*
 Whether the cluster uses a bring-your-own VNet. True when
 global.connectivity.network.vnet.subnetArmId is set, in which case the
 chart does not create a VNet and every node pool references the given

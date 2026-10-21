@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add `global.controlPlane.aadProfile.enableAzureRBAC`. When `true`, the chart grants the management cluster's CAPZ identity the Azure Kubernetes Service RBAC Cluster Admin role on the cluster's resource group with a Crossplane `RoleAssignment`, reading the identity's object ID from the Crossplane `UserAssignedIdentity` `<managementCluster>-capz` on the management cluster.
 - Add the BYO CNI opt-in `global.connectivity.cni.managed` (default `false`). When `true`, AKS installs no CNI and the cluster runs Giant Swarm's Cilium with AKS BYO CNI values. Not supported yet.
 
 ### Fixed
