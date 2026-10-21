@@ -43,7 +43,10 @@ Cross-field validation. Produces no output — only `fail` calls as side effects
 {{- end -}}
 {{- $networking := $cp.networking -}}
 {{- $acns := $networking.advancedNetworking -}}
-{{- $acnsOn := or $acns.observability.enabled $acns.security.enabled -}}
+{{- $acnsOn := $acns.enabled -}}
+{{- if and (or $acns.observability.enabled $acns.security.enabled) (not $acnsOn) -}}
+{{- fail "global.controlPlane.networking.advancedNetworking.observability.enabled and security.enabled require global.controlPlane.networking.advancedNetworking.enabled: true" -}}
+{{- end -}}
 {{- if $networking.networkPluginMode -}}
   {{- if ne $networking.networkPlugin "azure" -}}
 {{- fail "global.controlPlane.networking.networkPluginMode overlay requires global.controlPlane.networking.networkPlugin azure" -}}

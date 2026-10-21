@@ -95,6 +95,7 @@ global:
     networking:
       networkPluginMode: overlay
       advancedNetworking:
+        enabled: true
         observability:
           enabled: true
         security:
@@ -110,7 +111,7 @@ Constraints:
 - Exactly one pod CIDR block, which must not overlap the VNet, peered or on-premises networks, or the service CIDR.
 - Pod egress is SNATed to the node IP and pod IPs aren't routable outside the cluster, so allowlists must use node or subnet IPs.
 - Overlay and ACNS require `networkPlugin: azure`. Overlay doesn't support `networkMode: bridge`, and ACNS security requires `networkDataplane: cilium`.
-- ACNS is a paid Azure add-on billed to the cluster's subscription. It can be turned on or off on an existing cluster.
+- ACNS is a paid Azure add-on billed to the cluster's subscription. It can be turned on or off on an existing cluster. With `advancedNetworking.enabled` unset, the chart leaves the AKS setting untouched; set it to `false` to disable ACNS. Observability and security require `enabled: true`.
 - Neither can be combined with the BYO CNI opt-in.
 
 ## Compatibility

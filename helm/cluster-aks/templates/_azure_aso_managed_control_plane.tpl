@@ -53,9 +53,9 @@ spec:
           networkPluginMode: {{ . }}
           {{- end }}
           {{- $acns := $cp.networking.advancedNetworking }}
-          {{- if or $acns.observability.enabled $acns.security.enabled }}
+          {{- if hasKey $acns "enabled" }}
           advancedNetworking:
-            enabled: true
+            enabled: {{ $acns.enabled }}
             observability:
               enabled: {{ $acns.observability.enabled }}
             security:

@@ -1012,6 +1012,11 @@
                                     "description": "ACNS, a paid Azure add-on billed to the cluster's subscription. Requires networkPlugin azure. Can be turned on or off on an existing cluster. Can't be combined with global.connectivity.cni.managed.",
                                     "additionalProperties": false,
                                     "properties": {
+                                        "enabled": {
+                                            "type": "boolean",
+                                            "title": "Enabled",
+                                            "description": "Enable ACNS. When unset, the chart renders no advancedNetworking block and AKS keeps its current setting. Set to false to disable ACNS on a cluster that has it enabled. Required to be true for observability or security."
+                                        },
                                         "observability": {
                                             "type": "object",
                                             "title": "Observability",

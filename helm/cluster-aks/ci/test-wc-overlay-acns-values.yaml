@@ -25,6 +25,7 @@ global:
       networkPluginMode: overlay
       outboundType: userDefinedRouting
       advancedNetworking:
+        enabled: true
         observability:
           enabled: true
         security:
