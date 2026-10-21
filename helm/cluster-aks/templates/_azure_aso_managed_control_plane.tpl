@@ -49,6 +49,21 @@ spec:
           networkPlugin: none
           {{- else }}
           networkPlugin: {{ $cp.networking.networkPlugin }}
+          {{- with $cp.networking.networkPluginMode }}
+          networkPluginMode: {{ . }}
+          {{- end }}
+          {{- $acns := $cp.networking.advancedNetworking }}
+          {{- if or $acns.observability.enabled $acns.security.enabled }}
+          advancedNetworking:
+            enabled: true
+            observability:
+              enabled: {{ $acns.observability.enabled }}
+            security:
+              enabled: {{ $acns.security.enabled }}
+              {{- with $acns.security.advancedNetworkPolicies }}
+              advancedNetworkPolicies: {{ . }}
+              {{- end }}
+          {{- end }}
           {{- with $cp.networking.networkDataplane }}
           networkDataplane: {{ . }}
           {{- end }}
