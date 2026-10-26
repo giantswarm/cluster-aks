@@ -19,6 +19,13 @@ allowEgressToUpstreamDNS:
 # azure.workload.identity/use=true are rejected.
 azureWorkloadIdentityWebhook:
   enabled: true
+{{- $acns := .Values.global.controlPlane.networking.advancedNetworking }}
+{{- if and $acns.enabled $acns.observability.enabled }}
+# ACNS observability deploys hubble-relay in kube-system as a regular pod. It must reach
+# the Hubble servers in the hostNetwork Cilium agents to become ready.
+hubbleRelay:
+  enabled: true
+{{- end }}
 konnectivityAgent:
   enabled: true
   namespaces:
