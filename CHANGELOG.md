@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add render-time validation that `outboundType: userDefinedRouting` requires a BYO subnet, and document its route table prerequisite.
 - Add Azure CNI Overlay (`global.controlPlane.networking.networkPluginMode`) and Advanced Container Networking Services observability and security (`global.controlPlane.networking.advancedNetworking`), with render-time validation of unsupported combinations.
 - Add the BYO CNI opt-in `global.connectivity.cni.managed` (default `false`). When `true`, AKS installs no CNI and the cluster runs Giant Swarm's Cilium with AKS BYO CNI values. Not supported yet.
 

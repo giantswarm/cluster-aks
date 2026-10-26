@@ -115,6 +115,27 @@ Constraints:
 - ACNS is a paid Azure add-on billed to the cluster's subscription. It can be turned on or off on an existing cluster. With `advancedNetworking.enabled` unset, the chart leaves the AKS setting untouched; set it to `false` to disable ACNS. Observability and security require `enabled: true`.
 - Neither can be combined with the BYO CNI opt-in.
 
+## User Defined Routing
+
+To send the cluster's egress through your own firewall or NVA, use `userDefinedRouting` on a BYO subnet:
+
+```yaml
+global:
+  connectivity:
+    network:
+      vnet:
+        subnetArmId: /subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.Network/virtualNetworks/<vnet>/subnets/<subnet>
+  controlPlane:
+    networking:
+      outboundType: userDefinedRouting
+```
+
+Constraints:
+
+- Requires a BYO subnet. A VNet created by the chart has no route table, so rendering fails without `subnetArmId`.
+- The subnet's route table must send `0.0.0.0/0` to your egress device. With per-pool subnets, each of them needs that route table too.
+- The outbound type is a creation-time choice. Azure rejects changing it on an existing cluster.
+
 ## Compatibility
 
 This app has been tested to work with the following workload cluster release versions:

@@ -1109,6 +1109,7 @@
                                 "outboundType": {
                                     "type": "string",
                                     "title": "Outbound type",
+                                    "description": "How the cluster's egress leaves Azure. Creation-time choice, Azure rejects changing it on an existing cluster. userDefinedRouting requires a BYO subnet (global.connectivity.network.vnet.subnetArmId) whose route table sends 0.0.0.0/0 to your egress device, such as Azure Firewall or an NVA; with per-pool subnets (global.nodePools.<pool>.subnetArmId), each of them needs that route table too.",
                                     "enum": [
                                         "loadBalancer",
                                         "managedNATGateway",
