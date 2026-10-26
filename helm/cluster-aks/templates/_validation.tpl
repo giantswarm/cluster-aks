@@ -67,6 +67,9 @@ Cross-field validation. Produces no output — only `fail` calls as side effects
 {{- if and .Values.global.connectivity.cni.managed (or $networking.networkPluginMode $acnsOn) -}}
 {{- fail "global.controlPlane.networking.networkPluginMode and global.controlPlane.networking.advancedNetworking are AKS-managed networking features and can't be used with the BYO CNI opt-in global.connectivity.cni.managed: true" -}}
 {{- end -}}
+{{- if and (eq $networking.outboundType "userDefinedRouting") (not $vnet.subnetArmId) -}}
+{{- fail "global.controlPlane.networking.outboundType userDefinedRouting requires global.connectivity.network.vnet.subnetArmId (BYO VNet); a chart-created VNet has no route table to send egress to your egress device" -}}
+{{- end -}}
 {{- if and $cp.disableLocalAccounts (not $cp.aadProfile.managed) -}}
 {{- fail "global.controlPlane.disableLocalAccounts requires global.controlPlane.aadProfile.managed: true; AKS only accepts disabling local accounts on Entra-integrated clusters, and without it no client (including CAPZ) can authenticate to the API server" -}}
 {{- end -}}
