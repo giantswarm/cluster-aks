@@ -134,7 +134,7 @@ Constraints:
 
 - Requires a BYO subnet. A VNet created by the chart has no route table, so rendering fails without `subnetArmId`.
 - The subnet's route table must send `0.0.0.0/0` to your egress device. With per-pool subnets, each of them needs that route table too.
-- The outbound type is a creation-time choice. Azure rejects changing it on an existing cluster.
+- Changing the outbound type of an existing cluster changes its egress IP and interrupts existing connections. Update firewall rules and authorized IP ranges accordingly.
 
 ## Compatibility
 
