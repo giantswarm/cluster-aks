@@ -10,13 +10,13 @@ global:
   connectivity:
     baseDomain: azuretest.gigantic.io
     network:
-      dnsServiceIP: 172.31.0.10
+      dnsServiceIP: 172.16.0.10
       pods:
         cidrBlocks:
           - 100.64.0.0/16
       services:
         cidrBlocks:
-          - 172.31.0.0/16
+          - 172.16.0.0/16
       vnet:
         subnetArmId: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/existing-network-rg/providers/Microsoft.Network/virtualNetworks/existing-vnet/subnets/existing-subnet
 
