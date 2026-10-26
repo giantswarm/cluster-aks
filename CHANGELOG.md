@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Allow the ACNS `hubble-relay` through the network-policies default deny when ACNS observability is on.
 - Fix the security-bundle values key `apps.cloudNativePG` to `apps.cloudnativePG`, so that the cloudnative-pg HelmRelease no longer depends on the `cilium` HelmRelease, which AKS doesn't have.
 
 ## [0.9.0] - 2026-10-19
