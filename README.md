@@ -109,6 +109,7 @@ Constraints:
 
 - Overlay is a creation-time choice. Existing clusters can't be migrated from Azure CNI node-subnet.
 - Exactly one pod CIDR block, which must not overlap the VNet, peered or on-premises networks, or the service CIDR.
+- The pod CIDR, the service CIDR and the VNet must not overlap the AKS reserved ranges `169.254.0.0/16`, `172.30.0.0/16`, `172.31.0.0/16`, `192.0.2.0/24` and `224.0.0.0/4`. AKS rejects the cluster otherwise.
 - Pod egress is SNATed to the node IP and pod IPs aren't routable outside the cluster, so allowlists must use node or subnet IPs.
 - Overlay and ACNS require `networkPlugin: azure`. Overlay doesn't support `networkMode: bridge`, and ACNS security requires `networkDataplane: cilium`.
 - ACNS is a paid Azure add-on billed to the cluster's subscription. It can be turned on or off on an existing cluster. With `advancedNetworking.enabled` unset, the chart leaves the AKS setting untouched; set it to `false` to disable ACNS. Observability and security require `enabled: true`.

@@ -804,7 +804,7 @@
                                 "pods": {
                                     "type": "object",
                                     "title": "Pods network",
-                                    "description": "Pods CIDR. Used by AKS with kubenet and with Azure CNI Overlay (global.controlPlane.networking.networkPluginMode), and as the Cilium cluster pool on BYO CNI clusters (global.connectivity.cni.managed). Ignored with Azure CNI node-subnet. With overlay and BYO CNI it must have exactly one entry, which must not overlap the VNet, peered or on-premises networks, the service CIDR or the AKS reserved ranges. Kept non-empty because the giantswarm/cluster subchart schema requires at least one entry.",
+                                    "description": "Pods CIDR. Used by AKS with kubenet and with Azure CNI Overlay (global.controlPlane.networking.networkPluginMode), and as the Cilium cluster pool on BYO CNI clusters (global.connectivity.cni.managed). Ignored with Azure CNI node-subnet. With overlay and BYO CNI it must have exactly one entry, which must not overlap the VNet, peered or on-premises networks, the service CIDR or the AKS reserved ranges 169.254.0.0/16, 172.30.0.0/16, 172.31.0.0/16, 192.0.2.0/24 and 224.0.0.0/4. Kept non-empty because the giantswarm/cluster subchart schema requires at least one entry.",
                                     "properties": {
                                         "cidrBlocks": {
                                             "type": "array",
@@ -821,7 +821,7 @@
                                 "services": {
                                     "type": "object",
                                     "title": "Services network",
-                                    "description": "Services CIDR — assigned by AKS for Kubernetes Service IPs. Used to populate Cluster.spec.clusterNetwork.services.",
+                                    "description": "Services CIDR — assigned by AKS for Kubernetes Service IPs. Used to populate Cluster.spec.clusterNetwork.services. Must not overlap the VNet, peered or on-premises networks, the pod CIDR or the AKS reserved ranges 169.254.0.0/16, 172.30.0.0/16, 172.31.0.0/16, 192.0.2.0/24 and 224.0.0.0/4; AKS rejects the cluster otherwise.",
                                     "properties": {
                                         "cidrBlocks": {
                                             "type": "array",
@@ -843,7 +843,7 @@
                                         "cidrBlocks": {
                                             "type": "array",
                                             "title": "CIDR blocks",
-                                            "description": "CIDR(s) of the chart-created VirtualNetwork's address space.",
+                                            "description": "CIDR(s) of the chart-created VirtualNetwork's address space. Must not overlap the AKS reserved ranges 169.254.0.0/16, 172.30.0.0/16, 172.31.0.0/16, 192.0.2.0/24 and 224.0.0.0/4.",
                                             "items": {
                                                 "type": "string"
                                             },
