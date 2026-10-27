@@ -9,12 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Make the observability-bundle apps depend on the `cilium` HelmRelease only on BYO CNI clusters (`global.connectivity.cni.managed`), using the map format of `apps.<appName>.dependsOn` that a newer version of observability-bundle requires.
 - Bump the `cluster` chart to v9.2.0.
 - Make the security-bundle apps depend on Cilium on BYO CNI clusters, as the bundle does by default.
 
 ### Added
 
+- Add render-time validation that `outboundType: userDefinedRouting` requires a BYO subnet, and document its route table prerequisite.
+- Add Azure CNI Overlay (`global.controlPlane.networking.networkPluginMode`) and Advanced Container Networking Services observability and security (`global.controlPlane.networking.advancedNetworking`), with render-time validation of unsupported combinations.
 - Add the BYO CNI opt-in `global.connectivity.cni.managed` (default `false`). When `true`, AKS installs no CNI and the cluster runs Giant Swarm's Cilium with AKS BYO CNI values. Not supported yet.
+
+### Fixed
+
+- Allow the ACNS `hubble-relay` through the network-policies default deny when ACNS observability is on.
+- Fix the security-bundle values key `apps.cloudNativePG` to `apps.cloudnativePG`, so that the cloudnative-pg HelmRelease no longer depends on the `cilium` HelmRelease, which AKS doesn't have.
 
 ## [0.9.0] - 2026-10-19
 

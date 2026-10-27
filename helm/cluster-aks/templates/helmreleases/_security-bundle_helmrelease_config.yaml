@@ -13,7 +13,7 @@ userConfig:
               effect: "NoSchedule"
 
 apps:
-  cloudNativePG:
+  cloudnativePG:
     dependsOn:
       - prometheus-operator-crd
 
