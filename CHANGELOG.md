@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Make the observability-bundle apps depend on the `cilium` HelmRelease only on BYO CNI clusters (`global.connectivity.cni.managed`), using the map format of `apps.<appName>.dependsOn` that a newer version of observability-bundle requires.
 - Bump the `cluster` chart to v9.2.0.
+- Make the security-bundle apps depend on Cilium on BYO CNI clusters, as the bundle does by default.
 
 ### Added
 
