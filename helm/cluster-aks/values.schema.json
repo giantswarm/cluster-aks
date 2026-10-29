@@ -430,6 +430,15 @@
                                         }
                                     }
                                 },
+                                "prometheusBlackboxExporter": {
+                                    "type": "object",
+                                    "properties": {
+                                        "enable": {
+                                            "type": "boolean",
+                                            "default": true
+                                        }
+                                    }
+                                },
                                 "rbacBootstrap": {
                                     "type": "object",
                                     "properties": {
