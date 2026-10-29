@@ -254,6 +254,8 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration.apps.observabilityPolicies.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.priorityClasses` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.priorityClasses.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
+| `cluster.providerIntegration.apps.prometheusBlackboxExporter` |**None**|**Type:** `object`<br/>|
+| `cluster.providerIntegration.apps.prometheusBlackboxExporter.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.rbacBootstrap` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.rbacBootstrap.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.securityBundle` |**None**|**Type:** `object`<br/>|
