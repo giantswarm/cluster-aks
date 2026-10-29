@@ -12,49 +12,29 @@ userConfig:
               operator: "Exists"
               effect: "NoSchedule"
 
+# Only BYO CNI clusters have a `cilium` HelmRelease to wait for, otherwise AKS manages Cilium itself
 apps:
   cloudnativePG:
     dependsOn:
-      - prometheus-operator-crd
+      cilium: {{ $.Values.global.connectivity.cni.managed }}
 
   falco:
     dependsOn:
-      {{- if $.Values.global.connectivity.cni.managed }}
-      - cilium
-      {{- end }}
-      - kyverno-crds
+      cilium: {{ $.Values.global.connectivity.cni.managed }}
 
   kubescape:
     dependsOn:
-      {{- if $.Values.global.connectivity.cni.managed }}
-      - cilium
-      {{- end }}
-      - kyverno-crds
-      - kyverno-policy-operator
+      cilium: {{ $.Values.global.connectivity.cni.managed }}
 
   kyverno:
     dependsOn:
-      {{- if $.Values.global.connectivity.cni.managed }}
-      - cilium
-      {{- end }}
-      - kyverno-crds
-      - prometheus-operator-crd
-      - alloy-podlogs-crds
+      cilium: {{ $.Values.global.connectivity.cni.managed }}
 
   kyvernoPolicyOperator:
     dependsOn:
-      {{- if $.Values.global.connectivity.cni.managed }}
-      - cilium
-      {{- end }}
-      - kyverno-crds
-      - kyverno
-      - alloy-podlogs-crds
+      cilium: {{ $.Values.global.connectivity.cni.managed }}
 
   trivyOperator:
     dependsOn:
-      {{- if $.Values.global.connectivity.cni.managed }}
-      - cilium
-      {{- end }}
-      - kyverno-crds
-      - trivy
+      cilium: {{ $.Values.global.connectivity.cni.managed }}
 {{- end }}
