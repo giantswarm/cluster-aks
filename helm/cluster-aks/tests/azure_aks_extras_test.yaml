@@ -1,0 +1,55 @@
+suite: azure-aks-extras HelmRelease
+templates:
+  - templates/helmreleases/azure-aks-extras-helmrelease.yaml
+values:
+  - ../ci/test-wc-minimal-values.yaml
+set:
+  global.release.version: v1.0.0
+  cluster.internal.ephemeralConfiguration.offlineTesting.renderWithoutReleaseResource: false
+kubernetesProvider:
+  scheme:
+    "release.giantswarm.io/v1alpha1/Release":
+      gvr:
+        version: v1alpha1
+        group: release.giantswarm.io
+        resource: releases
+      namespaced: false
+  objects:
+    - apiVersion: release.giantswarm.io/v1alpha1
+      kind: Release
+      metadata:
+        name: aks-1.0.0
+      spec:
+        apps:
+          - name: azure-aks-extras
+            version: 0.1.0
+            dependsOn:
+              - cilium
+              - prometheus-operator-crd
+tests:
+  - it: depends on the apps listed in the Release on BYO CNI clusters
+    documentSelector:
+      path: kind
+      value: HelmRelease
+    set:
+      global.connectivity.cni.managed: true
+    asserts:
+      - equal:
+          path: spec.dependsOn
+          value:
+            - name: test-wc-minimal-cilium
+              namespace: NAMESPACE
+            - name: test-wc-minimal-prometheus-operator-crd
+              namespace: NAMESPACE
+  - it: does not depend on cilium when AKS manages the CNI
+    documentSelector:
+      path: kind
+      value: HelmRelease
+    set:
+      global.connectivity.cni.managed: false
+    asserts:
+      - equal:
+          path: spec.dependsOn
+          value:
+            - name: test-wc-minimal-prometheus-operator-crd
+              namespace: NAMESPACE
