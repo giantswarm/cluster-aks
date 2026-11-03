@@ -51,6 +51,18 @@ spec:
   chartRef:
     kind: OCIRepository
     name: {{ include "cluster-aks.resource.name" $ }}-azure-aks-extras
+  {{- $_ := set $ "appName" "azure-aks-extras" }}
+  {{- $dependencies := include "cluster.app.dependencies" $ | fromYamlArray }}
+  {{- if not $.Values.global.connectivity.cni.managed }}
+  {{- $dependencies = without $dependencies "cilium" }}
+  {{- end }}
+  {{- if $dependencies }}
+  dependsOn:
+  {{- range $_, $dependency := $dependencies }}
+  - name: {{ include "cluster-aks.resource.name" $ }}-{{ $dependency }}
+    namespace: {{ $.Release.Namespace }}
+  {{- end }}
+  {{- end }}
   kubeConfig:
     secretRef:
       name: {{ include "cluster-aks.resource.name" $ }}-kubeconfig
