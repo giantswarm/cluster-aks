@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
+### Added
 
-- Set the network-policies `standardAllows.webhookIngress.fromEntities` to `[cluster]`, the only webhook ingress source that works on AKS.
+- Allow the API server's webhook calls into namespaces labelled `policy.giantswarm.io/allow-webhook-ingress: "true"` on AKS by setting the network-policies `standardAllows.webhookIngress.fromEntities` to `[cluster]`. Only rendered when the Release has network-policies v0.6.0 or newer.
 
 ## [0.12.0] - 2026-11-04
 
