@@ -52,9 +52,6 @@ See our [full reference on how to configure apps](https://docs.giantswarm.io/tut
 
 ## BYO CNI (opt-in)
 
-> [!WARNING]
-> Not supported yet. Use it on test clusters only until the mode is declared supported.
-
 By default, clusters use AKS-managed networking (Azure CNI powered by Cilium), and Microsoft supports the pod network. A new cluster can instead opt into BYO CNI:
 
 ```yaml
@@ -68,7 +65,7 @@ global:
           - 192.168.0.0/16
 ```
 
-AKS then installs no CNI (`networkPlugin: none`, with `networkDataplane`, `networkMode` and `networkPolicy` ignored), and the Release installs Giant Swarm's Cilium with the AKS BYO CNI values: VXLAN tunnelling, cluster-pool IPAM from the pod CIDR, no kube-proxy replacement and socket LB for the host namespace. Apps that need the pod network wait for Cilium. Cilium is tuned per cluster through `global.apps.cilium.values`, as on other providers.
+AKS then installs no CNI (`networkPlugin: none`, with `networkDataplane`, `networkMode` and `networkPolicy` ignored), and the Release installs Giant Swarm's Cilium with the AKS BYO CNI values: VXLAN tunnelling, cluster-pool IPAM from the pod CIDR, no kube-proxy replacement and socket LB for the host namespace. Apps that need the pod network wait for Cilium. Giant Swarm then supports the pod network, as Microsoft doesn't support CNI issues on BYO CNI clusters. Cilium is tuned per cluster through `global.apps.cilium.values`, as on other providers.
 
 Constraints:
 

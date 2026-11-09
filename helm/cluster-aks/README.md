@@ -42,7 +42,7 @@ Properties within the `.global.connectivity` object
 | `global.connectivity.apiServerAccess.privateDNSZone` | **Private DNS zone**|**Type:** `string`<br/>**Default:** `""`|
 | `global.connectivity.baseDomain` | **Base domain** - DNS base domain used by the management cluster's installation.|**Type:** `string`<br/>**Default:** `""`|
 | `global.connectivity.cni` | **CNI**|**Type:** `object`<br/>|
-| `global.connectivity.cni.managed` | **Managed CNI** - BYO CNI opt-in, for new clusters only. When true, AKS installs no CNI (networkPlugin none) and Giant Swarm installs and operates Cilium. When false, the cluster uses AKS-managed networking. Unsupported until the BYO CNI mode is declared supported, see the README.|**Type:** `boolean`<br/>**Default:** `false`|
+| `global.connectivity.cni.managed` | **Managed CNI** - BYO CNI opt-in, for new clusters only. When true, AKS installs no CNI (networkPlugin none) and Giant Swarm installs and operates Cilium. When false, the cluster uses AKS-managed networking.|**Type:** `boolean`<br/>**Default:** `false`|
 | `global.connectivity.dns` | **DNS**|**Type:** `object`<br/>|
 | `global.connectivity.dns.wildcardCnameTarget` | **Wildcard CNAME Target** - Override the wildcard CNAME record value. If no value is passed defaults to "ingress". Only subdomains from the cluster DNS zone are valid.|**Type:** `string`<br/>**Example:** `"gateway"`<br/>|
 | `global.connectivity.network` | **Network**|**Type:** `object`<br/>|
@@ -254,6 +254,8 @@ Properties within the `.cluster` top-level object
 | `cluster.providerIntegration.apps.observabilityPolicies.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.priorityClasses` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.priorityClasses.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
+| `cluster.providerIntegration.apps.prometheusBlackboxExporter` |**None**|**Type:** `object`<br/>|
+| `cluster.providerIntegration.apps.prometheusBlackboxExporter.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.rbacBootstrap` |**None**|**Type:** `object`<br/>|
 | `cluster.providerIntegration.apps.rbacBootstrap.enable` |**None**|**Type:** `boolean`<br/>**Default:** `true`|
 | `cluster.providerIntegration.apps.securityBundle` |**None**|**Type:** `object`<br/>|

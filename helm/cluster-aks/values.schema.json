@@ -430,6 +430,15 @@
                                         }
                                     }
                                 },
+                                "prometheusBlackboxExporter": {
+                                    "type": "object",
+                                    "properties": {
+                                        "enable": {
+                                            "type": "boolean",
+                                            "default": true
+                                        }
+                                    }
+                                },
                                 "rbacBootstrap": {
                                     "type": "object",
                                     "properties": {
@@ -851,7 +860,7 @@
                                 "managed": {
                                     "type": "boolean",
                                     "title": "Managed CNI",
-                                    "description": "BYO CNI opt-in, for new clusters only. When true, AKS installs no CNI (networkPlugin none) and Giant Swarm installs and operates Cilium. When false, the cluster uses AKS-managed networking. Unsupported until the BYO CNI mode is declared supported, see the README.",
+                                    "description": "BYO CNI opt-in, for new clusters only. When true, AKS installs no CNI (networkPlugin none) and Giant Swarm installs and operates Cilium. When false, the cluster uses AKS-managed networking.",
                                     "default": false
                                 }
                             }

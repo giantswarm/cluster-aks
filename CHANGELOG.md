@@ -11,6 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Make the security-bundle apps depend on the `cilium` HelmRelease only on BYO CNI clusters (`global.connectivity.cni.managed`), using the map format of `apps.<appName>.dependsOn` that a newer version of security-bundle requires, instead of overriding the bundle's own dependency lists.
 
+## [0.12.0] - 2026-11-04
+
+### Changed
+
+- Chart: Update `cluster` to v9.5.0.
+
+## [0.11.1] - 2026-11-03
+
+### Fixed
+
+- Make `azure-aks-extras` honour the app dependencies from the Release, so on BYO CNI clusters it waits for Cilium.
+
+## [0.11.0] - 2026-10-29
+
+### Added
+
+- Enable `prometheus-blackbox-exporter` app.
+
 ## [0.10.0] - 2026-10-27
 
 ### Changed
@@ -142,7 +160,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added: Post-install/post-upgrade/post-rollback hook that sets an ownerReference on the ASO credentials Secret and on the `AzureClusterIdentity` CR pointing at the `AzureASOManagedCluster`, so they are garbage-collected when the cluster is deleted.
 - changed: `app.giantswarm.io` label group was changed to `application.giantswarm.io`
 
-[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/giantswarm/cluster-aks/compare/v0.11.1...v0.12.0
+[0.11.1]: https://github.com/giantswarm/cluster-aks/compare/v0.11.0...v0.11.1
+[0.11.0]: https://github.com/giantswarm/cluster-aks/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/giantswarm/cluster-aks/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/giantswarm/cluster-aks/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/giantswarm/cluster-aks/compare/v0.8.0...v0.8.1
