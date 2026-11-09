@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Set the network-policies `standardAllows.webhookIngress.fromEntities` to `[cluster]`, the only webhook ingress source that works on AKS.
+
 ## [0.12.0] - 2026-11-04
 
 ### Changed

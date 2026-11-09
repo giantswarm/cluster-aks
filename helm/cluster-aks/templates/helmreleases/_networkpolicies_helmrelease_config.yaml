@@ -30,4 +30,11 @@ konnectivityAgent:
   enabled: true
   namespaces:
     - "kube-system"
+# On AKS the API server's webhook calls reach pods through the Konnectivity agent on the
+# worker nodes, so the kube-apiserver entity does not match them. cluster is the only
+# source that works for the allow-webhook-ingress standard allow.
+standardAllows:
+  webhookIngress:
+    fromEntities:
+      - cluster
 {{- end }}
