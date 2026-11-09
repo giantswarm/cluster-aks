@@ -30,10 +30,12 @@ konnectivityAgent:
   enabled: true
   namespaces:
     - "kube-system"
-{{- /* standardAllows exists since network-policies v0.6.0, older versions reject it. The
-  version is N/A only when rendering without a Release resource (offline tests). */}}
+{{- /* standardAllows exists since network-policies v0.6.0, older versions reject it. Compare
+  against the deployed version: the ephemeral versionOverride, else the version in the Release.
+  It is N/A when there is no Release resource or it does not list the app (offline tests). */}}
 {{- $_ := set $ "appName" "network-policies" }}
-{{- $version := include "cluster.app.version" $ | trim }}
+{{- $override := ((($.Values.internal).ephemeralConfiguration).apps).networkPolicies }}
+{{- $version := (($override | default dict).versionOverride) | default (include "cluster.app.version" $ | trim) }}
 {{- if or (eq $version "N/A") (semverCompare ">=0.6.0-0" $version) }}
 # On AKS the API server calls webhooks through the konnectivity-agent pods in kube-system,
 # so the calls carry a pod or host identity, not kube-apiserver or remote-node. cluster is
