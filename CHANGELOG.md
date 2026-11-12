@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Set the network-policies `standardAllows.webhookIngress.fromEntities` to `[cluster]`, so the API server's webhook calls reach namespaces labelled `policy.giantswarm.io/allow-webhook-ingress: "true"` on AKS. This admits every in-cluster source on the webhook ports of those namespaces. Only set when the deployed network-policies is v0.6.0 or newer.
 - Make the security-bundle apps depend on the `cilium` HelmRelease only on BYO CNI clusters (`global.connectivity.cni.managed`), using the map format of `apps.<appName>.dependsOn` that a newer version of security-bundle requires, instead of overriding the bundle's own dependency lists.
 
 ## [0.12.0] - 2026-11-04

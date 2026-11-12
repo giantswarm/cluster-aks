@@ -1,5 +1,5 @@
 {{/* AKS-specific network-policies Helm values*/}}
-{{/* https://github.com/giantswarm/network-policies-app/blob/main/helm/network-policies-app/values.yaml */}}
+{{/* https://github.com/giantswarm/network-policies-app/blob/main/helm/network-policies/values.yaml */}}
 {{- define "AKSNetworkPoliciesHelmValues" }}
 allowEgressToDNS:
   enabled: true
@@ -30,4 +30,26 @@ konnectivityAgent:
   enabled: true
   namespaces:
     - "kube-system"
+{{- /* standardAllows exists since network-policies v0.6.0, older versions reject it. Compare
+  against the deployed version: the ephemeral versionOverride, else the version in the Release.
+  It is N/A when there is no Release resource or it does not list the app (offline tests), which
+  renders the allow. Assumes providerIntegration.useReleases: true. A version that is not semver
+  leaves the allow out instead of failing the whole render. */}}
+{{- $_ := set $ "appName" "network-policies" }}
+{{- $override := ((($.Values.internal).ephemeralConfiguration).apps).networkPolicies }}
+{{- $version := (($override | default dict).versionOverride) | default (include "cluster.app.version" $ | trim) }}
+{{- $renderStandardAllows := eq $version "N/A" }}
+{{- if regexMatch "^v?[0-9]+\\.[0-9]+\\.[0-9]+(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$" $version }}
+{{- $renderStandardAllows = semverCompare ">=0.6.0-0" $version }}
+{{- end }}
+{{- if $renderStandardAllows }}
+# On AKS the API server calls webhooks through the konnectivity-agent pods in kube-system,
+# so the calls carry a pod or host identity, not kube-apiserver or remote-node. cluster is
+# the narrowest entity that covers them. It admits every in-cluster source on the webhook
+# ports of namespaces labelled policy.giantswarm.io/allow-webhook-ingress: "true".
+standardAllows:
+  webhookIngress:
+    fromEntities:
+      - cluster
+{{- end }}
 {{- end }}
