@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-11-12
+
 ### Changed
 
 - Set the network-policies `standardAllows.webhookIngress.fromEntities` to `[cluster]`, so the API server's webhook calls reach namespaces labelled `policy.giantswarm.io/allow-webhook-ingress: "true"` on AKS. This admits every in-cluster source on the webhook ports of those namespaces. Only set when the deployed network-policies is v0.6.0 or newer.
@@ -161,7 +163,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added: Post-install/post-upgrade/post-rollback hook that sets an ownerReference on the ASO credentials Secret and on the `AzureClusterIdentity` CR pointing at the `AzureASOManagedCluster`, so they are garbage-collected when the cluster is deleted.
 - changed: `app.giantswarm.io` label group was changed to `application.giantswarm.io`
 
-[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.12.0...HEAD
+[Unreleased]: https://github.com/giantswarm/cluster-aks/compare/v0.13.0...HEAD
+[0.13.0]: https://github.com/giantswarm/cluster-aks/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/giantswarm/cluster-aks/compare/v0.11.1...v0.12.0
 [0.11.1]: https://github.com/giantswarm/cluster-aks/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/giantswarm/cluster-aks/compare/v0.10.0...v0.11.0
