@@ -71,7 +71,7 @@ Properties within the `.global.controlPlane` object
 | `global.controlPlane.aadProfile` | **AAD profile** - AAD integration. When managed: true, AKS uses AAD for Kubernetes API authentication.|**Type:** `object`<br/>|
 | `global.controlPlane.aadProfile.adminGroupObjectIDs` | **Admin group object IDs**|**Type:** `array`<br/>|
 | `global.controlPlane.aadProfile.adminGroupObjectIDs[*]` |**None**|**Type:** `string`<br/>|
-| `global.controlPlane.aadProfile.enableAzureRBAC` | **Enable Azure RBAC** - Authorize Kubernetes API requests with Azure RBAC in addition to Kubernetes RBAC. Requires managed: true. When enabled, the chart grants the management cluster's CAPZ identity the Azure Kubernetes Service RBAC Cluster Admin role on the cluster's resource group. The identity's object ID is read from the observe-only Crossplane UserAssignedIdentity `<managementCluster>-capz`, which must exist on the management cluster.|**Type:** `boolean`<br/>|
+| `global.controlPlane.aadProfile.enableAzureRBAC` | **Enable Azure RBAC** - Authorize Kubernetes API requests with Azure RBAC in addition to Kubernetes RBAC. Requires managed: true. When enabled, the chart grants the management cluster's CAPZ identity the Azure Kubernetes Service RBAC Cluster Admin role on the cluster's resource group. The identity's object ID is read from the observe-only Crossplane UserAssignedIdentity `capz`, which must exist on the management cluster.|**Type:** `boolean`<br/>|
 | `global.controlPlane.aadProfile.managed` | **Managed**|**Type:** `boolean`<br/>|
 | `global.controlPlane.additionalTags` | **Additional tags** - Additional Azure tags applied to the underlying AKS resources.|**Type:** `object`<br/>**Default:** `{}`|
 | `global.controlPlane.additionalTags.*` |**None**|**Type:** `string`<br/>|

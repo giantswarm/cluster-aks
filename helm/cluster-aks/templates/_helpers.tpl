@@ -68,11 +68,11 @@ AUTH_MODE: workloadidentity
 Object ID of the management cluster's CAPZ identity. Neither the
 AzureClusterIdentity nor anything else on the management cluster records it,
 so each management cluster carries an observe-only Crossplane
-UserAssignedIdentity named `<managementCluster>-capz` that points at the
-identity, and its status reports the object ID.
+UserAssignedIdentity named `capz` that points at the identity, and its status
+reports the object ID.
 */}}
 {{- define "cluster-aks.capzIdentity.principalId" -}}
-{{- $name := printf "%s-capz" .Values.global.managementCluster -}}
+{{- $name := "capz" -}}
 {{- $identity := lookup "managedidentity.azure.upbound.io/v1beta1" "UserAssignedIdentity" "" $name -}}
 {{- if not $identity -}}
 {{- fail (printf "Couldn't find the Crossplane UserAssignedIdentity %s; it must exist on the management cluster, observing its CAPZ identity, when global.controlPlane.aadProfile.enableAzureRBAC is true" $name) -}}
