@@ -1,5 +1,5 @@
 {{/* AKS-specific network-policies Helm values*/}}
-{{/* https://github.com/giantswarm/network-policies-app/blob/main/helm/network-policies-app/values.yaml */}}
+{{/* https://github.com/giantswarm/network-policies-app/blob/main/helm/network-policies/values.yaml */}}
 {{- define "AKSNetworkPoliciesHelmValues" }}
 allowEgressToDNS:
   enabled: true
@@ -19,8 +19,30 @@ allowEgressToUpstreamDNS:
 # azure.workload.identity/use=true are rejected.
 azureWorkloadIdentityWebhook:
   enabled: true
+{{- $acns := .Values.global.controlPlane.networking.advancedNetworking }}
+{{- if and $acns.enabled $acns.observability.enabled }}
+# ACNS observability deploys hubble-relay in kube-system as a regular pod. It must reach
+# the Hubble servers in the hostNetwork Cilium agents to become ready.
+hubbleRelay:
+  enabled: true
+{{- end }}
 konnectivityAgent:
   enabled: true
   namespaces:
     - "kube-system"
+{{- /* standardAllows exists since network-policies v0.6.0, older versions reject it. Compare
+  against the deployed version: the ephemeral versionOverride, else the version in the Release.
+  It is N/A when there is no Release resource or it does not list the app (offline tests), which
+  renders the allow. Assumes providerIntegration.useReleases: true. A version that is not semver
+  leaves the allow out instead of failing the whole render. */}}
+{{- if eq (include "cluster.app.version.satisfies" (dict "root" $ "appName" "network-policies" "constraint" ">=0.6.0")) "true" }}
+# On AKS the API server calls webhooks through the konnectivity-agent pods in kube-system,
+# so the calls carry a pod or host identity, not kube-apiserver or remote-node. cluster is
+# the narrowest entity that covers them. It admits every in-cluster source on the webhook
+# ports of namespaces labelled policy.giantswarm.io/allow-webhook-ingress: "true".
+standardAllows:
+  webhookIngress:
+    fromEntities:
+      - cluster
+{{- end }}
 {{- end }}

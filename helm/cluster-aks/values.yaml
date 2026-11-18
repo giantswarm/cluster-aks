@@ -51,6 +51,8 @@ cluster:
         enable: true
       priorityClasses:
         enable: true
+      prometheusBlackboxExporter:
+        enable: true
       rbacBootstrap:
         enable: true
       securityBundle:
@@ -174,6 +176,11 @@ global:
           partitionCount: 4
           retentionTimeInHours: 168
     networking:
+      advancedNetworking:
+        observability:
+          enabled: false
+        security:
+          enabled: false
       networkDataplane: cilium
       networkMode: transparent
       networkPlugin: azure
