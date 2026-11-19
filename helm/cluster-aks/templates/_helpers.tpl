@@ -69,15 +69,16 @@ Object ID of the management cluster's CAPZ identity. Neither the
 AzureClusterIdentity nor anything else on the management cluster records it,
 so each management cluster carries an observe-only Crossplane
 UserAssignedIdentity named `capz` that points at the identity, and its status
-reports the object ID.
+reports the object ID. The capz-crossplane-resources chart
+(https://github.com/giantswarm/capz-crossplane-resources) creates it.
 */}}
 {{- define "cluster-aks.capzIdentity.principalId" -}}
 {{- $name := "capz" -}}
 {{- $identity := lookup "managedidentity.azure.upbound.io/v1beta1" "UserAssignedIdentity" "" $name -}}
 {{- if not $identity -}}
-{{- fail (printf "Couldn't find the Crossplane UserAssignedIdentity %s; it must exist on the management cluster, observing its CAPZ identity, when global.controlPlane.aadProfile.enableAzureRBAC is true" $name) -}}
+{{- fail (printf "Couldn't find the Crossplane UserAssignedIdentity %s; it must exist on the management cluster, observing its CAPZ identity, when global.controlPlane.aadProfile.enableAzureRBAC is true. It is created by the capz-crossplane-resources chart (https://github.com/giantswarm/capz-crossplane-resources): check its HelmRelease giantswarm/capz-crossplane-resources" $name) -}}
 {{- end -}}
-{{- dig "status" "atProvider" "principalId" "" $identity | required (printf "The Crossplane UserAssignedIdentity %s doesn't report a principalId yet" $name) -}}
+{{- dig "status" "atProvider" "principalId" "" $identity | required (printf "The Crossplane UserAssignedIdentity %s doesn't report a principalId yet; check its Ready and Synced conditions, set by Crossplane's Azure provider" $name) -}}
 {{- end -}}
 
 {{/*
