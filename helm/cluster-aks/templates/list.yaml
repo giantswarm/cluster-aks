@@ -9,3 +9,7 @@
 {{ include "azure-aso-managed-control-plane" . }}
 ---
 {{ include "azure-aso-managed-machine-pools" . }}
+{{- if .Values.global.controlPlane.aadProfile.enableAzureRBAC }}
+---
+{{ include "capz-identity-role-assignment" . }}
+{{- end }}

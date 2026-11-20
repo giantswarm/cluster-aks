@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `global.controlPlane.aadProfile.enableAzureRBAC`. When `true`, the chart grants the management cluster's CAPZ identity the Azure Kubernetes Service RBAC Cluster Admin role on the cluster's resource group with a Crossplane `RoleAssignment`, reading the identity's object ID from the Crossplane `UserAssignedIdentity` `capz` on the management cluster.
+
 ## [0.13.0] - 2026-11-12
 
 ### Changed
