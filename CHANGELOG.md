@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Chart: Test `cluster` dev version `9.6.1-r12ba8beet20261123095712haaf92c6` from giantswarm/cluster#1167.
 - Cilium: Turn off API server URL discovery on BYO CNI clusters, as it only finds the `kubernetes` Service ClusterIP without kube-proxy replacement.
 
 ## [0.13.0] - 2026-11-12
