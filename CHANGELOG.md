@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Chart: Pull the `cluster` dependency from `oci://gsoci.azurecr.io/charts/giantswarm` instead of the HTTP `cluster-catalog`.
 - Cilium: Turn off API server URL discovery on BYO CNI clusters, as it only finds the `kubernetes` Service ClusterIP without kube-proxy replacement.
 
 ## [0.13.0] - 2026-11-12
