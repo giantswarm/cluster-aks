@@ -8,6 +8,8 @@ ipam:
   operator:
     clusterPoolIPv4PodCIDRList:
       - {{ first $.Values.global.connectivity.network.pods.cidrBlocks | quote }}
+k8s:
+  apiServerURLs: null
 k8sServiceHost: ""
 kubeProxyReplacement: "false"
 socketLB:
